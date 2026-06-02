@@ -1054,6 +1054,92 @@ function FoodCard({ f, lang }) {
   );
 }
 
+// 🌟 独家定制：小红书同款滑动相册组件
+function ImageGallery({ images }) {
+  const [activeIndex, setActiveIndex] = useState(0);
+
+  const handleScroll = (e) => {
+    const scrollLeft = e.target.scrollLeft;
+    const width = e.target.clientWidth;
+    if (width > 0) {
+      // 动态计算当前滑动到了第几张图，用来控制下方的小圆点
+      const newIndex = Math.round(scrollLeft / width);
+      if (newIndex !== activeIndex) {
+        setActiveIndex(newIndex);
+      }
+    }
+  };
+
+  return (
+    <div style={{ marginTop: 22, width: "100%" }}>
+      {/* 隐藏原生丑陋的横向滚动条 */}
+      <style>{`.hide-scroll::-webkit-scrollbar { display: none; }`}</style>
+
+      <div
+        className="hide-scroll"
+        onScroll={handleScroll}
+        style={{
+          display: "flex",
+          width: "100%", // 1. 绝对不超出文字框
+          overflowX: "auto",
+          scrollSnapType: "x mandatory",
+          WebkitOverflowScrolling: "touch",
+          borderRadius: 12,
+          backgroundColor: "#f4f4f5", // 浅灰背景托底，让竖屏图两边不显突兀
+        }}
+      >
+        {images.map((src, idx) => (
+          <div
+            key={idx}
+            style={{
+              flex: "0 0 100%", // 3. 严格只展示一张照片的大小
+              width: "100%",
+              scrollSnapAlign: "center",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <img
+              src={src}
+              alt={`view-${idx}`}
+              style={{
+                width: "100%",
+                maxHeight: 450, // 限制最高高度，防止竖屏图霸占整个手机屏幕
+                objectFit: "contain", // 2. 🌟 核心魔法：原比例完整展示！绝对不裁剪、不拉伸！
+                display: "block",
+              }}
+            />
+          </div>
+        ))}
+      </div>
+
+      {/* 4. 底部滑动小点点指示器 */}
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          gap: 6,
+          marginTop: 12,
+        }}
+      >
+        {images.map((_, idx) => (
+          <div
+            key={idx}
+            style={{
+              width: activeIndex === idx ? 18 : 6, // 划到哪张，哪个点就变成拉长的胶囊
+              height: 6,
+              borderRadius: 3,
+              backgroundColor: activeIndex === idx ? "#0e2d4d" : "#cbd5e1",
+              transition: "all 0.3s ease", // 丝滑的切换动画
+            }}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
+
 export default function App() {
   const [lang, setLang] = useState("zh");
   const [hotelZone, setHotelZone] = useState("city");
@@ -1215,6 +1301,17 @@ export default function App() {
             <Card accent>
               <SectionTitle title={c.overviewTitle} sub={c.overviewSub} />
               <BulletList items={c.overviewBullets} />
+
+              {/* 直接调用我们刚写好的画廊引擎，把5张图传进去！ */}
+              <ImageGallery
+                images={[
+                  "/view1.jpg",
+                  "/view2.jpg",
+                  "/view3.jpg",
+                  "/view4.jpg",
+                  "/view5.jpg",
+                ]}
+              />
             </Card>
 
             <SectionTitle title={c.bookingTitle} sub={c.bookingSub} />
@@ -1557,72 +1654,131 @@ export default function App() {
               gap: 14,
             }}
           >
+            {/* 卡片 1：签证与行前准备 (融合原版 + 订房提示) */}
             <Card>
               <div
                 style={{ fontWeight: 900, color: "#0e2d4d", marginBottom: 8 }}
               >
-                {lang === "zh" ? "签证与证件" : "비자와 서류"}
+                {lang === "zh" ? "签证与行前准备" : "비자와 여행 준비"}
               </div>
               <BulletList
                 items={
                   lang === "zh"
                     ? [
-                        "护照有效期至少 6 个月。",
-                        "越南签证政策请以出发前官方信息为准，不要只看攻略旧文。",
+                        "护照有效期至少 6 个月。签证政策以出发前官方信息为准。",
                         "把酒店订单、返程票、保险都放在手机和纸质备份里。",
+                        "大部分经济实惠又干净的酒店容易长期满房，务必一定要提前订好。",
                       ]
                     : [
-                        "여권 유효기간은 최소 6개월 이상이어야 합니다.",
-                        "베트남 비자 정책은 출발 전 공식 정보를 기준으로 확인하세요.",
+                        "여권 유효기간은 최소 6개월 이상이어야 합니다. 비자 정책은 출발 전 공식 정보를 확인하세요.",
                         "호텔 예약, 귀국 항공권, 보험 서류는 휴대폰과 종이 모두 보관하세요.",
+                        "가성비 좋고 깨끗한 호텔은 금방 만실이 되니 반드시 미리 예약하세요.",
                       ]
                 }
               />
             </Card>
+
+            {/* 卡片 2：天气与交通出行 (融合原版 + 交通避雷) */}
             <Card>
               <div
                 style={{ fontWeight: 900, color: "#0e2d4d", marginBottom: 8 }}
               >
-                {lang === "zh" ? "天气和装备" : "날씨와 준비물"}
+                {lang === "zh" ? "天气与交通出行" : "날씨와 교통 이동"}
               </div>
               <BulletList
                 items={
                   lang === "zh"
                     ? [
-                        "7 月很热，防晒霜、帽子、太阳镜一定要带足。",
-                        "四岛游和海边活动建议准备一套干衣服。",
-                        "带一双好走的鞋，教堂、寺庙、市场都需要步行。",
+                        "7 月很热，防晒霜、帽子、太阳镜必带；带一双好走的鞋，教堂和市场都需要步行。",
+                        "市区赶时间不要打车坐公交，高峰期极度拥堵，优选摩托车 (Grab Bike)。",
+                        "在越南自己骑摩托车必须带好安全帽，否则会被警察重罚款。",
                       ]
                     : [
-                        "7월은 매우 덥기 때문에 선크림, 모자, 선글라스가 필수입니다.",
-                        "사섬투어와 해변 일정에는 마른 옷 한 세트를 준비하세요.",
-                        "성당, 사원, 시장을 걸어다닐 수 있는 편한 신발을 가져가세요.",
+                        "7월은 매우 더우니 선크림, 모자, 선글라스가 필수입니다. 걷기 편한 신발을 챙기세요.",
+                        "출퇴근 시간 시내는 매우 막히므로 급할 때는 오토바이(Grab Bike)가 낫습니다.",
+                        "직접 오토바이를 운전할 경우 헬멧을 쓰지 않으면 경찰에게 큰 벌금을 뭅니다.",
                       ]
                 }
               />
             </Card>
+
+            {/* 卡片 3：饮食与水果避坑 (全新整理) */}
             <Card>
               <div
                 style={{ fontWeight: 900, color: "#0e2d4d", marginBottom: 8 }}
               >
-                {lang === "zh" ? "预订顺序" : "예약 순서"}
+                {lang === "zh" ? "饮食与水果避坑" : "음식 및 과일 주의사항"}
               </div>
               <BulletList
                 items={
                   lang === "zh"
                     ? [
-                        "先锁酒店，再订 VinWonders 和四岛游。",
-                        "热门日期尽量提前订可退改产品。",
-                        "包船和私家车尽量找酒店/大平台代订，减少踩坑。",
+                        "不要在Grab上买鲜切水果（贵且不熟）；不要轻易尝试没见过的鲜艳水果。",
+                        "酒店严禁带榴莲入内，违规会被罚款，买完务必在外面吃完。",
+                        "千万别大口吃本地辣椒，辣度极高；很多餐厅不提供纸巾，一定随身携带。",
+                        "看不懂菜单别乱点，最稳妥就是看别人吃什么，指着要一份一样的。",
                       ]
                     : [
-                        "먼저 호텔을 확정한 뒤 VinWonders와 사섬투어를 예약하세요.",
-                        "인기 날짜는 취소·변경 가능한 상품을 미리 잡는 거시 좋습니다.",
-                        "전세 보트나 프라이빗 차량은 호텔 또는 대형 플랫폼을 통해 예약하는 것이 안전합니다.",
+                        "Grab에서 파는 컷팅 과일은 비싸고 덜 익은 경우가 많습니다. 낯선 화려한 과일은 피하세요.",
+                        "호텔 내 두리안 반입은 금지(위반 시 벌금)되니 밖에서 다 드시고 들어가야 합니다.",
+                        "현지 고추는 상상 이상으로 맵습니다. 식당은 대부분 티슈를 주지 않으니 꼭 챙기세요.",
+                        "메뉴를 모를 때는 다른 테이블의 음식을 가리켜 주문하는 것이 가장 안전합니다.",
                       ]
                 }
               />
             </Card>
+
+            {/* 卡片 4：消费与支付避雷 (全新整理) */}
+            <Card>
+              <div
+                style={{ fontWeight: 900, color: "#0e2d4d", marginBottom: 8 }}
+              >
+                {lang === "zh" ? "消费与支付避雷" : "결제 및 쇼핑 주의사항"}
+              </div>
+              <BulletList
+                items={
+                  lang === "zh"
+                    ? [
+                        "一定要带现金！很多小店不刷卡也不收美金。机场出来用VISA卡在ATM取现最稳，别找私人换钱防被骗。",
+                        "别买特产（尤其是翡翠玉石），不买药店保健品和纪念品店的纪念品。",
+                        "进按摩店一定要提前问好价格，越南没有小费习惯。街头的主动搭讪绝大多数是付费套路，轻易别理会。",
+                        "不要特意去订制奥黛，很挑人穿，直接租一套体验就行。",
+                      ]
+                    : [
+                        "카드나 달러를 안 받는 곳이 많으니 베트남 동 현금을 꼭 챙기세요. 공항 ATM에서 VISA 카드로 인출하는 것이 좋으며, 개인 환전은 피하세요.",
+                        "약국의 영양제나 옥/비취 같은 특산품은 절대 사지 마세요.",
+                        "베트남은 팁 문화가 없으니 마사지 샵 입장 전 꼭 총가격을 확인하세요. 길거리의 호객 행위는 무시하는 것이 좋습니다.",
+                        "아오자이는 맞춤 제작보다 대여를 강력히 추천합니다.",
+                      ]
+                }
+              />
+            </Card>
+
+            {/* 卡片 5：游玩与体验排雷 (融合原版 + 游玩避坑) */}
+            <Card>
+              <div
+                style={{ fontWeight: 900, color: "#0e2d4d", marginBottom: 8 }}
+              >
+                {lang === "zh" ? "游玩与体验排雷" : "액티비티 및 투어 예약"}
+              </div>
+              <BulletList
+                items={
+                  lang === "zh"
+                    ? [
+                        "先锁酒店，再订乐园/四岛游；包船尽量找大平台代订，减少踩坑。",
+                        "想好好体验潜水强烈推荐去“黑岛（Hon Mun）”，水质更清，别参加普通四岛游；没经验实力千万别试海钓，又晒又钓不到。",
+                        "景点一定要按预约时间进，提前或延迟都进不去；网红餐厅一直排队，请合理安排时间。",
+                      ]
+                    : [
+                        "먼저 호텔을 확정하고 테마파크/투어를 예약하세요. 프라이빗 보트는 대형 플랫폼을 이용하세요.",
+                        "스쿠버다이빙은 수질이 좋은 '혼문섬(Hon Mun)'을 추천하며 일반 사섬투어는 피하세요. 초보자의 바다낚시는 비추천합니다.",
+                        "관광지는 예약 시간을 엄수해야 하며, 유명 식당은 대기가 기니 시간을 잘 배분하세요.",
+                      ]
+                }
+              />
+            </Card>
+
+            {/* 卡片 6：最后一晚建议 (完美保留原版) */}
             <Card>
               <div
                 style={{ fontWeight: 900, color: "#0e2d4d", marginBottom: 8 }}
@@ -1633,9 +1789,9 @@ export default function App() {
                 items={
                   lang === "zh"
                     ? [
-                        "如果 7/16 是早航班，最后一晚最好住金兰方向。",
-                        "如果 7/16 航班晚，最后一晚继续住市区更方便补逛。",
-                        "这一晚不要再折腾太远的点，减少变动风险。",
+                        "如果 7/16 是早航班，最后一晚最好住金兰机场方向酒店。",
+                        "如果 7/16 航班较晚，最后一晚继续住市区更方便补逛。",
+                        "这一晚不要再折腾太远的点，尽量减少变动风险。",
                       ]
                     : [
                         "7/16에 이른 비행편이라면 마지막 밤은 깜라인 쪽이 좋습니다.",
