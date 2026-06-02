@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react"; // 👈 加上了 useEffect
 
 const localeCopy = {
   zh: {
@@ -1143,9 +1143,31 @@ function ImageGallery({ images }) {
 export default function App() {
   const [lang, setLang] = useState("zh");
   const [hotelZone, setHotelZone] = useState("city");
-
-  // 新增：记录当前选中的导航栏 Tab 索引
   const [activeTab, setActiveTab] = useState(0);
+
+  // 🌟 新增：小红书同款滚动监听引擎 (让导航栏随滚动自动加粗)
+  useEffect(() => {
+    const handleScrollSpy = () => {
+      const tabKeys = ["overview", "spots", "hotels", "itinerary", "tips"];
+      let currentActive = 0;
+
+      for (let i = 0; i < tabKeys.length; i++) {
+        const el = document.getElementById(`section-${tabKeys[i]}`);
+        if (el) {
+          const rect = el.getBoundingClientRect();
+          // 当某个板块顶部划到距离屏幕顶部 85px 以内时，立刻触发高亮切换
+          if (rect.top <= 85) {
+            currentActive = i;
+          }
+        }
+      }
+      setActiveTab(currentActive);
+    };
+
+    window.addEventListener("scroll", handleScrollSpy);
+    return () => window.removeEventListener("scroll", handleScrollSpy);
+  }, []);
+
   const c = localeCopy[lang];
 
   const zoneHotels = useMemo(() => {
