@@ -67,7 +67,6 @@ const localeCopy = {
   },
 };
 
-// 🌟 全新的《酒店日程》深度数据
 const hotelItineraryList = [
   {
     date: "7/9 - 7/10 (第 1 晚)",
@@ -301,142 +300,136 @@ const cityHighlights = [
   {
     name: { zh: "婆那加占婆塔", ko: "포나가르 참탑" },
     en: "Po Nagar Cham Towers",
-    where: {
-      zh: "芽庄北部，离市区很近",
-      ko: "냐짱 북쪽, 시내와 가깝습니다",
-    },
-    time: { zh: "30-60 分钟", ko: "30~60분" },
-    price: { zh: "门票约 22,000 VND", ko: "입장료 약 22,000 VND" },
+    img: "/p1.png", // 👈 替换为你的 p1 图
+    where: { zh: "芽庄市区以北，丐河北岸", ko: "냐짱 북쪽, 까이 강 북단" },
+    time: { zh: "1 - 1.5 小时", ko: "1 ~ 1.5시간" },
+    price: { zh: "约 30,000 VND", ko: "약 30,000 VND" },
     note: {
-      zh: "先看占婆遗迹，再去钟屿，两个点可以连着走。",
-      ko: "참탑을 본 뒤 혼쫑(Hon Chong)으로 이어서 가면 동선이 좋습니다.",
+      zh: "建于公元7-12世纪的印度教遗址，供奉占婆女神。不仅有着“小吴哥窟”般的深厚历史底蕴，经典的红砖塔身配上蓝天极具异域风情。建议下午 4 点左右光线最柔和时去，最适合拍高质感的双人合影。",
+      ko: "7~12세기에 지어진 힌두교 건축물로 '작은 앙코르와트'라 불리며, 참파 왕국의 여신을 모십니다. 붉은 벽돌이 이국적인 분위기를 냅니다. 오후 4시경 부드러운 빛일 때 인생 커플 사진을 찍는 것을 추천합니다.",
     },
   },
   {
-    name: { zh: "钟屿 / 五指岩", ko: "혼쫑 / 오지암" },
-    en: "Hon Chong",
-    where: {
-      zh: "占婆塔附近，北部海岸",
-      ko: "참탑 근처의 북부 해안",
-    },
-    time: { zh: "30-45 分钟", ko: "30~45분" },
-    price: {
-      zh: "通常门票很低，现场为准",
-      ko: "보통 입장료가 낮으며 현장 기준",
-    },
+    name: { zh: "钟屿石岬角 / 五指岩", ko: "혼쫑 / 오지암" },
+    en: "Hon Chong Promontory",
+    img: "/p2.png", // 👈 替换为你的 p2 图
+    where: { zh: "占婆塔向北，海岸线旁", ko: "참탑 북쪽의 해안가" },
+    time: { zh: "45 分钟 - 1 小时", ko: "45분 ~ 1시간" },
+    price: { zh: "约 30,000 VND", ko: "약 30,000 VND" },
     note: {
-      zh: "更适合顺路拍照，不建议单独跑一趟。",
-      ko: "사진 찍기 좋은 코스이며, 이곳만 따로 가기보다는 근처 일정과 묶는 편이 좋습니다.",
+      zh: "法国经典电影《情人》的取景地。巨大的花岗岩交错延伸入海，自带电影浪漫感。全网最推荐的隐藏玩法：不要光看石头，一定要在岩石旁的滴漏咖啡馆，点一杯当地冰咖啡（Cà phê sữa đá），吹海风看日落，极其惬意。",
+      ko: "프랑스 영화 '연인'의 촬영지입니다. 거대한 화강암이 바다로 이어지는 영화 같은 풍경이 특징입니다. 바위 옆 카페에서 베트남 연유 커피(Cà phê sữa đá)를 마시며 바닷바람과 일몰을 즐기는 것이 최고의 포인트입니다.",
     },
   },
   {
     name: { zh: "芽庄大教堂", ko: "냐짱 대성당" },
     en: "Nha Trang Cathedral",
-    where: {
-      zh: "市中心，靠近火车站",
-      ko: "시내 중심, 기차역 근처",
+    img: "/p3.png", // 👈 替换为你的 p3 图
+    where: { zh: "市中心十字路口，近火车站", ko: "시내 중심, 기차역 근처" },
+    time: { zh: "30 - 45 分钟", ko: "30 ~ 45분" },
+    price: {
+      zh: "免费（遇门口骗子勿给钱，可自愿捐赠）",
+      ko: "무료 (입구에서 돈을 요구하는 사기꾼 주의, 자율 기부)",
     },
-    time: { zh: "20-40 分钟", ko: "20~40분" },
-    price: { zh: "免费，偶尔象征性捐赠", ko: "무료, 가끔 자율 기부" },
     note: {
-      zh: "上午和傍晚光线最好，注意穿着别太随意。",
-      ko: "아침이나 저녁 빛이 가장 좋습니다. 복장은 너무 가볍지 않게 하는 편이 좋습니다.",
+      zh: "建于1928年的纯石头法式哥特建筑。拥有极美的玫瑰玻璃窗，阳光透过时色彩斑斓，建筑本身极具历史庄严感。注意：这是神圣的宗教场所，男士也请务必注意穿着，不要穿背心和不过膝的短裤。",
+      ko: "1928년에 지어진 100% 돌로 된 프랑스 고딕 양식 건축물입니다. 아름다운 스테인드글라스 창문이 포인트입니다. 신성한 종교 시설이므로 남성도 민소매나 무릎 위 반바지 등 노출이 심한 옷은 피해야 합니다.",
     },
   },
   {
     name: { zh: "龙山寺", ko: "롱선사" },
     en: "Long Son Pagoda",
-    where: {
-      zh: "市中心西侧",
-      ko: "시내 서쪽",
-    },
-    time: { zh: "45-60 分钟", ko: "45~60분" },
+    img: "/p4.jpg", // 👈 注意：这里是 .jpg！
+    where: { zh: "市中心偏西侧", ko: "시내 중심 서쪽" },
+    time: { zh: "45 - 60 分钟", ko: "45 ~ 60분" },
     price: { zh: "免费", ko: "무료" },
     note: {
-      zh: "适合傍晚去，白佛和城市俯瞰都值得看。",
-      ko: "해질 무렵에 가면 좋습니다. 백불상과 시내 전망을 함께 볼 수 있습니다.",
+      zh: "芽庄最大的佛教寺庙。爬上150级台阶后，能近距离仰望标志性的 24 米高白色大佛，并俯瞰整个芽庄市区的全景。寺庙安静祥和，树木葱郁，很适合傍晚来散步消食。",
+      ko: "냐짱에서 가장 큰 불교 사원입니다. 150개의 계단을 오르면 24m 높이의 거대한 백불상과 냐짱 시내 전경을 한눈에 볼 수 있습니다. 조용하고 평화로워 해 질 무렵 산책하기 좋습니다.",
     },
   },
   {
     name: { zh: "大坝市场", ko: "담 시장" },
     en: "Dam Market",
-    where: {
-      zh: "市中心",
-      ko: "시내 중심",
-    },
-    time: { zh: "30-60 分钟", ko: "30~60분" },
+    img: "/p5.png", // 👈 替换为你的 p5 图
+    where: { zh: "市中心", ko: "시내 중심" },
+    time: { zh: "1 小时左右", ko: "약 1시간" },
     price: { zh: "免费入场", ko: "입장 무료" },
     note: {
-      zh: "买咖啡、腰果、果干、鱼露都适合。",
-      ko: "커피, 캐슈넛, 건과일, 피쉬소스 등을 사기에 적당합니다.",
+      zh: "芽庄规模最大的传统市场，环形建筑十分醒目。里面能体验到最浓郁的越南市井气息，是买伴手礼（咖啡豆、腰果、夏威夷果、果干）的绝佳去处。避雷提示：买东西一定要狠狠砍价，至少按对半砍！",
+      ko: "냐짱 최대 규모의 전통 시장으로 원형 건물이 독특합니다. 현지 분위기를 물씬 느낄 수 있으며 커피, 캐슈넛, 건과일 등 기념품을 사기 좋습니다. 주의: 물건을 살 때는 반드시 흥정하세요(반값부터 시작)!",
     },
   },
   {
-    name: { zh: "塔巴泥浴", ko: "탑바 머드배스" },
-    en: "Thap Ba Mud Bath",
-    where: {
-      zh: "市区北侧",
-      ko: "시내 북쪽",
-    },
-    time: { zh: "2-3 小时", ko: "2~3시간" },
+    name: { zh: "泥浴体验 (I-Resort)", ko: "머드배스 (I-Resort)" },
+    en: "I-Resort Mineral Hot Springs",
+    img: "/p6.png", // 👈 替换为你的 p6 图
+    where: { zh: "市区以北，距离中心约 7km", ko: "시내 북쪽, 중심에서 약 7km" },
+    time: { zh: "2.5 - 3 小时", ko: "2.5 ~ 3시간" },
     price: {
-      zh: "基础套餐约 200,000 VND 起",
-      ko: "기본 패키지 약 200,000 VND부터",
+      zh: "基础双人私密泥浴约 350,000 VND/人",
+      ko: "프라이빗 2인 머드배스 약 350,000 VND/1인",
     },
     note: {
-      zh: "更像放松项目，不是硬核景点。",
-      ko: "강한 관광지라기보다 휴식형 체험에 가깝습니다.",
+      zh: "芽庄最具特色的理疗项目！富含矿物质的泥浆对皮肤极好且非常解乏。相比老牌塔巴泥浴，小红书更推荐 I-Resort，环境更高级、干净，有热带雨林感。两人泡完私密池后再游个泳，满血复活。",
+      ko: "냐짱의 명물인 미네랄 머드배스로 피부 미용과 피로 회복에 탁월합니다. I-Resort는 열대우림 분위기의 더 고급스럽고 깨끗한 환경을 제공합니다. 프라이빗 탕에서 피로를 풀고 수영장까지 즐기면 완벽합니다.",
     },
   },
 ];
 
 const islandHighlights = [
   {
-    name: { zh: "四岛游", ko: "사섬투어" },
-    en: "Island Hopping Tour",
+    name: { zh: "黑岛 / 木岛 潜水", ko: "혼문 섬 (Hon Mun) 다이빙" },
+    en: "Hon Mun Island Diving",
+    img: "https://images.unsplash.com/photo-1544551763-46a013bb70d5?auto=format&fit=crop&w=800&q=80",
     where: {
-      zh: "从 Cầu Đá 码头出发",
-      ko: "Cầu Đá 부두에서 출발",
+      zh: "从 Cầu Đá 码头乘快艇出发",
+      ko: "Cầu Đá 부두에서 스피드보트로 출발",
     },
-    time: { zh: "半天到全天", ko: "반나절~종일" },
+    time: {
+      zh: "大半天 (通常 8:00 - 14:00)",
+      ko: "반나절 (보통 8:00 - 14:00)",
+    },
     price: {
-      zh: "跟团约 20-50 美元/人，包船更贵",
-      ko: "조인 투어는 1인 약 20~50달러, 전세는 더 비쌉니다",
+      zh: "精品深潜/浮潜一日游约 400-600 元人民币",
+      ko: "프리미엄 스쿠버/스노클링 일일 투어 약 80,000~120,000 KRW",
     },
     note: {
-      zh: "经典路线通常会含竹岛、妙岛、蚕岛、猴岛或类似组合；浮潜和午餐是核心卖点。",
-      ko: "일반적으로 Hon Tre, Mun Island, Tam Island, Monkey Island 같은 조합으로 운영되며, 스노클링과 점심이 핵심입니다.",
+      zh: "全网口碑一致推荐：芽庄水质最好、珊瑚最美的国家级海洋保护区！强烈建议抛弃走马观花且水质浑浊的“普通四岛游”，直接报黑岛的精品一日游。即使没有潜水证，也能在教练一对一带领下安全体验极其震撼的水下世界。",
+      ko: "냐짱에서 수질이 가장 좋고 산호가 아름다운 국가 지정 해양 보호 구역입니다! 저렴하고 복잡한 일반 4섬 투어 대신, 수중 환경이 압도적인 '혼문 섬 스쿠버다이빙/스노클링 일일 투어'를 강력히 추천합니다. 초보자도 전문 강사와 함께 안전하게 즐길 수 있습니다.",
     },
   },
   {
-    name: { zh: "VinWonders 芽庄", ko: "VinWonders 냐짱" },
+    name: { zh: "VinWonders 珍珠岛乐园", ko: "VinWonders 냐짱" },
     en: "VinWonders Nha Trang",
-    where: {
-      zh: "竹岛 Hon Tre",
-      ko: "Hon Tre 섬",
-    },
-    time: { zh: "整天最合适", ko: "하루 종일이 가장 적합" },
+    img: "/p7.png",
+    where: { zh: "竹岛 (Hon Tre)", ko: "혼쩨 섬 (Hon Tre)" },
+    time: { zh: "一整天", ko: "하루 종일" },
     price: {
-      zh: "成人标准票含缆车约 1,050,000 VND",
-      ko: "성인 표준권(케이블카 포함) 약 1,050,000 VND",
+      zh: "成人通票约 1,050,000 VND",
+      ko: "성인 종일권 약 1,050,000 VND",
     },
     note: {
-      zh: "如果 4 点后入园会便宜些；乐园、水上项目和缆车是连在一起的。",
-      ko: "오후 4시 이후 입장은 더 저렴한 편입니다. 테마파크, 워터파크, 케이블카가 한 세트입니다.",
+      zh: "集惊险游乐、动物园、超大水上乐园于一体的巨型主题乐园。必玩项目：跨海缆车、高山飞车（需排队）和夜间水上剧场的 Tata Show。既然你们第三晚住在岛上的万豪酒店，完美策略是：利用万豪 4PM 延迟退房的钛金特权，把乐园时间拆分为两个半天，玩累了随时叫 Buggy 回房间洗澡休息！",
+      ko: "놀이공원, 워터파크, 동물원이 결합된 초대형 테마파크입니다. 해상 케이블카, 알파인 코스터, 야간 Tata Show가 핵심입니다. 섬 내 메리어트 호텔에 투숙하시니, 티타늄 혜택인 4PM 레잇 체크아웃을 적극 활용해 1.5일 동안 여유롭게 모든 시설을 즐기고 버기카로 편하게 호텔을 오가세요!",
     },
   },
   {
-    name: { zh: "竹岛海滩与度假村", ko: "혼쩨 해변과 리조트" },
-    en: "Hon Tre Beach",
+    name: { zh: "蚕岛 奢华泥浴与度假", ko: "혼땀 섬 (Hon Tam) 럭셔리 투어" },
+    en: "Hon Tam Island Resort",
+    img: "https://images.unsplash.com/photo-1540541338287-41700207dee6?auto=format&fit=crop&w=800&q=80",
     where: {
-      zh: "竹岛上",
-      ko: "Hon Tre 섬 내부",
+      zh: "从 Cầu Đá 码头乘船约 20 分钟",
+      ko: "Cầu Đá 부두에서 배로 20분 소요",
     },
-    time: { zh: "随时", ko: "언제든지" },
-    price: { zh: "住店即享", ko: "숙박객은 바로 이용 가능" },
+    time: { zh: "半天", ko: "반나절" },
+    price: {
+      zh: "上岛+高端泥浴套餐约 600,000 VND",
+      ko: "입장+고급 머드배스 패키지 약 600,000 VND",
+    },
     note: {
-      zh: "适合把一整天留给海滩、泳池、Spa 和拍照。",
-      ko: "해변, 수영장, 스파, 사진 촬영에 하루를 온전히 쓰기 좋습니다.",
+      zh: "如果不喜欢硬核潜水，也不想去市区的挤泥浴，蚕岛是你们完美的奢华平替。岛上提供顶级的接送服务、五星级水准的阶梯式无边泳池和极其宽敞的岛上独立泥浴池。整体体验非常有“高级感”，环境极其出片，适合情侣悠闲躺平。",
+      ko: "다이빙이나 시내의 붐비는 머드배스가 끌리지 않는다면 혼땀 섬이 완벽한 럭셔리 대안입니다. 5성급 계단식 인피니티 풀과 넓고 프라이빗한 고급 머드배스를 갖추고 있습니다. 분위기가 매우 고급스럽고 사진 찍기에 최고라 커플의 여유로운 휴양에 완벽합니다.",
     },
   },
 ];
@@ -605,10 +598,7 @@ const foodRecommendations = [
 const itinerary = [
   {
     date: "7/9",
-    title: {
-      zh: "晚到，先落地休息",
-      ko: "늦은 도착, 먼저 휴식",
-    },
+    title: { zh: "晚到，先落地休息", ko: "늦은 도착, 먼저 휴식" },
     hotel: "Wyndham Grand KN Paradise Cam Ranh",
     tasks: {
       zh: [
@@ -685,10 +675,7 @@ const itinerary = [
   },
   {
     date: "7/13",
-    title: {
-      zh: "市区核心日",
-      ko: "시내 핵심 일정",
-    },
+    title: { zh: "市区核心日", ko: "시내 핵심 일정" },
     hotel: "Sheraton Nha Trang Hotel & Spa",
     tasks: {
       zh: [
@@ -705,10 +692,7 @@ const itinerary = [
   },
   {
     date: "7/14",
-    title: {
-      zh: "缓冲回金兰海湾",
-      ko: "깜라인 해변으로 다시 이동",
-    },
+    title: { zh: "缓冲回金兰海湾", ko: "깜라인 해변으로 다시 이동" },
     hotel: "Wyndham Grand KN Paradise Cam Ranh",
     tasks: {
       zh: [
@@ -822,11 +806,9 @@ function BulletList({ items }) {
   );
 }
 
-// 🌟 全新的深层酒店排版卡片
 function HotelItineraryCard({ h, lang }) {
   return (
     <Card accent>
-      {/* 头部信息 */}
       <div
         style={{
           display: "flex",
@@ -874,8 +856,6 @@ function HotelItineraryCard({ h, lang }) {
           </div>
         </div>
       </div>
-
-      {/* 六宫格详细信息 */}
       <div
         style={{
           display: "grid",
@@ -918,7 +898,6 @@ function HotelItineraryCard({ h, lang }) {
   );
 }
 
-// 辅助组件：带图标的图文块
 function InfoItem({ icon, title, text }) {
   return (
     <div style={{ fontSize: 14, lineHeight: 1.6 }}>
@@ -987,7 +966,6 @@ function FoodCard({ f, lang }) {
             </div>
           )}
         </div>
-
         <div style={{ flex: 1, minWidth: 240 }}>
           <div
             style={{
@@ -1034,7 +1012,6 @@ function FoodCard({ f, lang }) {
                 </span>
               </div>
             </div>
-
             <div
               style={{
                 background: "#fef2f2",
@@ -1049,7 +1026,6 @@ function FoodCard({ f, lang }) {
               {f.price}
             </div>
           </div>
-
           <div
             style={{
               marginTop: 12,
@@ -1060,8 +1036,7 @@ function FoodCard({ f, lang }) {
           >
             {lang === "zh" ? f.desc.zh : f.desc.ko}
           </div>
-
-          {f.menu ? (
+          {f.menu && (
             <div style={{ marginTop: 12 }}>
               <div
                 style={{
@@ -1093,8 +1068,7 @@ function FoodCard({ f, lang }) {
                 ))}
               </div>
             </div>
-          ) : null}
-
+          )}
           {f.mapLink && (
             <a
               href={f.mapLink}
@@ -1123,7 +1097,6 @@ function FoodCard({ f, lang }) {
   );
 }
 
-// 🌟 独家定制：小红书同款滑动相册组件
 function ImageGallery({ images }) {
   const [activeIndex, setActiveIndex] = useState(0);
 
@@ -1208,12 +1181,10 @@ export default function App() {
   const [lang, setLang] = useState("zh");
   const [activeTab, setActiveTab] = useState(0);
 
-  // 🌟 小红书同款滚动监听引擎 (让导航栏随滚动自动加粗)
   useEffect(() => {
     const handleScrollSpy = () => {
       const tabKeys = ["overview", "spots", "hotels", "itinerary", "tips"];
       let currentActive = 0;
-
       for (let i = 0; i < tabKeys.length; i++) {
         const el = document.getElementById(`section-${tabKeys[i]}`);
         if (el) {
@@ -1225,14 +1196,12 @@ export default function App() {
       }
       setActiveTab(currentActive);
     };
-
     window.addEventListener("scroll", handleScrollSpy);
     return () => window.removeEventListener("scroll", handleScrollSpy);
   }, []);
 
   const c = localeCopy[lang];
 
-  // 丝滑滚动到对应区域的控制函数
   const tabKeys = ["overview", "spots", "hotels", "itinerary", "tips"];
   const scrollToSection = (idx) => {
     setActiveTab(idx);
@@ -1364,7 +1333,7 @@ export default function App() {
           </div>
         </Card>
 
-        {/* 锚点 0：总览区 (已移除了重复的旧订单展示，加入滑动相册) */}
+        {/* 锚点 0：总览区 */}
         <div id="section-overview">
           <div style={{ display: "grid", gap: 14, marginTop: 14 }}>
             <Card accent>
@@ -1452,18 +1421,6 @@ export default function App() {
                   referrerPolicy="no-referrer-when-downgrade"
                 />
               </div>
-              <div
-                style={{
-                  marginTop: 10,
-                  fontSize: 12,
-                  color: "#6b7280",
-                  lineHeight: 1.6,
-                }}
-              >
-                {lang === "zh"
-                  ? "地图中心点为芽庄市区附近，适合配合下面的酒店和景点清单使用。"
-                  : "지도 중심점은 냐짱 시내 부근으로, 아래 호텔 및 명소 목록과 함께 보시면 편합니다."}
-              </div>
             </Card>
           </div>
 
@@ -1477,6 +1434,28 @@ export default function App() {
           >
             {cityHighlights.map((s) => (
               <Card key={s.en}>
+                {s.img && (
+                  <div
+                    style={{
+                      width: "100%",
+                      height: 160,
+                      borderRadius: 12,
+                      overflow: "hidden",
+                      marginBottom: 14,
+                    }}
+                  >
+                    <img
+                      src={s.img}
+                      alt={s.en}
+                      style={{
+                        width: "100%",
+                        height: "100%",
+                        objectFit: "cover",
+                        display: "block",
+                      }}
+                    />
+                  </div>
+                )}
                 <div
                   style={{ fontWeight: 900, fontSize: 17, color: "#0e2d4d" }}
                 >
@@ -1516,6 +1495,28 @@ export default function App() {
           >
             {islandHighlights.map((s) => (
               <Card key={s.en}>
+                {s.img && (
+                  <div
+                    style={{
+                      width: "100%",
+                      height: 160,
+                      borderRadius: 12,
+                      overflow: "hidden",
+                      marginBottom: 14,
+                    }}
+                  >
+                    <img
+                      src={s.img}
+                      alt={s.en}
+                      style={{
+                        width: "100%",
+                        height: "100%",
+                        objectFit: "cover",
+                        display: "block",
+                      }}
+                    />
+                  </div>
+                )}
                 <div
                   style={{ fontWeight: 900, fontSize: 17, color: "#0e2d4d" }}
                 >
@@ -1546,10 +1547,9 @@ export default function App() {
           </div>
         </div>
 
-        {/* 锚点 2：酒店日程区 (全新整合深度信息版) */}
+        {/* 锚点 2：酒店日程区 */}
         <div id="section-hotels">
           <SectionTitle title={c.hotelTitle} sub={c.hotelSub} />
-
           <div style={{ display: "grid", gap: 20 }}>
             {hotelItineraryList.map((h, idx) => (
               <HotelItineraryCard key={idx} h={h} lang={lang} />
@@ -1557,7 +1557,7 @@ export default function App() {
           </div>
         </div>
 
-        {/* 锚点 3：旅行计划区（含美食和行程） */}
+        {/* 锚点 3：旅行计划区 */}
         <div id="section-itinerary">
           <SectionTitle title={c.foodTitle} sub={c.foodSub} />
           <div style={{ display: "grid", gap: 14, marginBottom: 28 }}>
@@ -1623,7 +1623,7 @@ export default function App() {
           </div>
         </div>
 
-        {/* 锚点 4：实用提示区 (融合了全网 19 条高阶避雷提示) */}
+        {/* 锚点 4：实用提示区 */}
         <div id="section-tips">
           <SectionTitle title={c.tipsTitle} sub={c.tipsSub} />
           <div
