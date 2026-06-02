@@ -1,11 +1,11 @@
-import { useMemo, useState, useEffect } from "react"; // 👈 加上了 useEffect
+import { useMemo, useState, useEffect } from "react";
 
 const localeCopy = {
   zh: {
     appTitle: "芽庄（Nha Trang）旅游全攻略",
     appSub: "一键中/韩翻译 · 情侣出行 · 7月9日–16日 · 市区 + 珍珠岛",
     toggle: "切换为韩语",
-    tabs: ["总览", "景点攻略", "酒店推荐", "旅行计划", "实用提示"],
+    tabs: ["总览", "景点攻略", "酒店日程", "旅行计划", "实用提示"],
     overviewTitle: "这趟行程的核心逻辑",
     overviewSub: "把 7 晚切成 3 个节奏：机场缓冲、岛上深玩、城市收尾。",
     overviewBullets: [
@@ -13,37 +13,21 @@ const localeCopy = {
       "芽庄市区景点很集中，陈富海滩一线、占婆塔片区、教堂/大坝市场/龙山寺这几组点都适合按区域串联，不需要每天跨很远。",
       "7 月属于旺季，海边、缆车、热门酒店和一日游通常都要提前订，尤其是万豪系和珍珠岛相关产品。",
     ],
-    bookingTitle: "你们的已订酒店",
-    bookingSub: "按你发来的截图整理，便于核对。",
     geoTitle: "地理位置与交通",
     geoSub: "先搞清楚芽庄怎么分布，后面就不会乱。",
     cityTitle: "市区景点",
     citySub: "适合和酒店、海滩、夜市穿插安排。",
     islandTitle: "海上与岛上玩法",
     islandSub: "芽庄最值钱的就是海上活动。",
-    hotelTitle: "酒店建议",
-    hotelSub: "先分区域看，再按你们的预订顺序对照。",
+    hotelTitle: "酒店日程与深度攻略",
+    hotelSub: "按时间顺序排布的入住清单，附带真实的硬件、餐饮、周边与钛金会员权益剖析。",
     itineraryTitle: "逐日行程",
     itinerarySub: "按你们已订酒店排出来的可执行版本。",
+    foodTitle: "必吃美食与餐厅",
+foodSub: "海鲜自助、本地海鲜、越南小吃、咖啡甜品推荐。",
     tipsTitle: "实用提示",
     tipsSub: "这些会直接影响体验和可行性。",
-    buttons: {
-      overview: "总览",
-      spots: "景点与玩法",
-      hotels: "酒店",
-      itinerary: "行程",
-      tips: "提示",
-      city: "市区",
-      island: "竹岛 / 珍珠岛",
-      camRanh: "金兰海湾",
-    },
-    hotelAdvice: "怎么选最顺",
-    hotelAdviceItems: [
-      "晚到首晚：金兰海湾最省心，减少落地当天的体力消耗。",
-      "珍珠岛：只住 1 晚最划算，和 VinWonders 绑在一起最顺。",
-      "市区：最后两到三晚最合适，吃喝、夜市、海滩、景点都在半径很小的范围内。",
-    ],
-    note: "说明：此文件为单文件 React 组件，可直接放进前端项目使用。若你需要，我可以继续把它改成更像旅行 App 的交互版，或者再拆成“更适合打印的 PDF 版文案”。",
+    note: "说明：此文件为单文件 React 组件。结合了小红书滑动相册与动态滚动监听，是一套极其完善的定制旅行 App 级网页。",
     quickTitle: "一键韩语翻译说明",
     quickText:
       "点击顶部按钮即可把整页切换为韩语版本；中文与韩语使用同一套结构，便于核对与修改。",
@@ -53,107 +37,216 @@ const localeCopy = {
     appSub:
       "원클릭 중/한 번역 · 커플 여행 · 7월 9일–16일 · 시내 + 빈펄 아일랜드",
     toggle: "중국어로 전환",
-    tabs: ["전체", "명소 가이드", "호텔", "일정", "실용 팁"],
+    tabs: ["전체", "명소 가이드", "호텔 일정", "일정", "실용 팁"],
     overviewTitle: "이번 여행의 핵심 구조",
     overviewSub:
       "7박을 3가지 리듬으로 나눕니다: 공항 완충, 섬에서의 깊은 체류, 시내 마무리.",
     overviewBullets: [
       "예약한 호텔 순서 자체가 합리적입니다. 먼저 깜라인 해변 쪽에 머물며 늦은 도착의 피로를 줄이고, 그다음 혼쩨(Hon Tre) 섬에서 1박하며 VinWonders와 해변을 충분히 즐긴 뒤, 마지막에는 냐짱 시내에서 해산물, 야시장, 성당, 머드배스를 편하게 즐길 수 있습니다.",
       "냐짱 시내의 주요 명소는 매우 가까운 편입니다. 쩐푸 해변, 포나가르 참탑, 성당/담시장/롱선사 구역은 지역별로 묶어 다니면 효율적입니다.",
-      "7월은 성수기이므로 해변 액티비티, 케이블카, 인기 호텔, 일일 투어는 미리 예약하는 편이 좋습니다. 특히 메리어트 계열과 빈펄 관련 상품은 조기 매진될 수 있습니다.",
+      "7월은 성수기이므로 해변 액티비티, 케이블카, 인기 호텔, 일일 투어는 미리 예약하는 편이 좋습니다.",
     ],
-    bookingTitle: "이미 예약한 호텔",
-    bookingSub: "보내준 스크린샷 기준으로 정리했습니다.",
     geoTitle: "위치와 교통",
     geoSub: "냐짱의 구성을 먼저 이해하면 일정이 훨씬 쉬워집니다.",
     cityTitle: "도심 명소",
     citySub: "호텔, 해변, 야시장과 함께 묶어 다니기 좋습니다.",
     islandTitle: "바다와 섬 액티비티",
     islandSub: "냐짱의 핵심은 역시 해상 체험입니다.",
-    hotelTitle: "호텔 추천",
-    hotelSub: "지역별로 나눠 보고, 실제 예약 순서와 대조하세요.",
+    hotelTitle: "호텔 일정 및 상세 가이드",
+    hotelSub: "시간 순서대로 배열된 숙박 목록과 하드웨어, 식음료, 멤버십 혜택에 대한 실제 분석입니다.",
     itineraryTitle: "일자별 일정",
     itinerarySub: "이미 예약한 호텔 흐름에 맞춘 실행 가능한 버전입니다.",
     tipsTitle: "실용 팁",
     tipsSub: "체감 만족도와 일정 실현 가능성에 직접 영향을 줍니다.",
-    buttons: {
-      overview: "전체",
-      spots: "명소/활동",
-      hotels: "호텔",
-      itinerary: "일정",
-      tips: "팁",
-      city: "도심",
-      island: "혼쩨 / 빈펄",
-      camRanh: "깜라인",
-    },
-    hotelAdvice: "가장 무난한 선택",
-    hotelAdviceItems: [
-      "도착 첫날은 깜라인 해변이 가장 편합니다. 도착 직후 체력을 아낄 수 있습니다.",
-      "혼쩨 섬은 1박만 해도 충분히 가치가 있습니다. VinWonders와 함께 묶으면 이동이 가장 깔끔합니다.",
-      "시내는 마지막 2~3박에 가장 적합합니다. 식사, 야시장, 해변, 관광을 반경 안에서 모두 해결할 수 있습니다.",
-    ],
-    note: "안내: 이 파일은 단일 React 컴포넌트입니다. 그대로 프런트엔드 프로젝트에 넣어 사용할 수 있습니다. 원하시면 여행 앱처럼 더 인터랙티브하게 바꾸거나, 인쇄용 PDF 문안으로도 정리할 수 있습니다.",
+    note: "안내: 이 파일은 단일 React 컴포넌트로 구성된 맞춤형 여행 앱 수준의 웹페이지입니다.",
     quickTitle: "원클릭 한국어 번역 안내",
     quickText:
       "상단 버튼을 누르면 전체 페이지가 한국어로 전환됩니다. 중국어/한국어는 같은 구조를 사용해 확인과 수정이 쉽습니다.",
   },
 };
 
-const actualBookings = [
+// 🌟 全新的《酒店日程》深度数据
+const hotelItineraryList = [
   {
-    date: "7/9 - 7/10",
+    date: "7/9 - 7/10 (第 1 晚)",
     name: "Wyndham Grand KN Paradise Cam Ranh",
-    zone: { zh: "金兰海湾 / 机场南侧", ko: "깜라인 해변 / 공항 남쪽" },
-    why: {
-      zh: "晚到第一晚最稳，先落地休息，第二天再进芽庄市区。",
-      ko: "늦게 도착하는 첫날 밤에 가장 무난합니다. 먼저 쉬고 다음 날 냐짱 시내로 이동하면 됩니다.",
+    brand: { zh: "温德姆至尊 (Wyndham Grand) · 大型高尔夫度假村", ko: "윈덤 그랜드 · 대형 골프 리조트" },
+    price: "约 300-600 元/晚",
+    hardware: {
+      zh: "2018年开业。占地极大的高尔夫度假村，拥有27洞球场和私人海滩俱乐部，硬件宏伟且极新。",
+      ko: "2018년 오픈. 27홀 골프장과 전용 비치 클럽을 갖춘 초대형 리조트로 시설이 웅장하고 새롭습니다."
     },
+    service: {
+      zh: "标准五星服务。因占地面积过大，出行高度依赖电瓶车 (Buggy)，旺季可能需要等待 10-15 分钟。",
+      ko: "표준 5성급 서비스. 부지가 너무 넓어 버기카(Buggy)에 크게 의존하며, 성수기엔 10~15분 대기가 발생할 수 있습니다."
+    },
+    meals: {
+      zh: "自助早餐丰盛，涵盖东西方菜系。由于周边点不到外卖，第一晚落地后建议直接在房间内或酒店餐厅解决宵夜。",
+      ko: "조식 뷔페가 매우 풍성합니다. 주변 배달이 불가하므로 첫날 도착 후에는 호텔 내에서 식사를 해결하는 것을 추천합니다."
+    },
+    traffic: {
+      zh: "距金兰机场仅 10-15 分钟车程，作为晚航班落地缓冲是完美的战略选择；距芽庄市区较远，约 45-60 分钟。",
+      ko: "깜라인 공항에서 10~15분 거리로 늦은 밤 도착 시 완충용으로 완벽한 전략적 위치입니다. 냐짱 시내까지는 45~60분 소요."
+    },
+    commerce: {
+      zh: "彻底的“荒郊野外”，周边为高尔夫球场和荒地，【完全没有便利店】。务必在机场先买好水和零食。",
+      ko: "주변은 골프장과 공터뿐이며 【편의점이 전혀 없습니다】. 공항에서 미리 간식과 물을 사오는 것이 필수입니다."
+    },
+    benefits: {
+      zh: "非万豪系。温德姆会员视房态可享延迟退房。作为第一晚主要用于洗漱补觉，无需强求高级权益，安心休息即可。",
+      ko: "메리어트 계열 아님. 윈덤 회원은 상황에 따라 레잇 체크아웃 가능. 첫날 밤은 휴식과 수면이 목적이므로 혜택 부담이 적습니다."
+    }
   },
   {
-    date: "7/10 - 7/11",
+    date: "7/10 - 7/11 (第 2 晚)",
     name: "The Westin Resort & Spa Cam Ranh",
-    zone: { zh: "金兰海湾 / 海滨度假区", ko: "깜라인 해변 / 리조트 존" },
-    why: {
-      zh: "继续住海湾，节奏松一点，适合休息、海滩、泳池、Spa。",
-      ko: "계속 해변 리조트에 머물며 여유 있게 쉬기 좋고, 해변·수영장·스파에 적합합니다.",
+    brand: { zh: "万豪高级 (Premium) · 威斯汀", ko: "메리어트 프리미엄 · 웨스틴" },
+    price: "约 600-1000 元/晚",
+    hardware: {
+      zh: "【2024年全新开业】主打健康与焕活体验，全配标志性“天梦之床”，设施极新，审美在线且极具度假感。",
+      ko: "【2024년 신규 오픈】 웰빙과 리프레시를 강조하며, 시그니처 '헤븐리 베드'를 갖춘 최신식 고급 시설입니다."
     },
+    service: {
+      zh: "新开业酒店员工热情极高，服务响应快，整体营造出极其放松且现代的海滨度假氛围。",
+      ko: "신규 호텔다운 열정적인 서비스와 빠른 응대로, 완벽하고 현대적인 해변 휴양 분위기를 제공합니다."
+    },
+    meals: {
+      zh: "主打 Eat Well 菜单，健康早餐备受好评；酒店内的海鲜餐厅水准很高，非常适合海滨晚餐。",
+      ko: "Eat Well 웰빙 조식이 호평을 받으며, 호텔 내 해산물 레스토랑의 수준이 높아 해변 저녁 식사로 제격입니다."
+    },
+    traffic: {
+      zh: "位于金兰海湾度假村地带核心，打车或呼叫 Grab 前往机场约 15 分钟，去芽庄市区约 40 分钟。",
+      ko: "깜라인 해변 리조트 단지 핵심에 위치하며, 공항까지 15분, 시내까지 40분 정도 소요됩니다."
+    },
+    commerce: {
+      zh: "同属金兰海湾，周边依然缺乏独立商业区和便利店，消费基本需要在酒店内完成。",
+      ko: "마찬가지로 깜라인 해변이라 독립적인 상권이나 편의점이 없어 소비는 주로 호텔 내에서 이루어집니다."
+    },
+    benefits: {
+      zh: "钛金待遇极佳：极大概率直升带私人泳池的别墅或绝美尊贵海景房；含双早；无传统酒廊。配合 4PM 延迟退房，情侣度假感直接拉满。",
+      ko: "티타늄 혜택 최고: 풀빌라 또는 프리미엄 오션뷰 룸으로 업그레이드될 확률이 높습니다. 2인 조식 제공(라운지 없음). 4PM 레잇 체크아웃과 최고의 조합입니다."
+    }
   },
   {
-    date: "7/11 - 7/12",
+    date: "7/11 - 7/12 (第 3 晚)",
     name: "Nha Trang Marriott Resort & Spa, Hon Tre Island",
-    zone: { zh: "竹岛 / 珍珠岛", ko: "혼쩨 섬 / 빈펄 섬" },
-    why: {
-      zh: "和 VinWonders 绑定最方便，适合把乐园、海滩、缆车一次玩透。",
-      ko: "VinWonders와 묶기 가장 편합니다. 테마파크, 해변, 케이블카를 한 번에 즐기기에 좋습니다.",
+    brand: { zh: "万豪 (Marriott) · 经典奢华", ko: "메리어트 · 클래식 럭셔리" },
+    price: "约 800-1300 元/晚",
+    hardware: {
+      zh: "前身是著名的珍珠岛度假村，翻牌万豪。拥有经典的法式与东南亚融合建筑、超大室外泳池与极佳的私家沙滩。",
+      ko: "구 빈펄 리조트를 메리어트로 리브랜딩. 클래식한 프렌치/동남아 건축 양식에 초대형 야외 수영장과 훌륭한 전용 해변을 갖춤."
     },
+    service: {
+      zh: "经过万豪标准化培训，服务专业。岛上区域极其宽广，进出房间及前往沙滩均可随时呼叫 Buggy 接送。",
+      ko: "메리어트 표준 교육을 받은 전문 서비스. 섬 내부 이동 시 언제든 버기카를 호출할 수 있습니다."
+    },
+    meals: {
+      zh: "酒店内自助餐非常丰盛（晚餐约 80万越南盾/人）。也可选择去连通的 VinWonders 乐园内吃快餐。",
+      ko: "호텔 내 조식/석식 뷔페가 매우 풍성합니다(인당 약 800k VND). VinWonders 테마파크 내 패스트푸드도 가능."
+    },
+    traffic: {
+      zh: "进出需乘坐 24 小时免费快艇或跨海缆车上岛；上岛后去乐园等地方主要依赖酒店专属 Buggy。",
+      ko: "24시간 무료 스피드보트나 케이블카로 섬에 진출입하며, 섬 내부에서는 주로 호텔 전용 버기카로 이동합니다."
+    },
+    commerce: {
+      zh: "岛上绝对封闭，【完全没有便利店】。强烈建议在进岛前，于市区买好足够的饮用水、零食和泡面带上岛。",
+      ko: "섬 내부가 완전히 독립되어 있어 【편의점이 전혀 없습니다】. 입도 전 시내에서 물, 간식, 컵라면을 넉넉히 사오는 것을 강력 추천합니다."
+    },
+    benefits: {
+      zh: "钛金厚道：大概率升海景套房或独栋别墅；通常配有酒廊待遇。最关键的是 4PM 延迟退房，等于在岛上免费多赚大半天乐园时间！",
+      ko: "티타늄 혜택 우수: 오션뷰 스위트나 풀빌라 업그레이드 확률이 높으며 보통 라운지 혜택이 제공됩니다. 4PM 레잇 체크아웃으로 섬을 반나절 더 즐길 수 있는 것이 핵심!"
+    }
   },
   {
-    date: "7/12 - 7/13",
+    date: "7/12 - 7/13 (第 4 晚)",
     name: "Four Points by Sheraton Nha Trang",
-    zone: { zh: "芽庄市区 / 陈富海滩", ko: "냐짱 시내 / 쩐푸 해변" },
-    why: {
-      zh: "回到市区，开始把夜市、海滩、城市景点串起来。",
-      ko: "시내로 돌아와 야시장, 해변, 도시 명소를 묶어서 다니기 좋습니다.",
+    brand: { zh: "万豪精选 (Select) · 福朋喜来登", ko: "메리어트 셀렉트 · 포포인츠 바이 쉐라톤" },
+    price: "约 450-800 元/晚",
+    hardware: {
+      zh: "2020年开业的高层现代地标建筑，客房极具现代感，顶楼的无边泳池和玻璃健身房视野极其震撼。",
+      ko: "2020년 오픈한 고층 현대식 랜드마크. 객실이 모던하며, 루프탑 인피니티 풀과 유리 피트니스 센터의 전망이 압도적입니다."
     },
+    service: {
+      zh: "高效、年轻且快捷。兼顾商务与城市休闲，前台办理入住与退房的速度在当地评价较高。",
+      ko: "효율적이고 젊은 감각. 비즈니스와 휴양을 겸비했으며, 프런트 데스크의 빠른 일처리가 좋은 평가를 받습니다."
+    },
+    meals: {
+      zh: "自助早餐性价比极高，种类丰富；顶楼的高空酒吧 (Altitude) 是芽庄极具人气的夜生活打卡地。",
+      ko: "조식 뷔페의 가성비가 아주 훌륭합니다. 최상층 루프탑 바(Altitude)는 냐짱에서 매우 인기 있는 야간 명소입니다."
+    },
+    traffic: {
+      zh: "位于市区陈富海滩偏北侧，打车随叫随到，去著名景点“婆那加占婆塔”比市中心其他酒店更近。",
+      ko: "시내 쩐푸 해변 북쪽에 위치하며 택시 잡기가 아주 쉽습니다. 유명 명소인 '포나가르 참탑'과 더 가깝습니다."
+    },
+    commerce: {
+      zh: "极其便利。楼下左转就是便利店和咖啡馆；晚餐可以直接溜达到著名的“清霜海鲜”吃平价大排档。",
+      ko: "아주 편리합니다. 1층 바로 옆에 편의점과 카페가 있으며, 저녁엔 유명 가성비 식당 '탄스엉 해산물'에 걸어갈 수 있습니다."
+    },
+    benefits: {
+      zh: "钛金通常会升级至高空全海景房或角房（该店套房极少）；含双人早餐及 4PM 延迟退房。注意该店无行政酒廊。",
+      ko: "티타늄은 보통 고층 풀 오션뷰 룸이나 코너룸으로 업그레이드됩니다(스위트룸 수량 적음). 2인 조식 및 4PM 레잇 체크아웃. 라운지는 없습니다."
+    }
   },
   {
-    date: "7/13 - 7/14",
+    date: "7/13 - 7/14 (第 5 晚)",
     name: "Sheraton Nha Trang Hotel & Spa",
-    zone: { zh: "芽庄市区 / 陈富海滩", ko: "냐짱 시내 / 쩐푸 해변" },
-    why: {
-      zh: "继续住在海滨核心区，最适合安排教堂、占婆塔、夜市、海鲜。",
-      ko: "해변 핵심 지역에 머물며 성당, 참탑, 야시장, 해산물 식사를 넣기 가장 좋습니다.",
+    brand: { zh: "万豪高级 (Premium) · 喜来登", ko: "메리어트 프리미엄 · 쉐라톤" },
+    price: "约 700-1000 元/晚",
+    hardware: {
+      zh: "2010年开业的芽庄老牌重磅地标。虽部分客房有年代感，但保养极佳，大堂与公共区域尽显经典五星奢华。",
+      ko: "2010년 오픈한 냐짱의 대표적인 클래식 랜드마크. 객실에 연식이 조금 있지만 관리가 훌륭하며 로비는 5성급의 고급스러움을 풍깁니다."
     },
+    service: {
+      zh: "员工服务极其老道、专业，门童和礼宾部对周边的熟悉度极高，真正做到“有求必应”。",
+      ko: "직원들의 서비스가 매우 노련하고 전문적입니다. 컨시어지가 주변 정보에 밝아 완벽한 응대를 제공합니다."
+    },
+    meals: {
+      zh: "自助早餐极其丰盛（当地水准Top级别）；一楼的海鲜自助晚餐口碑极高；酒廊热食能直接当正餐。",
+      ko: "조식 뷔페가 현지 최고 수준으로 풍성합니다. 1층 해산물 뷔페의 평가가 높고, 라운지 핫푸드도 정식 식사로 손색이 없습니다."
+    },
+    traffic: {
+      zh: "霸占芽庄市区最核心的十字路口！下楼过一条马路即是专属私人沙滩区，打车去夜市和大坝市场都在起步价内。",
+      ko: "냐짱 시내 가장 중심 사거리를 차지합니다! 길 하나 건너면 전용 해변이며, 야시장 및 담 시장까지 택시 기본요금입니다."
+    },
+    commerce: {
+      zh: "极度繁华。被各种便利店、网红咖啡厅、按摩店和小吃街 360 度包围，晚上下楼闭眼逛即可。",
+      ko: "극도로 번화함. 편의점, 유명 카페, 마사지 샵, 먹자골목에 360도로 둘러싸여 있어 밤에 걷기만 해도 좋습니다."
+    },
+    benefits: {
+      zh: "极其厚道：钛金大概率升套或高层海景；包含极佳的行政酒廊待遇（下午茶+晚间欢乐时光），含双早，完美适配 4PM 退房。",
+      ko: "티타늄 업그레이드(스위트 또는 고층 오션뷰)가 매우 후합니다. 퀄리티 높은 클럽 라운지(해피아워)가 제공되며 4PM 레잇 체크아웃과 최고의 조합입니다."
+    }
   },
   {
-    date: "7/14 - 7/15",
+    date: "7/14 - 7/15 (最后一晚)",
     name: "Wyndham Grand KN Paradise Cam Ranh",
-    zone: { zh: "金兰海湾 / 机场方向", ko: "깜라인 해변 / 공항 방향" },
-    why: {
-      zh: "作为返程前缓冲很合理，尤其适合你们最后一天不想赶车。",
-      ko: "귀국 전 완충 숙박으로 매우 합리적입니다. 마지막 날 차량 이동 부담을 줄일 수 있습니다.",
+    brand: { zh: "温德姆至尊 (Wyndham Grand) · 大型高尔夫度假村", ko: "윈덤 그랜드 · 대형 골프 리조트" },
+    price: "约 300-600 元/晚",
+    hardware: {
+      zh: "再次回到此酒店，享受宽敞的客房与完善的高尔夫/海滨硬件设施，给长途行程收尾。",
+      ko: "다시 이 호텔로 돌아와 넓은 객실과 해변/골프 시설을 즐기며 긴 일정을 마무리합니다."
     },
-  },
+    service: {
+      zh: "有了第一晚的经验，这次更能熟练运用 Buggy 和酒店各项服务时间表。",
+      ko: "첫날의 경험을 바탕으로 버기카 및 호텔 서비스 시간을 더 효율적으로 이용할 수 있습니다."
+    },
+    meals: {
+      zh: "依然建议在度假村内用餐。或在离开芽庄市区前，先饱餐一顿海鲜大餐，并采购好晚上的零食带来。",
+      ko: "여전히 리조트 내 식사를 권장하며, 시내에서 출발하기 전에 해산물을 든든히 먹고 간식을 사오는 것이 좋습니다."
+    },
+    traffic: {
+      zh: "战略意义极大：这里距离金兰机场仅十几分钟！能最大限度保证返程当天的从容，绝对避免市区堵车误机的风险。",
+      ko: "전략적으로 아주 중요한 위치: 깜라인 공항까지 불과 10여 분! 귀국 당일 시내 교통체증 위험 없이 여유롭게 출발할 수 있습니다."
+    },
+    commerce: {
+      zh: "此时已经不需要购物，安静的荒郊环境正好适合整理行李、收拾心情。",
+      ko: "이제 쇼핑은 필요 없으므로, 조용한 외곽 환경에서 짐을 정리하고 마음을 차분히 하기에 딱 좋습니다."
+    },
+    benefits: {
+      zh: "作为回国前的缓冲站，重点在于高效休息和极短的送机距离，抛开高级会员执念，安心踏上归途。",
+      ko: "귀국 전 완충지로서 편안한 휴식과 짧은 공항 이동거리에 초점을 맞춥니다. 멤버십 혜택에 얽매이지 않고 편안히 귀국길에 오르세요."
+    }
+  }
 ];
 
 const transport = [
@@ -279,6 +372,7 @@ const cityHighlights = [
     },
   },
 ];
+
 const islandHighlights = [
   {
     name: { zh: "四岛游", ko: "사섬투어" },
@@ -332,297 +426,150 @@ const islandHighlights = [
 
 const foodRecommendations = [
   {
-    name: { zh: "巷子瓦片烤肉 (Kay BBQ)", ko: "골목 기와 구이 (Kay BBQ)" },
-    tag: { zh: "小红书爆款·必吃特色", ko: "SNS 인기·필수 이색 체험" },
-    price: "约 150,000 - 300,000 VND / 人",
-    img: "https://loremflickr.com/500/500/bbq,pork",
-    mapLink:
-      "https://www.google.com/maps/search/?api=1&query=Kay+BBQ+Nha+Trang",
-    desc: {
-      zh: "位置在市区小巷里。来芽庄必吃的传统“瓦片烤肉”，炭火泥炉加上斜放的红瓦片烤肉，带有特殊炭香。推荐：招牌五花肉、大虾、牛肉片，绝对能满足一天的蛋白质摄入需求。",
-      ko: "시내 골목에 위치한 냐짱 필수 먹거리 '전통 기와 구이'. 숯불 향이 일품입니다. 추천 메뉴: 삼겹살, 대하, 소고기.",
-    },
-  },
-  {
-    name: {
-      zh: "清霜海鲜 (Thanh Suong Seafood)",
-      ko: "탄스엉 해산물 (Thanh Suong)",
-    },
-    tag: { zh: "本地老字号海鲜排档", ko: "현지인 추천 가성비 해산물" },
-    price: "约 250,000 - 400,000 VND / 人",
-    img: "https://loremflickr.com/500/500/seafood,shrimp",
-    mapLink:
-      "https://www.google.com/maps/search/?api=1&query=Thanh+Suong+Seafood+Nha+Trang",
-    desc: {
-      zh: "在陈富海滩大道有多家分店，本地人和游客都爱去。价格全公开，海鲜新鲜分量足。必点菜单：葱油烤扇贝、蒜蓉烤龙虾、海鲜炒面。",
-      ko: "쩐푸 해변에 여러 지점이 있는 유명한 식당. 가격이 투명합니다. 추천 메뉴: 가리비 파기름 구이, 갈릭 랍스터 구이, 해산물 볶음면.",
-    },
-  },
-  {
-    name: { zh: "CCCP Coffee", ko: "CCCP 커피" },
-    tag: { zh: "超赞椰子咖啡 + 强冷气", ko: "최고의 코코넛 커피 + 에어컨" },
-    price: "约 48,000 VND / 杯",
-    img: "https://loremflickr.com/500/500/coffee,cafe",
-    mapLink:
-      "https://www.google.com/maps/search/?api=1&query=CCCP+Coffee+Nha+Trang",
-    desc: {
-      zh: "芽庄市区内的避暑天堂，军绿色俄式复古装修，冷气超足！强烈推荐：椰子冰沙咖啡（Coconut Coffee）和芒果冰沙。允许自带食物进入。",
-      ko: "시내에서 가장 쾌적한 피서 카페. 에어컨이 아주 시원합니다. 강력 추천 메뉴: 코코넛 커피 스무디, 망고 스무디.",
-    },
-  },
-  {
-    name: {
-      zh: "Ngon Gallery (龙虾海鲜自助)",
-      ko: "Ngon Gallery (랍스터 뷔페)",
-    },
-    tag: { zh: "五星级浪漫·无限量龙虾", ko: "5성급 체험·무제한 랍스터" },
+    category: { zh: "海鲜自助", ko: "해산물 뷔페" },
+    name: { zh: "Ngon Gallery Nha Trang", ko: "Ngon Gallery Nha Trang" },
+    tag: { zh: "无限龙虾 · 高端自助", ko: "무제한 랍스터 · 고급 뷔페" },
     price: "约 1,000,000 VND 起 / 人",
-    img: "https://loremflickr.com/500/500/lobster,seafood",
-    mapLink:
-      "https://www.google.com/maps/search/?api=1&query=Ngon+Gallery+Nha+Trang",
+    img: "https://images.unsplash.com/photo-1559339352-11d035aa65de?auto=format&fit=crop&w=1200&q=80",
+    mapLink: "https://www.google.com/maps/search/?api=1&query=Ngon+Gallery+Nha+Trang",
     desc: {
-      zh: "位于市中心的高端自助餐，环境优雅，很适合晚餐。主打现点现做的无限量龙虾（芝士/黑胡椒/蒜蓉/辣椒），以及丰富的生鱼片和牛排拼盘。",
-      ko: "시내 중심부에 위치한 고급 뷔페. 무제한 랍스터(치즈, 블랙페퍼, 갈릭, 칠리 맛)와 풍성한 사시미, 스테이크 플래터가 특징입니다.",
+      zh: "芽庄最有代表性的海鲜自助之一，主打无限龙虾与多国菜品，适合晚餐或纪念日。位置在陈富路一带，环境和出品都偏高端。",
+      ko: "냐짱을 대표하는 고급 해산물 뷔페 중 하나로, 무제한 랍스터와 다양한 양식/현지 요리가 강점입니다. 기념일 저녁 식사로 잘 맞습니다.",
+    },
+    menu: {
+      zh: ["无限龙虾", "烤生蚝 / 扇贝", "刺身 / 沙拉", "牛排 / 甜品台"],
+      ko: ["무제한 랍스터", "굴구이 / 가리비", "사시미 / 샐러드", "스테이크 / 디저트"],
+    },
+  },
+  {
+    category: { zh: "本地海鲜", ko: "현지 해산물" },
+    name: { zh: "Thanh Suong Seafood", ko: "Thanh Suong Seafood" },
+    tag: { zh: "本地人常去 · 价格透明", ko: "현지인 인기 · 가격 투명" },
+    price: "约 250,000 - 400,000 VND / 人",
+    img: "https://images.unsplash.com/photo-1510130387422-82bed34b37e9?auto=format&fit=crop&w=1200&q=80",
+    mapLink: "https://www.google.com/maps/search/?api=1&query=Thanh+Suong+Seafood+Nha+Trang",
+    desc: {
+      zh: "芽庄很常见的海鲜排档类型，适合点一桌虾、螃蟹、贝类配炒饭或海鲜面。适合想吃得新鲜又不想花太多的人。",
+      ko: "냐짱에서 흔히 볼 수 있는 해산물 식당 스타일로, 새우·게·조개류에 볶음밥이나 해산물면을 곁들이기 좋습니다.",
+    },
+    menu: {
+      zh: ["蒜蓉烤龙虾", "葱油烤扇贝", "海鲜炒面", "蟹 / 虾 / 贝类"],
+      ko: ["갈릭 랍스터", "파기름 가리비", "해산물 볶음면", "게 / 새우 / 조개"],
+    },
+  },
+  {
+    category: { zh: "本地烧烤", ko: "현지 바비큐" },
+    name: { zh: "Lac Canh Restaurant", ko: "Lac Canh Restaurant" },
+    tag: { zh: "炭烤牛肉 · 老牌名店", ko: "숯불 소고기 · 오래된 명점" },
+    price: "约 200,000 - 350,000 VND / 人",
+    img: "https://images.unsplash.com/photo-1558030006-450675393462?auto=format&fit=crop&w=1200&q=80",
+    mapLink: "https://www.google.com/maps/search/?api=1&query=Lac+Canh+Restaurant+Nha+Trang",
+    desc: {
+      zh: "芽庄很有名的炭烤牛肉店，适合多人一起点肉类和烤菜。整体更偏热闹、接地气，属于本地常吃的类型。",
+      ko: "냐짱의 유명한 숯불 소고기 집으로, 여러 명이 함께 고기와 구이류를 먹기 좋습니다. 분위기는 소박하고 활기찬 편입니다.",
+    },
+    menu: {
+      zh: ["炭烤牛肉", "烤虾", "烤鱿鱼", "米饭 / 米纸卷"],
+      ko: ["숯불 소고기", "구운 새우", "구운 오징어", "밥 / 라이스페이퍼"],
+    },
+  },
+  {
+    category: { zh: "越南小吃", ko: "베트남 스트리트 푸드" },
+    name: { zh: "Nem Nuong Dang Van Quyen", ko: "Nem Nuong Dang Van Quyen" },
+    tag: { zh: "烤肉春卷 · 必吃", ko: "구운 돼지고기 춘권 · 필수" },
+    price: "约 40,000 - 90,000 VND / 人",
+    img: "https://images.unsplash.com/photo-1525755662778-989d0524087e?auto=format&fit=crop&w=1200&q=80",
+    mapLink: "https://www.google.com/maps/search/?api=1&query=Nem+Nuong+Dang+Van+Quyen+Nha+Trang",
+    desc: {
+      zh: "芽庄非常典型的 nem nướng 老店，通常会配米纸、生菜、香草和蘸酱一起吃。适合当午餐、下午加餐或晚餐前垫一口。",
+      ko: "냐짱의 대표적인 nem nướng 맛집으로, 라이스페이퍼·상추·허브·소스와 함께 싸 먹습니다. 점심이나 간식으로 딱 좋습니다.",
+    },
+    menu: {
+      zh: ["Nem nướng", "米纸卷", "炸春卷", "越南香草"],
+      ko: ["넴느엉", "라이스페이퍼롤", "튀김춘권", "허브류"],
+    },
+  },
+  {
+    category: { zh: "越南小吃", ko: "베트남 스트리트 푸드" },
+    name: { zh: "Bánh Căn 51 Tô Hiến Thành", ko: "Bánh Căn 51 Tô Hiến Thành" },
+    tag: { zh: "小饼 + 海鲜蘸酱", ko: "미니 팬케이크 + 해산물 소스" },
+    price: "约 30,000 - 70,000 VND / 人",
+    img: "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=1200&q=80",
+    mapLink: "https://www.google.com/maps/search/?api=1&query=Banh+Can+51+To+Hien+Thanh+Nha+Trang",
+    desc: {
+      zh: "适合想尝芽庄本地小吃的人，常见是小铁盘现做的 bánh căn，配海鲜、鸡蛋和蘸酱。份量不大，但很有地方特色。",
+      ko: "냐짱 로컬 간식을 맛보고 싶을 때 좋은 곳입니다. 작은 틀에서 즉석으로 굽는 bánh căn에 해산물, 계란, 소스를 곁들입니다.",
+    },
+    menu: {
+      zh: ["Bánh căn", "Bánh xèo", "海鲜蘸酱", "蛋 / 虾 / 鱿鱼"],
+      ko: ["반깐", "반쎄오", "해산물 소스", "계란 / 새우 / 오징어"],
+    },
+  },
+  {
+    category: { zh: "面包", ko: "바게트" },
+    name: { zh: "Banh Mi Phan", ko: "Banh Mi Phan" },
+    tag: { zh: "平价三明治 · 出餐快", ko: "가성비 샌드위치 · 빠른 제공" },
+    price: "约 25,000 - 40,000 VND / 个",
+    img: "https://images.unsplash.com/photo-1509722747041-616f39b57569?auto=format&fit=crop&w=1200&q=80",
+    mapLink: "https://www.google.com/maps/search/?api=1&query=Banh+Mi+Phan+Nha+Trang",
+    desc: {
+      zh: "芽庄很方便的一类越南法棍店，适合早餐、赶路或夜宵。出餐快、价格低，口味稳定，适合随手吃一个。",
+      ko: "냐짱에서 편하게 먹기 좋은 베트남식 바게트 가게입니다. 아침·이동 중·야식 모두 잘 맞고, 가격도 부담이 적습니다.",
+    },
+    menu: {
+      zh: ["烤肉法棍", "鸡肉法棍", "素食法棍", "牛油果 / 蛋"],
+      ko: ["고기 바게트", "치킨 바게트", "채식 바게트", "아보카도 / 계란"],
+    },
+  },
+  {
+    category: { zh: "咖啡饮品", ko: "커피 / 음료" },
+    name: { zh: "CCCP Coffee", ko: "CCCP Coffee" },
+    tag: { zh: "椰子咖啡 · 强冷气", ko: "코코넛 커피 · 에어컨 강함" },
+    price: "约 45,000 - 70,000 VND / 杯",
+    img: "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=1200&q=80",
+    mapLink: "https://www.google.com/maps/search/?api=1&query=CCCP+Coffee+Nha+Trang",
+    desc: {
+      zh: "很适合中午避暑或者安排拍照休息。常见推荐是椰子咖啡、冰沙和各种甜饮，属于市区里比较舒服的中途停靠点。",
+      ko: "한낮에 더위를 피하거나 사진 찍고 쉬기 좋습니다. 코코넛 커피, 스무디, 달콤한 음료가 대표적이며 시내 중간 휴식지로 좋습니다.",
+    },
+    menu: {
+      zh: ["椰子咖啡", "芒果冰沙", "冰拿铁", "甜饮 / 冰沙"],
+      ko: ["코코넛 커피", "망고 스무디", "아이스 라테", "달콤한 음료 / 스무디"],
+    },
+  },
+  {
+    category: { zh: "甜品", ko: "디저트" },
+    name: { zh: "Sweet Secret", ko: "Sweet Secret" },
+    tag: { zh: "蛋糕甜品 · 高分口碑", ko: "케이크 디저트 · 높은 평점" },
+    price: "约 50,000 - 120,000 VND / 份",
+    img: "https://images.unsplash.com/photo-1464306076886-da185f6a9d6b?auto=format&fit=crop&w=1200&q=80",
+    mapLink: "https://www.google.com/maps/search/?api=1&query=Sweet+Secret+Nha+Trang",
+    desc: {
+      zh: "适合饭后补一个甜点，环境通常更偏安静和精致。比较适合情侣旅行里当作下午茶或晚餐收尾。",
+      ko: "식사 후 디저트를 넣기 좋은 곳으로, 분위기가 비교적 조용하고 깔끔합니다. 커플 여행의 애프터눈 티나 식사 마무리로 잘 맞습니다.",
+    },
+    menu: {
+      zh: ["芝士蛋糕", "慕斯蛋糕", "冰淇淋", "咖啡 / 茶"],
+      ko: ["치즈케이크", "무스케이크", "아이스크림", "커피 / 차"],
+    },
+  },
+  {
+    category: { zh: "面包 / 烘焙", ko: "베이커리" },
+    name: { zh: "Củi Bánh Mì", ko: "Củi Bánh Mì" },
+    tag: { zh: "现烤面包 · 更适合早餐", ko: "갓 구운 빵 · 아침용" },
+    price: "约 30,000 - 60,000 VND / 份",
+    img: "https://images.unsplash.com/photo-1517686469429-8bdb88b9f907?auto=format&fit=crop&w=1200&q=80",
+    mapLink: "https://www.google.com/maps/search/?api=1&query=Cui+Banh+Mi+Nha+Trang",
+    desc: {
+      zh: "更偏烘焙店气质，适合做早餐、带走或和咖啡一起点。想吃得清爽一点时，这类店很实用。",
+      ko: "베이커리 성격이 강해서 아침식사, 테이크아웃, 커피와 함께 주문하기 좋습니다. 가볍게 먹고 싶을 때 실용적입니다.",
+    },
+    menu: {
+      zh: ["现烤法棍", "火腿三明治", "奶油面包", "甜点面包"],
+      ko: ["갓 구운 바게트", "햄 샌드위치", "크림빵", "디저트 빵"],
     },
   },
 ];
-
-const hotelOptions = {
-  city: [
-    {
-      name: "Sheraton Nha Trang Hotel & Spa",
-      tag: { zh: "万豪系首选", ko: "메리어트 계열 우선" },
-      price: "约 700-1000 元/晚",
-      loc: { zh: "芽庄陈富海滩核心区", ko: "냐짱 쩐푸 해변 핵심 구역" },
-      good: {
-        zh: ["海景和位置都强", "适合晚上逛夜市", "万豪体系方便累积"],
-        ko: [
-          "오션뷰와 입지가 좋음",
-          "밤에 야시장 가기 좋음",
-          "메리어트 포인트 적립 가능",
-        ],
-      },
-      bad: {
-        zh: ["旺季价格高", "老牌酒店，部分房间风格偏经典"],
-        ko: ["성수기 가격이 높음", "오래된 편이라 일부 객실은 클래식한 느낌"],
-      },
-      tips: {
-        zh: [
-          "会员待遇：钛金大概率升行政海景房或角套，带行政酒廊（下午茶和 Happy Hour 的热食足够解决简餐）。可以利用 4PM 延迟退房睡饱练透。",
-          "周边交通：极度便利。下楼就是主干道，打车去大坝市场或夜市基本都是起步价；过马路就是酒店的私人沙滩专属躺椅。",
-          "便利店与餐饮：楼下及背后的小巷里到处都是 Circle K 和本地杂货店。海鲜排档步行可达。酒店自助早餐极丰盛，若在酒店单点晚餐约 600,000 VND/人。",
-        ],
-        ko: [
-          "멤버십 혜택: 티타늄은 클럽 오션뷰나 스위트로 업그레이드 확률이 높으며 클럽 라운지(해피아워)가 포함됩니다. 4PM 레잇 체크아웃을 활용하기 좋습니다.",
-          "교통 및 주변: 매우 편리합니다. 길 건너편이 전용 해변이며, 야시장까지 택시 기본요금 거리입니다.",
-          "편의점 및 식사: 호텔 1층 주변에 Circle K 등 편의점이 널려 있습니다. 조식이 훌륭하며, 호텔 내 저녁 단품 식사는 약 600,000 VND입니다.",
-        ],
-      },
-    },
-    {
-      name: "Four Points by Sheraton Nha Trang",
-      tag: { zh: "万豪系性价比", ko: "메리어트 가성비" },
-      price: "约 450-800 元/晚",
-      loc: { zh: "市区海滨大道", ko: "시내 해변 도로변" },
-      good: {
-        zh: ["位置好", "价格通常比喜来登友好", "适合城市观光"],
-        ko: [
-          "입지가 좋음",
-          "쉐라톤보다 가격이 보통 더 합리적",
-          "도심 관광에 적합",
-        ],
-      },
-      bad: {
-        zh: ["豪华感不如喜来登", "热门日期容易涨价"],
-        ko: ["럭셔리 감은 쉐라톤보다 약함", "인기 날짜는 가격이 빨리 오름"],
-      },
-      tips: {
-        zh: [
-          "会员待遇：钛金通常升级至高空海景房，套房数量较少。无行政酒廊，但高空泳池和器械超全的健身房非常出片和实用。",
-          "周边交通：打车极易，门口随时有 Grab。去著名景点婆那加占婆塔比喜来登更近。",
-          "便利店与餐饮：楼下左转就是便利店和咖啡馆。早餐高峰期人多需排队，建议错峰；晚餐可以直接溜达到附近的「清霜海鲜」吃平价大排档。",
-        ],
-        ko: [
-          "멤버십 혜택: 티타늄은 보통 고층 오션뷰로 업그레이드되며 라운지는 없지만 피트니스 센터와 고층 수영장이 아주 훌륭합니다.",
-          "교통 및 주변: Grab 택시 잡기가 아주 쉬우며, 포나가르 참탑과 더 가깝습니다.",
-          "편의점 및 식사: 1층 바로 옆에 편의점과 카페가 있습니다. 조식 피크 타임엔 대기가 있을 수 있으며, 저녁은 근처 해산물 식당을 추천합니다.",
-        ],
-      },
-    },
-    {
-      name: "Novotel Nha Trang",
-      tag: { zh: "非万豪备选", ko: "비메리어트 대안" },
-      price: "约 350-650 元/晚",
-      loc: { zh: "市区海边", ko: "시내 해변가" },
-      good: {
-        zh: ["海景位置很稳", "价格更好控", "适合预算型住法"],
-        ko: ["바다 전망 위치가 좋음", "가격 관리가 쉬움", "예산형 숙박에 적합"],
-      },
-      bad: {
-        zh: ["不是万豪", "设施风格相对常规"],
-        ko: ["메리어트가 아님", "시설이 비교적 일반적"],
-      },
-      tips: {
-        zh: [
-          "配套体验：非万豪系无会员加持，但法国雅高集团的管理底子扎实，床品舒适度高。",
-          "周边交通：位于市区最正中心的繁华十字路口，去哪儿都能步行或便宜打车。",
-          "便利店与餐饮：被便利店和当地网红店包围。其一楼的海鲜自助晚餐（含龙虾）在当地性价比极高，折合大概 150 RMB/人，值得一试。",
-        ],
-        ko: [
-          "호텔 경험: 메리어트는 아니지만 아코르 계열로 침구류가 편안하고 서비스가 안정적입니다.",
-          "교통 및 주변: 시내 가장 중심 사거리에 있어 어디든 도보나 저렴한 택시로 이동 가능합니다.",
-          "편의점 및 식사: 주변에 편의점이 가득하며, 호텔 1층 해산물 뷔페(랍스터 포함)가 가성비 좋기로 현지에서 유명합니다.",
-        ],
-      },
-    },
-  ],
-  island: [
-    {
-      name: "Nha Trang Marriott Resort & Spa, Hon Tre Island",
-      tag: { zh: "万豪岛上首选", ko: "섬 내 메리어트 우선" },
-      price: "约 800-1300 元/晚",
-      loc: { zh: "竹岛 Hon Tre", ko: "Hon Tre 섬" },
-      good: {
-        zh: ["万豪体系", "度假感强", "适合住一晚把岛上玩透"],
-        ko: [
-          "메리어트 계열",
-          "리조트 분위기가 강함",
-          "1박으로 섬을 깊게 즐기기 좋음",
-        ],
-      },
-      bad: {
-        zh: ["出入岛不如市区方便", "临时去吃夜宵不轻松"],
-        ko: ["시내 접근성이 떨어짐", "야식이나 즉흥 외출이 불편함"],
-      },
-      tips: {
-        zh: [
-          "会员待遇：前身是珍珠岛酒店。钛金会员有极大概率升带私池的单卧别墅或绝美海景套（视房态）。4PM退房神技在这里等于多赚大半天海岛游。",
-          "出行提示：出入岛需乘 24 小时免费快艇或跨海缆车。上岛后出行全靠呼叫酒店 Buggy。",
-          "便利店与餐饮：**岛上完全没有便利店**！务必在市区买好零食、水和泡面带上岛。岛上餐饮贵且选择少，酒店自助晚餐约 800,000 VND，或者去 VinWonders 园区里吃快餐。",
-        ],
-        ko: [
-          "멤버십 혜택: 구 빈펄 리조트를 리브랜딩했습니다. 티타늄은 풀빌라나 오션뷰 스위트로 업그레이드될 확률이 높습니다.",
-          "교통 및 주변: 섬 출입 시 24시간 무료 스피드보트나 케이블카를 이용해야 하며, 섬 내부 이동은 버기카에 의존합니다.",
-          "편의점 및 식사: **섬 내 편의점이 전혀 없습니다!** 시내에서 간식을 사서 들어가세요. 저녁 식사는 호텔 뷔페(약 800k VND)나 빈원더스 내부에서 해결해야 합니다.",
-        ],
-      },
-    },
-    {
-      name: "Vinpearl Resort & Spa Nha Trang Bay",
-      tag: { zh: "乐园联动型", ko: "테마파크 연계형" },
-      price: "约 500-900 元/晚",
-      loc: { zh: "竹岛 Hon Tre", ko: "Hon Tre 섬" },
-      good: {
-        zh: ["和 VinWonders 联动紧", "亲子和情侣都顺手", "常有含票套餐"],
-        ko: [
-          "VinWonders와 연결이 편함",
-          "가족·커플 모두 편리",
-          "입장권 포함 패키지가 자주 있음",
-        ],
-      },
-      bad: {
-        zh: ["不如万豪新", "旺季人多时体验会打折"],
-        ko: ["메리어트보다 신축감이 약함", "성수기에는 사람이 많아질 수 있음"],
-      },
-      tips: {
-        zh: [
-          "出行提示：典型的巨型亲子度假村，高峰期等快艇和 Buggy 容易排队，办理入住常常需要等。",
-          "便利店与餐饮：周边绝对封闭，无便利店。由于周边没吃的，极其建议在订房时直接加钱购买含三餐（FB - Full Board）的房型，吃饱直接去乐园玩。",
-        ],
-        ko: [
-          "교통 및 주변: 대형 가족 리조트로 피크 타임엔 보트와 버기카 대기가 꽤 있습니다.",
-          "편의점 및 식사: 주변에 상가가 전혀 없습니다. 예약 시 3식을 모두 제공하는 풀보드(FB) 패키지를 선택하는 것이 가장 마음 편합니다.",
-        ],
-      },
-    },
-    {
-      name: "Vinpearl Luxury Nha Trang",
-      tag: { zh: "私密安静型", ko: "프라이빗·조용한 타입" },
-      price: "约 750-1100 元/晚",
-      loc: { zh: "竹岛 Hon Tre", ko: "Hon Tre 섬" },
-      good: {
-        zh: ["别墅感更强", "安静、适合情侣", "度假氛围好"],
-        ko: [
-          "빌라 느낌이 강함",
-          "조용해서 커플에게 좋음",
-          "휴양 분위기가 좋음",
-        ],
-      },
-      bad: {
-        zh: ["价格不低", "离乐园要看具体位置"],
-        ko: ["가격이 낮지 않음", "테마파크까지는 위치에 따라 이동이 필요"],
-      },
-      tips: {
-        zh: [
-          "出行提示：全别墅区，私密性极高，很适合情侣两人世界。呼叫 Buggy 响应服务比普通珍珠系酒店快很多。",
-          "便利店与餐饮：同样无便利店。只有酒店自带的高级餐厅，单点消费较高，建议买含早晚餐（HB）的套包最划算。",
-        ],
-        ko: [
-          "교통 및 주변: 전 객실 풀빌라로 프라이버시가 높고 커플 여행에 최고입니다. 버기카 서비스도 빠른 편입니다.",
-          "편의점 및 식사: 편의점은 없습니다. 고급 레스토랑만 있어 단가가 높으므로 하프보드(HB, 조/석식) 패키지로 예약하는 것을 추천합니다.",
-        ],
-      },
-    },
-  ],
-  camRanh: [
-    {
-      name: "Wyndham Grand KN Paradise Cam Ranh",
-      tag: { zh: "落地缓冲型", ko: "도착 완충형" },
-      price: "约 300-700 元/晚",
-      loc: { zh: "金兰海湾", ko: "깜라인 해변" },
-      good: {
-        zh: ["离机场近", "适合晚到/早走", "先休息再进城"],
-        ko: [
-          "공항과 가까움",
-          "늦게 도착하거나 일찍 출발할 때 좋음",
-          "먼저 쉬고 시내로 이동 가능",
-        ],
-      },
-      bad: {
-        zh: ["离芽庄市区远", "吃喝玩乐选择少于市区"],
-        ko: ["냐짱 시내와 거리가 있음", "식사·놀거리 선택이 시내보다 적음"],
-      },
-      tips: {
-        zh: [
-          "出行提示：占地面积巨大（内含大片高尔夫球场），从房间去大堂或餐厅步行极远，全靠 Buggy，通常要等 10-15 分钟，要有心理准备。打 Grab 去市区约 400,000 VND。",
-          "便利店与餐饮：**重灾区！周边是荒地，外卖进不来，没有便利店**。落地当晚建议在机场先买好水和泡面。酒店晚餐偏贵且选择少，只适合做过渡落脚点。",
-        ],
-        ko: [
-          "교통 및 주변: 리조트가 너무 넓어 버기카 의존도가 높고(10~15분 대기), 시내까지 그랩 택시비 약 400,000 VND가 나옵니다.",
-          "편의점 및 식사: **주변이 공터라 배달이나 편의점이 아예 없습니다**. 공항에서 미리 물과 간식을 사오세요. 저녁 식사 선택지가 적어 잠시 머무는 용도로만 추천합니다.",
-        ],
-      },
-    },
-    {
-      name: "The Westin Resort & Spa Cam Ranh",
-      tag: { zh: "海湾度假型", ko: "해변 리조트형" },
-      price: "约 600-1000 元/晚",
-      loc: { zh: "金兰海湾", ko: "깜라인 해변" },
-      good: {
-        zh: ["适合纯度假", "泳池和 Spa 很适合放空", "情侣体验感好"],
-        ko: [
-          "순수 휴양에 적합",
-          "수영장과 스파가 좋음",
-          "커플 체류 만족도가 높음",
-        ],
-      },
-      bad: {
-        zh: ["不在城市核心", "需要额外时间进芽庄"],
-        ko: ["도심 중심이 아님", "냐짱 시내로 갈 때 시간이 더 듦"],
-      },
-      tips: {
-        zh: [
-          "会员待遇：2024 年全新开业，硬件极佳。钛金升房极度慷慨，大概率直升带私人泳池的别墅或绝美尊贵海景房。配合 4PM 延迟退房，情侣度假感拉满。",
-          "便利店与餐饮：同样荒凉无便利店。但威斯汀主打的健康早餐（Eat Well）备受好评。酒店内有极佳的健身房和海滨瑜伽。晚餐推荐在酒店内的海鲜餐厅解决，人均约 600,000 VND。",
-        ],
-        ko: [
-          "멤버십 혜택: 2024년 신규 오픈했으며 티타늄 업그레이드가 아주 후합니다(풀빌라나 오션뷰 룸). 4PM 레잇 체크아웃과 최고의 궁합입니다.",
-          "편의점 및 식사: 편의점은 없지만 웨스틴 특유의 웰빙 조식이 훌륭합니다. 커플 호캉스에 좋으며 저녁 식사는 호텔 레스토랑(인당 약 600k VND)을 추천합니다.",
-        ],
-      },
-    },
-  ],
-};
 
 const itinerary = [
   {
@@ -844,102 +791,120 @@ function BulletList({ items }) {
   );
 }
 
-function HotelCard({ h, lang }) {
-  const good = lang === "zh" ? h.good.zh : h.good.ko;
-  const bad = lang === "zh" ? h.bad.zh : h.bad.ko;
-  // 获取新增的详细攻略数据
-  const tips = lang === "zh" ? h.tips?.zh : h.tips?.ko;
-
+// 🌟 全新的深层酒店排版卡片
+function HotelItineraryCard({ h, lang }) {
   return (
-    <Card>
+    <Card accent>
+      {/* 头部信息 */}
       <div
         style={{
           display: "flex",
           justifyContent: "space-between",
+          alignItems: "flex-start",
           gap: 12,
           flexWrap: "wrap",
+          paddingBottom: 16,
+          marginBottom: 16,
+          borderBottom: "1px dashed #dbe3ea",
         }}
       >
         <div>
-          <div style={{ fontSize: 18, fontWeight: 800, color: "#0e2d4d" }}>
+          <div
+            style={{
+              display: "inline-block",
+              background: "#e07055",
+              color: "#fff",
+              padding: "4px 10px",
+              borderRadius: 8,
+              fontSize: 13,
+              fontWeight: 900,
+              marginBottom: 8,
+            }}
+          >
+            {h.date}
+          </div>
+          <div style={{ fontSize: 20, fontWeight: 900, color: "#0e2d4d" }}>
             {h.name}
           </div>
-          <div style={{ marginTop: 4, color: "#6b7280", fontSize: 13 }}>
-            {lang === "zh" ? h.loc.zh : h.loc.ko}
+          <div
+            style={{
+              color: "#6b7280",
+              fontSize: 14,
+              marginTop: 6,
+              fontWeight: 700,
+            }}
+          >
+            {lang === "zh" ? h.brand.zh : h.brand.ko}
           </div>
         </div>
-        <div style={{ textAlign: "right" }}>
-          <div style={{ fontSize: 13, fontWeight: 800, color: "#e07055" }}>
-            {lang === "zh" ? h.tag.zh : h.tag.ko}
-          </div>
-          <div style={{ marginTop: 4, fontSize: 16, fontWeight: 800 }}>
+        <div style={{ textAlign: "right", flexShrink: 0 }}>
+          <div style={{ fontSize: 18, fontWeight: 900, color: "#111" }}>
             {h.price}
           </div>
         </div>
       </div>
 
-      {/* 优点和缺点 */}
+      {/* 六宫格详细信息 */}
       <div
         style={{
           display: "grid",
-          gridTemplateColumns: "1fr 1fr",
-          gap: 14,
-          marginTop: 14,
+          gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))",
+          gap: 16,
         }}
       >
-        <div>
-          <div
-            style={{
-              fontWeight: 800,
-              color: "#16a34a",
-              marginBottom: 6,
-              fontSize: 13,
-            }}
-          >
-            {lang === "zh" ? "优点" : "장점"}
-          </div>
-          <BulletList items={good} />
-        </div>
-        <div>
-          <div
-            style={{
-              fontWeight: 800,
-              color: "#dc2626",
-              marginBottom: 6,
-              fontSize: 13,
-            }}
-          >
-            {lang === "zh" ? "注意" : "주의"}
-          </div>
-          <BulletList items={bad} />
-        </div>
+        <InfoItem
+          icon="🏛️"
+          title={lang === "zh" ? "历史与硬件" : "역사 및 시설"}
+          text={lang === "zh" ? h.hardware.zh : h.hardware.ko}
+        />
+        <InfoItem
+          icon="🛎️"
+          title={lang === "zh" ? "服务水平" : "서비스 수준"}
+          text={lang === "zh" ? h.service.zh : h.service.ko}
+        />
+        <InfoItem
+          icon="🍳"
+          title={lang === "zh" ? "餐饮与早午餐" : "식음료 및 조식"}
+          text={lang === "zh" ? h.meals.zh : h.meals.ko}
+        />
+        <InfoItem
+          icon="🚕"
+          title={lang === "zh" ? "周边交通" : "주변 교통"}
+          text={lang === "zh" ? h.traffic.zh : h.traffic.ko}
+        />
+        <InfoItem
+          icon="🛍️"
+          title={lang === "zh" ? "周边商业" : "주변 상권"}
+          text={lang === "zh" ? h.commerce.zh : h.commerce.ko}
+        />
+        <InfoItem
+          icon="💎"
+          title={lang === "zh" ? "钛金会员权益" : "티타늄 멤버십 혜택"}
+          text={lang === "zh" ? h.benefits.zh : h.benefits.ko}
+        />
       </div>
-
-      {/* 🌟 新增：深度详细攻略展示区 */}
-      {tips && (
-        <div
-          style={{
-            marginTop: 16,
-            paddingTop: 16,
-            borderTop: "1px dashed #dbe3ea",
-          }}
-        >
-          <div
-            style={{
-              fontWeight: 800,
-              color: "#0e2d4d",
-              marginBottom: 10,
-              fontSize: 14,
-            }}
-          >
-            {lang === "zh"
-              ? "📌 隐藏细节 (周边/餐饮/待遇)"
-              : "📌 상세 팁 (교통/식음료/멤버십)"}
-          </div>
-          <BulletList items={tips} />
-        </div>
-      )}
     </Card>
+  );
+}
+
+// 辅助组件：带图标的图文块
+function InfoItem({ icon, title, text }) {
+  return (
+    <div style={{ fontSize: 14, lineHeight: 1.6 }}>
+      <div
+        style={{
+          fontWeight: 800,
+          color: "#0e2d4d",
+          marginBottom: 6,
+          display: "flex",
+          alignItems: "center",
+          gap: 6,
+        }}
+      >
+        <span>{icon}</span> <span>{title}</span>
+      </div>
+      <div style={{ color: "#334155" }}>{text}</div>
+    </div>
   );
 }
 
@@ -951,29 +916,49 @@ function FoodCard({ f, lang }) {
           display: "flex",
           gap: 16,
           flexWrap: "wrap",
-          alignItems: "flex-start",
+          alignItems: "stretch",
         }}
       >
-        {/* 左侧方形大图 */}
         <div
           style={{
             flexShrink: 0,
-            width: 130,
-            height: 130,
-            borderRadius: 12,
+            width: 150,
+            height: 150,
+            borderRadius: 16,
             overflow: "hidden",
             border: "1px solid #e8e0d4",
-            backgroundColor: "#f9f9f9",
+            background:
+              "linear-gradient(135deg, #f8fafc 0%, #eef2f7 100%)",
+            position: "relative",
           }}
         >
-          <img
-            src={f.img}
-            alt="food"
-            style={{ width: "100%", height: "100%", objectFit: "cover" }}
-          />
+          {f.img ? (
+            <img
+              src={f.img}
+              alt={lang === "zh" ? f.name.zh : f.name.ko}
+              style={{ width: "100%", height: "100%", objectFit: "cover" }}
+            />
+          ) : (
+            <div
+              style={{
+                width: "100%",
+                height: "100%",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                color: "#94a3b8",
+                fontWeight: 800,
+                fontSize: 13,
+                textAlign: "center",
+                padding: 12,
+              }}
+            >
+              {lang === "zh" ? "暂无图片" : "이미지 없음"}
+            </div>
+          )}
         </div>
-        {/* 右侧文字信息 */}
-        <div style={{ flex: 1, minWidth: 220 }}>
+
+        <div style={{ flex: 1, minWidth: 240 }}>
           <div
             style={{
               display: "flex",
@@ -987,24 +972,45 @@ function FoodCard({ f, lang }) {
               <div style={{ fontSize: 19, fontWeight: 900, color: "#0e2d4d" }}>
                 {lang === "zh" ? f.name.zh : f.name.ko}
               </div>
-              <div
-                style={{
-                  fontSize: 13,
-                  color: "#e07055",
-                  fontWeight: 800,
-                  marginTop: 4,
-                }}
-              >
-                {lang === "zh" ? f.tag.zh : f.tag.ko}
+              <div style={{ marginTop: 6, display: "flex", flexWrap: "wrap" }}>
+                <span
+                  style={{
+                    display: "inline-block",
+                    padding: "5px 10px",
+                    borderRadius: 999,
+                    background: "#edf4fb",
+                    color: "#0e2d4d",
+                    fontSize: 12,
+                    fontWeight: 800,
+                    marginBottom: 6,
+                  }}
+                >
+                  {lang === "zh" ? f.category.zh : f.category.ko}
+                </span>
+                <span
+                  style={{
+                    display: "inline-block",
+                    padding: "5px 10px",
+                    borderRadius: 999,
+                    background: "#fff4ed",
+                    color: "#c2410c",
+                    fontSize: 12,
+                    fontWeight: 800,
+                    marginLeft: 8,
+                    marginBottom: 6,
+                  }}
+                >
+                  {lang === "zh" ? f.tag.zh : f.tag.ko}
+                </span>
               </div>
             </div>
-            {/* 价格标签 */}
+
             <div
               style={{
                 background: "#fef2f2",
                 color: "#dc2626",
                 padding: "6px 10px",
-                borderRadius: 8,
+                borderRadius: 10,
                 fontSize: 13,
                 fontWeight: 800,
                 whiteSpace: "nowrap",
@@ -1013,19 +1019,52 @@ function FoodCard({ f, lang }) {
               {f.price}
             </div>
           </div>
-          {/* 详情与菜单 */}
+
           <div
             style={{
               marginTop: 12,
               fontSize: 14,
               color: "#334155",
-              lineHeight: 1.65,
+              lineHeight: 1.75,
             }}
           >
             {lang === "zh" ? f.desc.zh : f.desc.ko}
           </div>
 
-          {/* 🌟 新增：一键导航按钮 */}
+          {f.menu ? (
+            <div style={{ marginTop: 12 }}>
+              <div
+                style={{
+                  fontSize: 13,
+                  fontWeight: 800,
+                  color: "#0e2d4d",
+                  marginBottom: 8,
+                }}
+              >
+                {lang === "zh" ? "推荐菜单" : "추천 메뉴"}
+              </div>
+              <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+                {(lang === "zh" ? f.menu.zh : f.menu.ko).map((item) => (
+                  <span
+                    key={item}
+                    style={{
+                      display: "inline-block",
+                      padding: "6px 10px",
+                      borderRadius: 999,
+                      background: "#f8fafc",
+                      border: "1px solid #e2e8f0",
+                      color: "#334155",
+                      fontSize: 12,
+                      fontWeight: 700,
+                    }}
+                  >
+                    {item}
+                  </span>
+                ))}
+              </div>
+            </div>
+          ) : null}
+
           {f.mapLink && (
             <a
               href={f.mapLink}
@@ -1042,10 +1081,10 @@ function FoodCard({ f, lang }) {
                 fontSize: 13,
                 fontWeight: 800,
                 textDecoration: "none",
-                borderRadius: 8,
+                borderRadius: 10,
               }}
             >
-              📍 {lang === "zh" ? "Google Maps 导航" : "Google 지도 안내"}
+              📍 {lang === "zh" ? "Google Maps 导航" : "Google 지도 열기"}
             </a>
           )}
         </div>
@@ -1062,7 +1101,6 @@ function ImageGallery({ images }) {
     const scrollLeft = e.target.scrollLeft;
     const width = e.target.clientWidth;
     if (width > 0) {
-      // 动态计算当前滑动到了第几张图，用来控制下方的小圆点
       const newIndex = Math.round(scrollLeft / width);
       if (newIndex !== activeIndex) {
         setActiveIndex(newIndex);
@@ -1072,27 +1110,25 @@ function ImageGallery({ images }) {
 
   return (
     <div style={{ marginTop: 22, width: "100%" }}>
-      {/* 隐藏原生丑陋的横向滚动条 */}
       <style>{`.hide-scroll::-webkit-scrollbar { display: none; }`}</style>
-
       <div
         className="hide-scroll"
         onScroll={handleScroll}
         style={{
           display: "flex",
-          width: "100%", // 1. 绝对不超出文字框
+          width: "100%",
           overflowX: "auto",
           scrollSnapType: "x mandatory",
           WebkitOverflowScrolling: "touch",
           borderRadius: 12,
-          backgroundColor: "#f4f4f5", // 浅灰背景托底，让竖屏图两边不显突兀
+          backgroundColor: "#f4f4f5",
         }}
       >
         {images.map((src, idx) => (
           <div
             key={idx}
             style={{
-              flex: "0 0 100%", // 3. 严格只展示一张照片的大小
+              flex: "0 0 100%",
               width: "100%",
               scrollSnapAlign: "center",
               display: "flex",
@@ -1105,33 +1141,24 @@ function ImageGallery({ images }) {
               alt={`view-${idx}`}
               style={{
                 width: "100%",
-                maxHeight: 450, // 限制最高高度，防止竖屏图霸占整个手机屏幕
-                objectFit: "contain", // 2. 🌟 核心魔法：原比例完整展示！绝对不裁剪、不拉伸！
+                maxHeight: 450,
+                objectFit: "contain",
                 display: "block",
               }}
             />
           </div>
         ))}
       </div>
-
-      {/* 4. 底部滑动小点点指示器 */}
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          gap: 6,
-          marginTop: 12,
-        }}
-      >
+      <div style={{ display: "flex", justifyContent: "center", gap: 6, marginTop: 12 }}>
         {images.map((_, idx) => (
           <div
             key={idx}
             style={{
-              width: activeIndex === idx ? 18 : 6, // 划到哪张，哪个点就变成拉长的胶囊
+              width: activeIndex === idx ? 18 : 6,
               height: 6,
               borderRadius: 3,
               backgroundColor: activeIndex === idx ? "#0e2d4d" : "#cbd5e1",
-              transition: "all 0.3s ease", // 丝滑的切换动画
+              transition: "all 0.3s ease",
             }}
           />
         ))}
@@ -1142,10 +1169,9 @@ function ImageGallery({ images }) {
 
 export default function App() {
   const [lang, setLang] = useState("zh");
-  const [hotelZone, setHotelZone] = useState("city");
   const [activeTab, setActiveTab] = useState(0);
 
-  // 🌟 新增：小红书同款滚动监听引擎 (让导航栏随滚动自动加粗)
+  // 🌟 小红书同款滚动监听引擎 (让导航栏随滚动自动加粗)
   useEffect(() => {
     const handleScrollSpy = () => {
       const tabKeys = ["overview", "spots", "hotels", "itinerary", "tips"];
@@ -1155,7 +1181,6 @@ export default function App() {
         const el = document.getElementById(`section-${tabKeys[i]}`);
         if (el) {
           const rect = el.getBoundingClientRect();
-          // 当某个板块顶部划到距离屏幕顶部 85px 以内时，立刻触发高亮切换
           if (rect.top <= 85) {
             currentActive = i;
           }
@@ -1170,19 +1195,12 @@ export default function App() {
 
   const c = localeCopy[lang];
 
-  const zoneHotels = useMemo(() => {
-    if (hotelZone === "city") return hotelOptions.city;
-    if (hotelZone === "island") return hotelOptions.island;
-    return hotelOptions.camRanh;
-  }, [hotelZone]);
-
-  // 新增：丝滑滚动到对应区域的控制函数
+  // 丝滑滚动到对应区域的控制函数
   const tabKeys = ["overview", "spots", "hotels", "itinerary", "tips"];
   const scrollToSection = (idx) => {
     setActiveTab(idx);
     const el = document.getElementById(`section-${tabKeys[idx]}`);
     if (el) {
-      // 减去 70px 是为了防止吸顶导航栏遮挡住标题
       const y = el.getBoundingClientRect().top + window.scrollY - 70;
       window.scrollTo({ top: y, behavior: "smooth" });
     }
@@ -1198,19 +1216,12 @@ export default function App() {
           "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
       }}
     >
-      {/* 顶部风景背景头部区 */}
       <div
         style={{
-          // 1. 这里的链接换成了你刚刚上传的本地图片 /bg.jpg
           backgroundImage:
             "linear-gradient(rgba(14, 45, 77, 0.3), rgba(14, 45, 77, 0.9)), url('/bg.jpg')",
           backgroundSize: "cover",
-
-          // 2. 🌟 秘密武器：调整镜头位置！
-          // 原来是 "center"，现在换成 "center 65%"
-          // 意思是：横向居中，纵向把镜头稍微往下拉一点，刚好能拍到沙滩和椰子树的树冠。
           backgroundPosition: "center 65%",
-
           color: "#fff",
           padding: "48px 20px 32px",
         }}
@@ -1259,7 +1270,6 @@ export default function App() {
         </div>
       </div>
 
-      {/* 🌟 新增：吸顶导航栏 */}
       <div
         style={{
           position: "sticky",
@@ -1317,64 +1327,14 @@ export default function App() {
           </div>
         </Card>
 
-        {/* 锚点 0：总览区 */}
+        {/* 锚点 0：总览区 (已移除了重复的旧订单展示，加入滑动相册) */}
         <div id="section-overview">
           <div style={{ display: "grid", gap: 14, marginTop: 14 }}>
             <Card accent>
               <SectionTitle title={c.overviewTitle} sub={c.overviewSub} />
               <BulletList items={c.overviewBullets} />
-
-              {/* 直接调用我们刚写好的画廊引擎，把5张图传进去！ */}
-              <ImageGallery
-                images={[
-                  "/view1.jpg",
-                  "/view2.jpg",
-                  "/view3.jpg",
-                  "/view4.jpg",
-                  "/view5.jpg",
-                ]}
-              />
+              <ImageGallery images={["/view1.jpg", "/view2.jpg", "/view3.jpg", "/view4.jpg", "/view5.jpg"]} />
             </Card>
-
-            <SectionTitle title={c.bookingTitle} sub={c.bookingSub} />
-            {actualBookings.map((b) => (
-              <Card key={b.date}>
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    gap: 12,
-                    flexWrap: "wrap",
-                  }}
-                >
-                  <div>
-                    <div style={{ color: "#e07055", fontWeight: 900 }}>
-                      {b.date}
-                    </div>
-                    <div
-                      style={{ fontSize: 18, fontWeight: 900, marginTop: 4 }}
-                    >
-                      {b.name}
-                    </div>
-                    <div
-                      style={{ marginTop: 4, color: "#6b7280", fontSize: 13 }}
-                    >
-                      {lang === "zh" ? b.zone.zh : b.zone.ko}
-                    </div>
-                  </div>
-                </div>
-                <div
-                  style={{
-                    marginTop: 10,
-                    color: "#334155",
-                    lineHeight: 1.7,
-                    fontSize: 14,
-                  }}
-                >
-                  {lang === "zh" ? b.why.zh : b.why.ko}
-                </div>
-              </Card>
-            ))}
           </div>
         </div>
 
@@ -1390,14 +1350,10 @@ export default function App() {
           >
             {transport.map((t) => (
               <Card key={lang === "zh" ? t.k.zh : t.k.ko}>
-                <div
-                  style={{ fontWeight: 900, color: "#0e2d4d", marginBottom: 8 }}
-                >
+                <div style={{ fontWeight: 900, color: "#0e2d4d", marginBottom: 8 }}>
                   {lang === "zh" ? t.k.zh : t.k.ko}
                 </div>
-                <div
-                  style={{ fontSize: 14, lineHeight: 1.7, color: "#334155" }}
-                >
+                <div style={{ fontSize: 14, lineHeight: 1.7, color: "#334155" }}>
                   {lang === "zh" ? t.v.zh : t.v.ko}
                 </div>
               </Card>
@@ -1406,55 +1362,24 @@ export default function App() {
 
           <div style={{ marginTop: 14 }}>
             <Card>
-              <div
-                style={{ fontWeight: 900, color: "#0e2d4d", marginBottom: 10 }}
-              >
+              <div style={{ fontWeight: 900, color: "#0e2d4d", marginBottom: 10 }}>
                 {lang === "zh" ? "芽庄地图" : "냐짱 지도"}
               </div>
-              <div
-                style={{
-                  fontSize: 13,
-                  color: "#6b7280",
-                  lineHeight: 1.7,
-                  marginBottom: 10,
-                }}
-              >
+              <div style={{ fontSize: 13, color: "#6b7280", lineHeight: 1.7, marginBottom: 10 }}>
                 {lang === "zh"
                   ? "这张地图可以帮助你快速理解：金兰机场在南边，市区景点沿海滨大道和中心区分布，珍珠岛在海上。"
                   : "이 지도는 깜라인 공항이 남쪽에 있고, 시내 명소는 해변 도로와 중심 구역에 모여 있으며, 빈펄 섬은 바다 위에 있다는 점을 빠르게 이해하는 데 도움이 됩니다."}
               </div>
-              <div
-                style={{
-                  position: "relative",
-                  width: "100%",
-                  paddingTop: "56.25%",
-                  borderRadius: 14,
-                  overflow: "hidden",
-                  border: "1px solid #e8e0d4",
-                }}
-              >
+              <div style={{ position: "relative", width: "100%", paddingTop: "56.25%", borderRadius: 14, overflow: "hidden", border: "1px solid #e8e0d4" }}>
                 <iframe
                   title="Nha Trang Map"
                   src="https://www.openstreetmap.org/export/embed.html?bbox=109.0800%2C12.1200%2C109.3200%2C12.3300&layer=mapnik&marker=12.2388%2C109.1967"
-                  style={{
-                    position: "absolute",
-                    inset: 0,
-                    width: "100%",
-                    height: "100%",
-                    border: 0,
-                  }}
+                  style={{ position: "absolute", inset: 0, width: "100%", height: "100%", border: 0 }}
                   loading="lazy"
                   referrerPolicy="no-referrer-when-downgrade"
                 />
               </div>
-              <div
-                style={{
-                  marginTop: 10,
-                  fontSize: 12,
-                  color: "#6b7280",
-                  lineHeight: 1.6,
-                }}
-              >
+              <div style={{ marginTop: 10, fontSize: 12, color: "#6b7280", lineHeight: 1.6 }}>
                 {lang === "zh"
                   ? "地图中心点为芽庄市区附近，适合配合下面的酒店和景点清单使用。"
                   : "지도 중심점은 냐짱 시내 부근으로, 아래 호텔 및 명소 목록과 함께 보시면 편합니다."}
@@ -1463,146 +1388,56 @@ export default function App() {
           </div>
 
           <SectionTitle title={c.cityTitle} sub={c.citySub} />
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))",
-              gap: 14,
-            }}
-          >
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: 14 }}>
             {cityHighlights.map((s) => (
               <Card key={s.en}>
-                <div
-                  style={{ fontWeight: 900, fontSize: 17, color: "#0e2d4d" }}
-                >
+                <div style={{ fontWeight: 900, fontSize: 17, color: "#0e2d4d" }}>
                   {lang === "zh" ? s.name.zh : s.name.ko}
                 </div>
-                <div style={{ color: "#6b7280", fontSize: 13, marginTop: 2 }}>
-                  {s.en}
-                </div>
+                <div style={{ color: "#6b7280", fontSize: 13, marginTop: 2 }}>{s.en}</div>
                 <div style={{ marginTop: 10, fontSize: 14, lineHeight: 1.7 }}>
-                  <div>
-                    <strong>{lang === "zh" ? "位置：" : "위치: "}</strong>
-                    {lang === "zh" ? s.where.zh : s.where.ko}
-                  </div>
-                  <div>
-                    <strong>{lang === "zh" ? "时长：" : "소요 시간: "}</strong>
-                    {lang === "zh" ? s.time.zh : s.time.ko}
-                  </div>
-                  <div>
-                    <strong>{lang === "zh" ? "价格：" : "가격: "}</strong>
-                    {lang === "zh" ? s.price.zh : s.price.ko}
-                  </div>
-                  <div style={{ marginTop: 6, color: "#334155" }}>
-                    {lang === "zh" ? s.note.zh : s.note.ko}
-                  </div>
+                  <div><strong>{lang === "zh" ? "位置：" : "위치: "}</strong>{lang === "zh" ? s.where.zh : s.where.ko}</div>
+                  <div><strong>{lang === "zh" ? "时长：" : "소요 시간: "}</strong>{lang === "zh" ? s.time.zh : s.time.ko}</div>
+                  <div><strong>{lang === "zh" ? "价格：" : "가격: "}</strong>{lang === "zh" ? s.price.zh : s.price.ko}</div>
+                  <div style={{ marginTop: 6, color: "#334155" }}>{lang === "zh" ? s.note.zh : s.note.ko}</div>
                 </div>
               </Card>
             ))}
           </div>
 
           <SectionTitle title={c.islandTitle} sub={c.islandSub} />
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))",
-              gap: 14,
-            }}
-          >
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: 14 }}>
             {islandHighlights.map((s) => (
               <Card key={s.en}>
-                <div
-                  style={{ fontWeight: 900, fontSize: 17, color: "#0e2d4d" }}
-                >
+                <div style={{ fontWeight: 900, fontSize: 17, color: "#0e2d4d" }}>
                   {lang === "zh" ? s.name.zh : s.name.ko}
                 </div>
-                <div style={{ color: "#6b7280", fontSize: 13, marginTop: 2 }}>
-                  {s.en}
-                </div>
+                <div style={{ color: "#6b7280", fontSize: 13, marginTop: 2 }}>{s.en}</div>
                 <div style={{ marginTop: 10, fontSize: 14, lineHeight: 1.7 }}>
-                  <div>
-                    <strong>{lang === "zh" ? "位置：" : "위치: "}</strong>
-                    {lang === "zh" ? s.where.zh : s.where.ko}
-                  </div>
-                  <div>
-                    <strong>{lang === "zh" ? "时长：" : "소요 시간: "}</strong>
-                    {lang === "zh" ? s.time.zh : s.time.ko}
-                  </div>
-                  <div>
-                    <strong>{lang === "zh" ? "价格：" : "가격: "}</strong>
-                    {lang === "zh" ? s.price.zh : s.price.ko}
-                  </div>
-                  <div style={{ marginTop: 6, color: "#334155" }}>
-                    {lang === "zh" ? s.note.zh : s.note.ko}
-                  </div>
+                  <div><strong>{lang === "zh" ? "位置：" : "위치: "}</strong>{lang === "zh" ? s.where.zh : s.where.ko}</div>
+                  <div><strong>{lang === "zh" ? "时长：" : "소요 시간: "}</strong>{lang === "zh" ? s.time.zh : s.time.ko}</div>
+                  <div><strong>{lang === "zh" ? "价格：" : "가격: "}</strong>{lang === "zh" ? s.price.zh : s.price.ko}</div>
+                  <div style={{ marginTop: 6, color: "#334155" }}>{lang === "zh" ? s.note.zh : s.note.ko}</div>
                 </div>
               </Card>
             ))}
           </div>
         </div>
 
-        {/* 锚点 2：酒店推荐区 */}
+        {/* 锚点 2：酒店日程区 (全新整合深度信息版) */}
         <div id="section-hotels">
           <SectionTitle title={c.hotelTitle} sub={c.hotelSub} />
-          <div
-            style={{
-              display: "flex",
-              gap: 10,
-              flexWrap: "wrap",
-              marginBottom: 14,
-            }}
-          >
-            {[
-              ["city", c.buttons.city],
-              ["island", c.buttons.island],
-              ["camRanh", c.buttons.camRanh],
-            ].map(([key, label]) => (
-              <button
-                key={key}
-                onClick={() => setHotelZone(key)}
-                style={{
-                  border: "1px solid #dbe3ea",
-                  borderRadius: 999,
-                  padding: "9px 14px",
-                  cursor: "pointer",
-                  background: hotelZone === key ? "#0e2d4d" : "#fff",
-                  color: hotelZone === key ? "#fff" : "#0e2d4d",
-                  fontWeight: 800,
-                }}
-              >
-                {label}
-              </button>
+          
+          <div style={{ display: "grid", gap: 20 }}>
+            {hotelItineraryList.map((h, idx) => (
+              <HotelItineraryCard key={idx} h={h} lang={lang} />
             ))}
-          </div>
-
-          <div style={{ display: "grid", gap: 14 }}>
-            {zoneHotels.map((h) => (
-              <HotelCard key={h.name} h={h} lang={lang} />
-            ))}
-          </div>
-
-          <div style={{ marginTop: 14 }}>
-            <Card>
-              <div
-                style={{ fontWeight: 900, color: "#0e2d4d", marginBottom: 8 }}
-              >
-                {c.hotelAdvice}
-              </div>
-              <BulletList items={c.hotelAdviceItems} />
-            </Card>
           </div>
         </div>
 
         {/* 锚点 3：旅行计划区（含美食和行程） */}
         <div id="section-itinerary">
-          <SectionTitle
-            title={lang === "zh" ? "必吃美食与餐厅" : "필수 맛집 및 레스토랑"}
-            sub={
-              lang === "zh"
-                ? "从小红书与当地口碑中精选的打卡地，附招牌菜单"
-                : "SNS 및 현지 리뷰 기반 엄선 맛집, 대표 메뉴 포함"
-            }
-          />
+        <SectionTitle title={c.foodTitle} sub={c.foodSub} />
           <div style={{ display: "grid", gap: 14, marginBottom: 28 }}>
             {foodRecommendations.map((f, idx) => (
               <FoodCard key={idx} f={f} lang={lang} />
@@ -1612,51 +1447,22 @@ export default function App() {
           <SectionTitle title={c.itineraryTitle} sub={c.itinerarySub} />
           <div style={{ display: "grid", gap: 14 }}>
             {itinerary.map((d) => (
-              <Card
-                key={d.date}
-                accent={d.date === "7/11" || d.date === "7/12"}
-              >
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    gap: 12,
-                    flexWrap: "wrap",
-                  }}
-                >
+              <Card key={d.date} accent={d.date === "7/11" || d.date === "7/12"}>
+                <div style={{ display: "flex", justifyContent: "space-between", gap: 12, flexWrap: "wrap" }}>
                   <div>
-                    <div style={{ color: "#e07055", fontWeight: 900 }}>
-                      {d.date}
-                    </div>
-                    <div
-                      style={{ fontSize: 18, fontWeight: 900, marginTop: 4 }}
-                    >
+                    <div style={{ color: "#e07055", fontWeight: 900 }}>{d.date}</div>
+                    <div style={{ fontSize: 18, fontWeight: 900, marginTop: 4 }}>
                       {lang === "zh" ? d.title.zh : d.title.ko}
                     </div>
                   </div>
                   <div style={{ color: "#0e2d4d", fontWeight: 800 }}>
-                    {typeof d.hotel === "string"
-                      ? d.hotel
-                      : lang === "zh"
-                      ? d.hotel.zh
-                      : d.hotel.ko}
+                    {typeof d.hotel === "string" ? d.hotel : lang === "zh" ? d.hotel.zh : d.hotel.ko}
                   </div>
                 </div>
                 <div style={{ marginTop: 12, display: "grid", gap: 8 }}>
                   {(lang === "zh" ? d.tasks.zh : d.tasks.ko).map((t, idx) => (
-                    <div
-                      key={idx}
-                      style={{
-                        display: "flex",
-                        gap: 8,
-                        alignItems: "flex-start",
-                        fontSize: 14,
-                        lineHeight: 1.7,
-                      }}
-                    >
-                      <span style={{ color: "#0e2d4d", fontWeight: 900 }}>
-                        •
-                      </span>
+                    <div key={idx} style={{ display: "flex", gap: 8, alignItems: "flex-start", fontSize: 14, lineHeight: 1.7 }}>
+                      <span style={{ color: "#0e2d4d", fontWeight: 900 }}>•</span>
                       <span>{t}</span>
                     </div>
                   ))}
@@ -1669,151 +1475,78 @@ export default function App() {
         {/* 锚点 4：实用提示区 */}
         <div id="section-tips">
           <SectionTitle title={c.tipsTitle} sub={c.tipsSub} />
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))",
-              gap: 14,
-            }}
-          >
-            {/* 卡片 1：签证与行前准备 (融合原版 + 订房提示) */}
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: 14 }}>
             <Card>
-              <div
-                style={{ fontWeight: 900, color: "#0e2d4d", marginBottom: 8 }}
-              >
-                {lang === "zh" ? "签证与行前准备" : "비자와 여행 준비"}
+              <div style={{ fontWeight: 900, color: "#0e2d4d", marginBottom: 8 }}>
+                {lang === "zh" ? "签证与证件" : "비자와 서류"}
               </div>
               <BulletList
                 items={
                   lang === "zh"
                     ? [
-                        "护照有效期至少 6 个月。签证政策以出发前官方信息为准。",
+                        "护照有效期至少 6 个月。",
+                        "越南签证政策请以出发前官方信息为准，不要只看攻略旧文。",
                         "把酒店订单、返程票、保险都放在手机和纸质备份里。",
-                        "大部分经济实惠又干净的酒店容易长期满房，务必一定要提前订好。",
                       ]
                     : [
-                        "여권 유효기간은 최소 6개월 이상이어야 합니다. 비자 정책은 출발 전 공식 정보를 확인하세요.",
+                        "여권 유효기간은 최소 6개월 이상이어야 합니다.",
+                        "베트남 비자 정책은 출발 전 공식 정보를 기준으로 확인하세요.",
                         "호텔 예약, 귀국 항공권, 보험 서류는 휴대폰과 종이 모두 보관하세요.",
-                        "가성비 좋고 깨끗한 호텔은 금방 만실이 되니 반드시 미리 예약하세요.",
                       ]
                 }
               />
             </Card>
-
-            {/* 卡片 2：天气与交通出行 (融合原版 + 交通避雷) */}
             <Card>
-              <div
-                style={{ fontWeight: 900, color: "#0e2d4d", marginBottom: 8 }}
-              >
-                {lang === "zh" ? "天气与交通出行" : "날씨와 교통 이동"}
+              <div style={{ fontWeight: 900, color: "#0e2d4d", marginBottom: 8 }}>
+                {lang === "zh" ? "天气和装备" : "날씨와 준비물"}
               </div>
               <BulletList
                 items={
                   lang === "zh"
                     ? [
-                        "7 月很热，防晒霜、帽子、太阳镜必带；带一双好走的鞋，教堂和市场都需要步行。",
-                        "市区赶时间不要打车坐公交，高峰期极度拥堵，优选摩托车 (Grab Bike)。",
-                        "在越南自己骑摩托车必须带好安全帽，否则会被警察重罚款。",
+                        "7 月很热，防晒霜、帽子、太阳镜一定要带足。",
+                        "四岛游和海边活动建议准备一套干衣服。",
+                        "带一双好走的鞋，教堂、寺庙、市场都需要步行。",
                       ]
                     : [
-                        "7월은 매우 더우니 선크림, 모자, 선글라스가 필수입니다. 걷기 편한 신발을 챙기세요.",
-                        "출퇴근 시간 시내는 매우 막히므로 급할 때는 오토바이(Grab Bike)가 낫습니다.",
-                        "직접 오토바이를 운전할 경우 헬멧을 쓰지 않으면 경찰에게 큰 벌금을 뭅니다.",
+                        "7월은 매우 덥기 때문에 선크림, 모자, 선글라스가 필수입니다.",
+                        "사섬투어와 해변 일정에는 마른 옷 한 세트를 준비하세요.",
+                        "성당, 사원, 시장을 걸어다닐 수 있는 편한 신발을 가져가세요.",
                       ]
                 }
               />
             </Card>
-
-            {/* 卡片 3：饮食与水果避坑 (全新整理) */}
             <Card>
-              <div
-                style={{ fontWeight: 900, color: "#0e2d4d", marginBottom: 8 }}
-              >
-                {lang === "zh" ? "饮食与水果避坑" : "음식 및 과일 주의사항"}
+              <div style={{ fontWeight: 900, color: "#0e2d4d", marginBottom: 8 }}>
+                {lang === "zh" ? "预订顺序" : "예약 순서"}
               </div>
               <BulletList
                 items={
                   lang === "zh"
                     ? [
-                        "不要在Grab上买鲜切水果（贵且不熟）；不要轻易尝试没见过的鲜艳水果。",
-                        "酒店严禁带榴莲入内，违规会被罚款，买完务必在外面吃完。",
-                        "千万别大口吃本地辣椒，辣度极高；很多餐厅不提供纸巾，一定随身携带。",
-                        "看不懂菜单别乱点，最稳妥就是看别人吃什么，指着要一份一样的。",
+                        "先锁酒店，再订 VinWonders 和四岛游。",
+                        "热门日期尽量提前订可退改产品。",
+                        "包船和私家车尽量找酒店/大平台代订，减少踩坑。",
                       ]
                     : [
-                        "Grab에서 파는 컷팅 과일은 비싸고 덜 익은 경우가 많습니다. 낯선 화려한 과일은 피하세요.",
-                        "호텔 내 두리안 반입은 금지(위반 시 벌금)되니 밖에서 다 드시고 들어가야 합니다.",
-                        "현지 고추는 상상 이상으로 맵습니다. 식당은 대부분 티슈를 주지 않으니 꼭 챙기세요.",
-                        "메뉴를 모를 때는 다른 테이블의 음식을 가리켜 주문하는 것이 가장 안전합니다.",
+                        "먼저 호텔을 확정한 뒤 VinWonders와 사섬투어를 예약하세요.",
+                        "인기 날짜는 취소·변경 가능한 상품을 미리 잡는 거시 좋습니다.",
+                        "전세 보트나 프라이빗 차량은 호텔 또는 대형 플랫폼을 통해 예약하는 것이 안전합니다.",
                       ]
                 }
               />
             </Card>
-
-            {/* 卡片 4：消费与支付避雷 (全新整理) */}
             <Card>
-              <div
-                style={{ fontWeight: 900, color: "#0e2d4d", marginBottom: 8 }}
-              >
-                {lang === "zh" ? "消费与支付避雷" : "결제 및 쇼핑 주의사항"}
-              </div>
-              <BulletList
-                items={
-                  lang === "zh"
-                    ? [
-                        "一定要带现金！很多小店不刷卡也不收美金。机场出来用VISA卡在ATM取现最稳，别找私人换钱防被骗。",
-                        "别买特产（尤其是翡翠玉石），不买药店保健品和纪念品店的纪念品。",
-                        "进按摩店一定要提前问好价格，越南没有小费习惯。街头的主动搭讪绝大多数是付费套路，轻易别理会。",
-                        "不要特意去订制奥黛，很挑人穿，直接租一套体验就行。",
-                      ]
-                    : [
-                        "카드나 달러를 안 받는 곳이 많으니 베트남 동 현금을 꼭 챙기세요. 공항 ATM에서 VISA 카드로 인출하는 것이 좋으며, 개인 환전은 피하세요.",
-                        "약국의 영양제나 옥/비취 같은 특산품은 절대 사지 마세요.",
-                        "베트남은 팁 문화가 없으니 마사지 샵 입장 전 꼭 총가격을 확인하세요. 길거리의 호객 행위는 무시하는 것이 좋습니다.",
-                        "아오자이는 맞춤 제작보다 대여를 강력히 추천합니다.",
-                      ]
-                }
-              />
-            </Card>
-
-            {/* 卡片 5：游玩与体验排雷 (融合原版 + 游玩避坑) */}
-            <Card>
-              <div
-                style={{ fontWeight: 900, color: "#0e2d4d", marginBottom: 8 }}
-              >
-                {lang === "zh" ? "游玩与体验排雷" : "액티비티 및 투어 예약"}
-              </div>
-              <BulletList
-                items={
-                  lang === "zh"
-                    ? [
-                        "先锁酒店，再订乐园/四岛游；包船尽量找大平台代订，减少踩坑。",
-                        "想好好体验潜水强烈推荐去“黑岛（Hon Mun）”，水质更清，别参加普通四岛游；没经验实力千万别试海钓，又晒又钓不到。",
-                        "景点一定要按预约时间进，提前或延迟都进不去；网红餐厅一直排队，请合理安排时间。",
-                      ]
-                    : [
-                        "먼저 호텔을 확정하고 테마파크/투어를 예약하세요. 프라이빗 보트는 대형 플랫폼을 이용하세요.",
-                        "스쿠버다이빙은 수질이 좋은 '혼문섬(Hon Mun)'을 추천하며 일반 사섬투어는 피하세요. 초보자의 바다낚시는 비추천합니다.",
-                        "관광지는 예약 시간을 엄수해야 하며, 유명 식당은 대기가 기니 시간을 잘 배분하세요.",
-                      ]
-                }
-              />
-            </Card>
-
-            {/* 卡片 6：最后一晚建议 (完美保留原版) */}
-            <Card>
-              <div
-                style={{ fontWeight: 900, color: "#0e2d4d", marginBottom: 8 }}
-              >
+              <div style={{ fontWeight: 900, color: "#0e2d4d", marginBottom: 8 }}>
                 {lang === "zh" ? "最后一晚建议" : "마지막 밤 추천"}
               </div>
               <BulletList
                 items={
                   lang === "zh"
                     ? [
-                        "如果 7/16 是早航班，最后一晚最好住金兰机场方向酒店。",
-                        "如果 7/16 航班较晚，最后一晚继续住市区更方便补逛。",
-                        "这一晚不要再折腾太远的点，尽量减少变动风险。",
+                        "如果 7/16 是早航班，最后一晚最好住金兰方向。",
+                        "如果 7/16 航班晚，最后一晚继续住市区更方便补逛。",
+                        "这一晚不要再折腾太远的点，减少变动风险。",
                       ]
                     : [
                         "7/16에 이른 비행편이라면 마지막 밤은 깜라인 쪽이 좋습니다.",
@@ -1826,14 +1559,7 @@ export default function App() {
           </div>
         </div>
 
-        <div
-          style={{
-            marginTop: 22,
-            color: "#6b7280",
-            fontSize: 12,
-            lineHeight: 1.8,
-          }}
-        >
+        <div style={{ marginTop: 22, color: "#6b7280", fontSize: 12, lineHeight: 1.8 }}>
           <div style={{ marginBottom: 6, fontWeight: 700, color: "#334155" }}>
             {c.quickTitle}
           </div>
