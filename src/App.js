@@ -6,13 +6,22 @@ const localeCopy = {
     appSub: "一键中/韩翻译 · 情侣出行 · 7月9日–16日 · 市区 + 珍珠岛",
     toggle: "切换为韩语",
     tabs: ["总览", "景点攻略", "酒店日程", "美食推荐", "旅行计划", "实用提示"],
-    overviewTitle: "这趟行程的核心逻辑",
-    overviewSub: "把 7 晚切成 3 个节奏：机场缓冲、岛上深玩、城市收尾。",
-    overviewBullets: [
-      "酒店顺序本身是合理的：先住金兰海湾，减少晚到当天折腾；再上竹岛住一晚，把 VinWonders 和海滩体验一次做透；最后回芽庄市区收尾，方便吃海鲜、逛夜市、看教堂和泥浴。",
-      "芽庄市区景点很集中，陈富海滩一线、占婆塔片区、教堂/大坝市场/龙山寺这几组点都适合按区域串联，不需要每天跨很远。",
-      "7 月属于旺季，海边、缆车、热门酒店和一日游通常都要提前订，尤其是万豪系和珍珠岛相关产品。",
+    overviewTitle: "行程总控面板",
+    overviewSub: "5秒快速掌握：8天7晚核心节奏与避坑指南",
+    overviewCards: [
+      { icon: "📅", label: "行程总览", value: "8天7晚 · 7月9日-16日" },
+      { icon: "💰", label: "预估预算", value: "人均约 6k-8k RMB (含机酒)" },
+      { icon: "🏨", label: "住宿逻辑", value: "金兰过渡 → 竹岛深玩 → 市区观光 → 金兰收尾" },
+      { icon: "🎯", label: "核心目标", value: "海岛放松、双人浪漫、体验万豪系满配权益" }
     ],
+    overviewMustDos: {
+      title: "🔥 必做项目",
+      items: ["黑岛 VIP 小团深潜/浮潜", "VinWonders 乐园 + 跨海缆车", "I-Resort 矿泉私密泥浴", "顶楼高空酒吧看海景日落"]
+    },
+    overviewAlerts: {
+      title: "⚠️ 最高危避坑",
+      items: ["坚决不理街边搭讪，打车只认 Grab 软件", "带足现金，机场 ATM 用 VISA 取现最划算", "防晒做足，酒店房间内绝不能吃榴莲"]
+    },
     geoTitle: "地理位置与交通",
     geoSub: "先搞清楚芽庄怎么分布，后面就不会乱。",
     cityTitle: "市区景点",
@@ -39,14 +48,22 @@ const localeCopy = {
       "원클릭 중/한 번역 · 커플 여행 · 7월 9일–16일 · 시내 + 빈펄 아일랜드",
     toggle: "중국어로 전환",
     tabs: ["전체", "명소 가이드", "호텔 일정", "맛집 추천", "일정", "실용 팁"],
-    overviewTitle: "이번 여행의 핵심 구조",
-    overviewSub:
-      "7박을 3가지 리듬으로 나눕니다: 공항 완충, 섬에서의 깊은 체류, 시내 마무리.",
-    overviewBullets: [
-      "예약한 호텔 순서 자체가 합리적입니다. 먼저 깜라인 해변 쪽에 머물며 늦은 도착의 피로를 줄이고, 그다음 혼쩨(Hon Tre) 섬에서 1박하며 VinWonders와 해변을 충분히 즐긴 뒤, 마지막에는 냐짱 시내에서 해산물, 야시장, 성당, 머드배스를 편하게 즐길 수 있습니다.",
-      "냐짱 시내의 주요 명소는 매우 가까운 편입니다. 쩐푸 해변, 포나가르 참탑, 성당/담시장/롱선사 구역은 지역별로 묶어 다니면 효율적입니다.",
-      "7월은 성수기이므로 해변 액티비티, 케이블카, 인기 호텔, 일일 투어는 미리 예약하는 편이 좋습니다.",
+    overviewTitle: "여행 마스터 컨트롤 패널",
+    overviewSub: "5초 만에 파악하는 7박 8일 핵심 리듬 및 주의사항",
+    overviewCards: [
+      { icon: "📅", label: "총 일정", value: "7박 8일 · 7월 9일-16일" },
+      { icon: "💰", label: "예상 예산", value: "1인 약 120-150만 원 (항공/숙박 포함)" },
+      { icon: "🏨", label: "숙박 로직", value: "깜라인 완충 → 혼쩨 섬 딥다이브 → 시내 관광 → 깜라인 마무리" },
+      { icon: "🎯", label: "핵심 목표", value: "해양 휴양, 커플 로맨스, 메리어트 풀 혜택 누리기" }
     ],
+    overviewMustDos: {
+      title: "🔥 필수 체험",
+      items: ["혼문 섬 VIP 스쿠버다이빙/스노클링", "VinWonders 테마파크 + 해상 케이블카", "I-Resort 프라이빗 머드배스", "루프탑 바에서 오션뷰 일몰 감상"]
+    },
+    overviewAlerts: {
+      title: "⚠️ 핵심 주의사항",
+      items: ["길거리 호객 절대 무시, 택시는 오직 Grab 앱만", "현금 넉넉히 준비, 공항 ATM(VISA) 인출 추천", "자외선 차단 필수, 호텔 객실 내 두리안 절대 금지"]
+    },
     geoTitle: "위치와 교통",
     geoSub: "냐짱의 구성을 먼저 이해하면 일정이 훨씬 쉬워집니다.",
     cityTitle: "도심 명소",
@@ -66,6 +83,177 @@ const localeCopy = {
       "상단 버튼을 누르면 전체 페이지가 한국어로 전환됩니다. 중국어/한국어는 같은 구조를 사용해 확인과 수정이 쉽습니다.",
   },
 };
+
+// --- 天气代码映射与组件 ---
+const weatherMap = {
+  0: { icon: "☀️", zh: "晴朗", ko: "맑음" },
+  1: { icon: "🌤️", zh: "大部晴朗", ko: "대체로 맑음" },
+  2: { icon: "⛅", zh: "多云", ko: "구름 많음" },
+  3: { icon: "☁️", zh: "阴天", ko: "흐림" },
+  45: { icon: "🌫️", zh: "雾", ko: "안개" },
+  48: { icon: "🌫️", zh: "雾", ko: "안개" },
+  51: { icon: "🌧️", zh: "毛毛雨", ko: "이슬비" },
+  53: { icon: "🌧️", zh: "毛毛雨", ko: "이슬비" },
+  55: { icon: "🌧️", zh: "毛毛雨", ko: "이슬비" },
+  61: { icon: "🌦️", zh: "小雨", ko: "약간의 비" },
+  63: { icon: "🌧️", zh: "中雨", ko: "비" },
+  65: { icon: "🌧️", zh: "大雨", ko: "강한 비" },
+  80: { icon: "🌦️", zh: "阵雨", ko: "소나기" },
+  81: { icon: "🌧️", zh: "阵雨", ko: "소나기" },
+  82: { icon: "🌧️", zh: "暴雨", ko: "폭우" },
+  95: { icon: "⛈️", zh: "雷阵雨", ko: "뇌우" },
+  96: { icon: "⛈️", zh: "雷暴", ko: "강한 뇌우" },
+  99: { icon: "⛈️", zh: "雷暴", ko: "강한 뇌우" },
+};
+
+function WeatherWidget({ lang }) {
+  const [weather, setWeather] = useState(null);
+
+  useEffect(() => {
+    // 自动获取芽庄的经纬度天气数据
+    fetch("https://api.open-meteo.com/v1/forecast?latitude=12.2388&longitude=109.1967&current=temperature_2m,relative_humidity_2m,weather_code&timezone=Asia%2FBangkok")
+      .then(res => res.json())
+      .then(data => {
+        if (data && data.current) setWeather(data.current);
+      })
+      .catch(e => console.error(e));
+  }, []);
+
+  if (!weather) return null;
+  const wInfo = weatherMap[weather.weather_code] || { icon: "🌡️", zh: "未知", ko: "알 수 없음" };
+
+  return (
+    <div style={{ background: "linear-gradient(135deg, #e0f2fe 0%, #bae6fd 100%)", padding: "16px 20px", borderRadius: 16, display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 20, border: "1px solid #7dd3fc" }}>
+       <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+          <span style={{ fontSize: 32, filter: "drop-shadow(0 4px 6px rgba(0,0,0,0.1))" }}>{wInfo.icon}</span>
+          <div>
+            <div style={{ fontWeight: 900, color: "#0284c7", fontSize: 16 }}>{lang === 'zh' ? '芽庄实时天气' : '냐짱 실시간 날씨'}</div>
+            <div style={{ fontSize: 13, color: "#0369a1", fontWeight: 700, marginTop: 2 }}>{lang === 'zh' ? wInfo.zh : wInfo.ko}</div>
+          </div>
+       </div>
+       <div style={{ display: "flex", gap: 20 }}>
+          <div style={{ textAlign: "right" }}>
+             <div style={{ fontSize: 12, color: "#0369a1", fontWeight: 700 }}>{lang === 'zh' ? '气温' : '기온'}</div>
+             <div style={{ fontSize: 22, fontWeight: 900, color: "#0c4a6e" }}>{Math.round(weather.temperature_2m)}°C</div>
+          </div>
+          <div style={{ textAlign: "right" }}>
+             <div style={{ fontSize: 12, color: "#0369a1", fontWeight: 700 }}>{lang === 'zh' ? '湿度' : '습도'}</div>
+             <div style={{ fontSize: 22, fontWeight: 900, color: "#0c4a6e" }}>{weather.relative_humidity_2m}%</div>
+          </div>
+       </div>
+    </div>
+  );
+}
+
+// --- 实时汇率换算组件 ---
+function CurrencyConverterWidget({ lang }) {
+  const [rates, setRates] = useState(null);
+  const [amount, setAmount] = useState(100); // 默认显示 100 RMB
+  const [base, setBase] = useState("cny");
+
+  useEffect(() => {
+    // 自动获取最新汇率 (使用稳定的免费开源 CDN)
+    fetch("https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1/currencies/cny.json")
+      .then(res => res.json())
+      .then(data => {
+        if (data && data.cny) {
+          setRates({ cny: 1, krw: data.cny.krw, vnd: data.cny.vnd });
+        }
+      })
+      .catch(e => console.error("汇率获取失败", e));
+  }, []);
+
+  const handleInputChange = (val, currency) => {
+    if (val === '') {
+      setAmount('');
+      setBase(currency);
+      return;
+    }
+    const num = parseFloat(val);
+    if (!isNaN(num)) {
+      setAmount(num);
+      setBase(currency);
+    }
+  };
+
+  const getValue = (currency) => {
+    if (amount === '') return '';
+    if (!rates) return '';
+    if (currency === base) return amount;
+    // 根据当前的基准货币反推计算目标货币
+    const inCny = amount / rates[base];
+    return Math.round(inCny * rates[currency]);
+  };
+
+  if (!rates) return null;
+
+  const uiText = {
+    title: lang === 'zh' ? '实时汇率换算' : '실시간 환율 계산기',
+    cny: lang === 'zh' ? '人民币 (CNY)' : '위안화 (CNY)',
+    krw: lang === 'zh' ? '韩元 (KRW)' : '원화 (KRW)',
+    vnd: lang === 'zh' ? '越南盾 (VND)' : '베트남 동 (VND)',
+    tip: lang === 'zh' ? '修改任意框自动换算' : '입력 시 자동 변환'
+  };
+
+  return (
+    <div style={{ background: "#fff", padding: "18px 20px", borderRadius: 16, marginBottom: 20, border: "2px solid #0e2d4d", boxShadow: "0 8px 24px rgba(20,30,50,0.05)" }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16 }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+          <span style={{ fontSize: 22 }}>💱</span>
+          <span style={{ fontWeight: 900, color: "#0e2d4d", fontSize: 16 }}>{uiText.title}</span>
+        </div>
+        <div style={{ fontSize: 12, color: "#64748b", fontWeight: 700 }}>{uiText.tip}</div>
+      </div>
+
+      <div style={{ display: "grid", gap: 10 }}>
+         {/* 人民币 */}
+         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", background: "#f8fafc", padding: "12px 16px", borderRadius: 12, border: "1px solid #e2e8f0" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+              <span style={{ fontSize: 24 }}>🇨🇳</span>
+              <span style={{ fontWeight: 800, color: "#334155", fontSize: 14 }}>{uiText.cny}</span>
+            </div>
+            <input
+              type="number"
+              value={getValue("cny")}
+              onChange={(e) => handleInputChange(e.target.value, "cny")}
+              style={{ textAlign: "right", border: "none", background: "transparent", fontSize: 20, fontWeight: 900, color: "#0e2d4d", width: "120px", outline: "none" }}
+              placeholder="0"
+            />
+         </div>
+
+         {/* 韩元 */}
+         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", background: "#f8fafc", padding: "12px 16px", borderRadius: 12, border: "1px solid #e2e8f0" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+              <span style={{ fontSize: 24 }}>🇰🇷</span>
+              <span style={{ fontWeight: 800, color: "#334155", fontSize: 14 }}>{uiText.krw}</span>
+            </div>
+            <input
+              type="number"
+              value={getValue("krw")}
+              onChange={(e) => handleInputChange(e.target.value, "krw")}
+              style={{ textAlign: "right", border: "none", background: "transparent", fontSize: 20, fontWeight: 900, color: "#0e2d4d", width: "150px", outline: "none" }}
+              placeholder="0"
+            />
+         </div>
+
+         {/* 越南盾 */}
+         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", background: "#fdf4ff", padding: "12px 16px", borderRadius: 12, border: "1px solid #f5d0fe" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+              <span style={{ fontSize: 24 }}>🇻🇳</span>
+              <span style={{ fontWeight: 900, color: "#86198f", fontSize: 14 }}>{uiText.vnd}</span>
+            </div>
+            <input
+              type="number"
+              value={getValue("vnd")}
+              onChange={(e) => handleInputChange(e.target.value, "vnd")}
+              style={{ textAlign: "right", border: "none", background: "transparent", fontSize: 20, fontWeight: 900, color: "#c026d3", width: "180px", outline: "none" }}
+              placeholder="0"
+            />
+         </div>
+      </div>
+    </div>
+  );
+}
 
 const hotelItineraryList = [
   {
@@ -2444,12 +2632,68 @@ export default function App() {
           </div>
         </Card>
 
-        {/* 锚点 0：总览区 */}
-        <div id="section-overview">
+
+   {/* 锚点 0：总览区 */}
+   <div id="section-overview">
           <div style={{ display: "grid", gap: 14, marginTop: 14 }}>
+            
+            {/* 你的天气组件 */}
+            <WeatherWidget lang={lang} />
+            
+            {/* 🌟 在这里插入新加的汇率组件！ */}
+            <CurrencyConverterWidget lang={lang} />
+            
             <Card accent>
               <SectionTitle title={c.overviewTitle} sub={c.overviewSub} />
-              <BulletList items={c.overviewBullets} />
+
+              {/* 🌟 1. 四宫格数据面板 */}
+              <div style={{
+                display: "grid",
+                gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))",
+                gap: 12,
+                marginBottom: 20
+              }}>
+                {c.overviewCards.map((item, idx) => (
+                  <div key={idx} style={{ background: "#f8fafc", padding: "14px 16px", borderRadius: 14, border: "1px solid #e2e8f0" }}>
+                    <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 8 }}>
+                      <span style={{ fontSize: 16 }}>{item.icon}</span>
+                      <span style={{ fontSize: 13, color: "#64748b", fontWeight: 800 }}>{item.label}</span>
+                    </div>
+                    <div style={{ fontSize: 14, color: "#0e2d4d", fontWeight: 900, lineHeight: 1.5 }}>
+                      {item.value}
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* 🌟 2. 必做与避坑 双栏设计 */}
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: 16, marginBottom: 16 }}>
+                {/* 必做列表 */}
+                <div style={{ background: "#fff7ed", padding: 18, borderRadius: 14, border: "1px solid #fdba74" }}>
+                  <div style={{ fontSize: 15, fontWeight: 900, color: "#c2410c", marginBottom: 12 }}>{c.overviewMustDos.title}</div>
+                  <div style={{ display: "grid", gap: 10 }}>
+                    {c.overviewMustDos.items.map((item, idx) => (
+                      <div key={idx} style={{ display: "flex", gap: 8, fontSize: 13, color: "#9a3412", lineHeight: 1.5, fontWeight: 700 }}>
+                        <span>✅</span><span>{item}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* 避坑列表 */}
+                <div style={{ background: "#fef2f2", padding: 18, borderRadius: 14, border: "1px solid #fca5a5" }}>
+                  <div style={{ fontSize: 15, fontWeight: 900, color: "#b91c1c", marginBottom: 12 }}>{c.overviewAlerts.title}</div>
+                  <div style={{ display: "grid", gap: 10 }}>
+                    {c.overviewAlerts.items.map((item, idx) => (
+                      <div key={idx} style={{ display: "flex", gap: 8, fontSize: 13, color: "#991b1b", lineHeight: 1.5, fontWeight: 700 }}>
+                        <span>🚨</span><span>{item}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              {/* 🌟 3. 滑动相册 */}
               <ImageGallery
                 images={[
                   "/view1.jpg",
