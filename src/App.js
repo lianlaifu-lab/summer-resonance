@@ -1,4 +1,5 @@
 import { useMemo, useState, useEffect } from "react";
+import "./styles.css";
 
 const localeCopy = {
   zh: {
@@ -1716,6 +1717,7 @@ const itinerary = [
 function Card({ children, accent = false }) {
   return (
     <div
+      className={accent ? "travel-card travel-card-accent" : "travel-card"}
       style={{
         background: "#fff",
         border: accent ? "2px solid #0e2d4d" : "1px solid #e8e0d4",
@@ -1732,6 +1734,7 @@ function Card({ children, accent = false }) {
 function Badge({ children }) {
   return (
     <span
+      className="trip-badge"
       style={{
         display: "inline-block",
         padding: "6px 10px",
@@ -1751,12 +1754,12 @@ function Badge({ children }) {
 
 function SectionTitle({ title, sub }) {
   return (
-    <div style={{ margin: "22px 0 12px" }}>
-      <div style={{ fontSize: 24, fontWeight: 800, color: "#0e2d4d" }}>
+    <div className="section-title" style={{ margin: "22px 0 12px" }}>
+      <div className="section-title-main" style={{ fontSize: 24, fontWeight: 800, color: "#0e2d4d" }}>
         {title}
       </div>
       {sub ? (
-        <div style={{ marginTop: 4, color: "#6b7280", fontSize: 13 }}>
+        <div className="section-title-sub" style={{ marginTop: 4, color: "#6b7280", fontSize: 13 }}>
           {sub}
         </div>
       ) : null}
@@ -2513,6 +2516,7 @@ export default function App() {
 
   return (
     <div
+      className="travel-app"
       style={{
         minHeight: "100vh",
         background: "linear-gradient(180deg, #f7f4ef 0%, #fdfdfd 100%)",
@@ -2522,6 +2526,7 @@ export default function App() {
       }}
     >
       <div
+        className="app-hero"
         style={{
           backgroundImage:
             "linear-gradient(rgba(14, 45, 77, 0.3), rgba(14, 45, 77, 0.9)), url('/bg.jpg')",
@@ -2531,8 +2536,9 @@ export default function App() {
           padding: "48px 20px 32px",
         }}
       >
-        <div style={{ maxWidth: 1120, margin: "0 auto" }}>
+        <div className="hero-inner" style={{ maxWidth: 1120, margin: "0 auto" }}>
           <div
+            className="hero-header"
             style={{
               display: "flex",
               justifyContent: "space-between",
@@ -2542,12 +2548,13 @@ export default function App() {
             }}
           >
             <div>
-              <div style={{ fontSize: 30, fontWeight: 900 }}>{c.appTitle}</div>
-              <div style={{ marginTop: 8, color: "#d6e6f5", fontSize: 14 }}>
+              <div className="hero-title" style={{ fontSize: 30, fontWeight: 900 }}>{c.appTitle}</div>
+              <div className="hero-subtitle" style={{ marginTop: 8, color: "#d6e6f5", fontSize: 14 }}>
                 {c.appSub}
               </div>
             </div>
             <button
+              className="lang-toggle"
               onClick={() => setLang((v) => (v === "zh" ? "ko" : "zh"))}
               style={{
                 border: "1px solid rgba(255,255,255,0.35)",
@@ -2563,7 +2570,7 @@ export default function App() {
               {lang === "zh" ? "한국어" : "中文"} · {c.toggle}
             </button>
           </div>
-          <div style={{ marginTop: 10, display: "flex", flexWrap: "wrap" }}>
+          <div className="hero-badges" style={{ marginTop: 10, display: "flex", flexWrap: "wrap" }}>
             <Badge>7/9 晚到</Badge>
             <Badge>{lang === "zh" ? "市区 + 珍珠岛" : "시내 + 빈펄 섬"}</Badge>
             <Badge>{lang === "zh" ? "万豪优先" : "메리어트 우선"}</Badge>
@@ -2576,6 +2583,7 @@ export default function App() {
       </div>
 
       <div
+        className="tab-shell"
         style={{
           position: "sticky",
           top: 0,
@@ -2587,6 +2595,7 @@ export default function App() {
         }}
       >
         <div
+          className="tab-scroller"
           style={{
             maxWidth: 1120,
             margin: "0 auto",
@@ -2600,6 +2609,7 @@ export default function App() {
           {c.tabs.map((tab, idx) => (
             <button
               key={idx}
+              className={activeTab === idx ? "tab-button active" : "tab-button"}
               onClick={() => scrollToSection(idx)}
               style={{
                 padding: "16px 0",
@@ -2622,7 +2632,7 @@ export default function App() {
         </div>
       </div>
 
-      <div style={{ maxWidth: 1120, margin: "0 auto", padding: 20 }}>
+      <div className="main-shell" style={{ maxWidth: 1120, margin: "0 auto", padding: 20 }}>
         <Card>
           <div style={{ fontWeight: 900, color: "#0e2d4d", marginBottom: 6 }}>
             {c.quickTitle}
