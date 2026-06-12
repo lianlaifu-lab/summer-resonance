@@ -1,4 +1,5 @@
 import { useMemo, useState, useEffect } from "react";
+import "./styles.css";
 
 const localeCopy = {
   zh: {
@@ -146,6 +147,8 @@ const weatherMap = {
 
 function WeatherWidget({ lang }) {
   const [weather, setWeather] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     fetch(
@@ -157,6 +160,30 @@ function WeatherWidget({ lang }) {
       })
       .catch((e) => console.error(e));
   }, []);
+
+  const t = lang === "zh";
+
+  if (loading) {
+    return (
+      <div className="card" style={{ marginBottom: "var(--sp-2xl)" }}>
+        <div style={{ fontWeight: 900, color: "var(--primary)", marginBottom: 6 }}>
+          {t ? "芽庄实时天气" : "냐짱 실시간 날씨"}
+        </div>
+        <div style={{ color: "var(--muted)", fontSize: 13 }}>{t ? "正在加载天气信息..." : "날씨 정보를 불러오는 중..."}</div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="card" style={{ marginBottom: "var(--sp-2xl)" }}>
+        <div style={{ fontWeight: 900, color: "#b91c1c", marginBottom: 6 }}>
+          {t ? "天气信息获取失败" : "날씨 정보 불러오기 실패"}
+        </div>
+        <div style={{ color: "var(--muted)", fontSize: 13 }}>{error}</div>
+      </div>
+    );
+  }
 
   if (!weather) return null;
   const wInfo = weatherMap[weather.weather_code] || {
@@ -261,6 +288,7 @@ function WeatherWidget({ lang }) {
       </div>
     </div>
   );
+}
 }
 
 // --- 实时汇率换算组件 ---
@@ -1992,6 +2020,7 @@ function Card({ children, accent = false }) {
 function Badge({ children }) {
   return (
     <span
+      className="trip-badge"
       style={{
         display: "inline-block",
         padding: "6px 14px",
@@ -2077,7 +2106,7 @@ function HotelItineraryCard({ h, lang }) {
           display: "flex",
           justifyContent: "space-between",
           alignItems: "flex-start",
-          gap: 12,
+          gap: "var(--sp-md)",
           flexWrap: "wrap",
           paddingBottom: 16,
           marginBottom: 16,
@@ -2113,8 +2142,9 @@ function HotelItineraryCard({ h, lang }) {
             style={{
               color: "#64748b",
               fontSize: 14,
-              marginTop: 6,
-              fontWeight: 700,
+              marginTop: "var(--sp-sm)",
+              fontWeight: 600,
+              lineHeight: 1.5,
             }}
           >
             {lang === "zh" ? h.brand.zh : h.brand.ko}
@@ -2187,7 +2217,7 @@ function InfoItem({ icon, title, text }) {
           marginBottom: 8,
           display: "flex",
           alignItems: "center",
-          gap: 6,
+          gap: "var(--sp-sm)",
         }}
       >
         <span style={{ fontSize: 18 }}>{icon}</span> <span>{title}</span>
@@ -2240,11 +2270,11 @@ function FoodCard({ f, lang }) {
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                color: "#94a3b8",
+                color: "var(--text-lighter)",
                 fontWeight: 800,
                 fontSize: 13,
                 textAlign: "center",
-                padding: 12,
+                padding: "var(--sp-md)",
               }}
             >
               {lang === "zh" ? "暂无图片" : "이미지 없음"}
@@ -2257,7 +2287,7 @@ function FoodCard({ f, lang }) {
               display: "flex",
               justifyContent: "space-between",
               alignItems: "flex-start",
-              gap: 10,
+              gap: "var(--sp-md)",
               flexWrap: "wrap",
             }}
           >
@@ -2800,6 +2830,7 @@ export default function App() {
 
   return (
     <div
+      className="travel-app"
       style={{
         minHeight: "100vh",
         background: "#f8fafc", // 更干净的基础底色
@@ -2821,6 +2852,7 @@ export default function App() {
       `}</style>
 
       <div
+        className="app-hero"
         style={{
           backgroundImage:
             "linear-gradient(rgba(14, 45, 77, 0.4), rgba(14, 45, 77, 0.95)), url('/bg.jpg')",
@@ -2830,8 +2862,9 @@ export default function App() {
           padding: "56px 20px 40px",
         }}
       >
-        <div style={{ maxWidth: 1120, margin: "0 auto" }}>
+        <div className="hero-inner" style={{ maxWidth: 1120, margin: "0 auto" }}>
           <div
+            className="hero-header"
             style={{
               display: "flex",
               justifyContent: "space-between",
@@ -2919,6 +2952,7 @@ export default function App() {
           {c.tabs.map((tab, idx) => (
             <button
               key={idx}
+              className={activeTab === idx ? "tab-button active" : "tab-button"}
               onClick={() => scrollToSection(idx)}
               style={{
                 padding: "8px 20px",
