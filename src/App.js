@@ -11,16 +11,33 @@ const localeCopy = {
     overviewCards: [
       { icon: "📅", label: "行程总览", value: "8天7晚 · 7月9日-16日" },
       { icon: "💰", label: "预估预算", value: "人均约 6k-8k RMB (含机酒)" },
-      { icon: "🏨", label: "住宿逻辑", value: "金兰过渡 → 竹岛深玩 → 市区观光 → 金兰收尾" },
-      { icon: "🎯", label: "核心目标", value: "海岛放松、双人浪漫、体验万豪系满配权益" }
+      {
+        icon: "🏨",
+        label: "住宿逻辑",
+        value: "金兰过渡 → 竹岛深玩 → 市区观光 → 金兰收尾",
+      },
+      {
+        icon: "🎯",
+        label: "核心目标",
+        value: "海岛放松、双人浪漫、体验万豪系满配权益",
+      },
     ],
     overviewMustDos: {
       title: "🔥 必做项目",
-      items: ["黑岛 VIP 小团深潜/浮潜", "VinWonders 乐园 + 跨海缆车", "I-Resort 矿泉私密泥浴", "顶楼高空酒吧看海景日落"]
+      items: [
+        "黑岛 VIP 小团深潜/浮潜",
+        "VinWonders 乐园 + 跨海缆车",
+        "I-Resort 矿泉私密泥浴",
+        "顶楼高空酒吧看海景日落",
+      ],
     },
     overviewAlerts: {
       title: "⚠️ 最高危避坑",
-      items: ["坚决不理街边搭讪，打车只认 Grab 软件", "带足现金，机场 ATM 用 VISA 取现最划算", "防晒做足，酒店房间内绝不能吃榴莲"]
+      items: [
+        "坚决不理街边搭讪，打车只认 Grab 软件",
+        "带足现金，机场 ATM 用 VISA 取现最划算",
+        "防晒做足，酒店房间内绝不能吃榴莲",
+      ],
     },
     geoTitle: "地理位置与交通",
     geoSub: "先搞清楚芽庄怎么分布，后面就不会乱。",
@@ -52,17 +69,38 @@ const localeCopy = {
     overviewSub: "5초 만에 파악하는 7박 8일 핵심 리듬 및 주의사항",
     overviewCards: [
       { icon: "📅", label: "총 일정", value: "7박 8일 · 7월 9일-16일" },
-      { icon: "💰", label: "예상 예산", value: "1인 약 120-150만 원 (항공/숙박 포함)" },
-      { icon: "🏨", label: "숙박 로직", value: "깜라인 완충 → 혼쩨 섬 딥다이브 → 시내 관광 → 깜라인 마무리" },
-      { icon: "🎯", label: "핵심 목표", value: "해양 휴양, 커플 로맨스, 메리어트 풀 혜택 누리기" }
+      {
+        icon: "💰",
+        label: "예상 예산",
+        value: "1인 약 120-150만 원 (항공/숙박 포함)",
+      },
+      {
+        icon: "🏨",
+        label: "숙박 로직",
+        value: "깜라인 완충 → 혼쩨 섬 딥다이브 → 시내 관광 → 깜라인 마무리",
+      },
+      {
+        icon: "🎯",
+        label: "핵심 목표",
+        value: "해양 휴양, 커플 로맨스, 메리어트 풀 혜택 누리기",
+      },
     ],
     overviewMustDos: {
       title: "🔥 필수 체험",
-      items: ["혼문 섬 VIP 스쿠버다이빙/스노클링", "VinWonders 테마파크 + 해상 케이블카", "I-Resort 프라이빗 머드배스", "루프탑 바에서 오션뷰 일몰 감상"]
+      items: [
+        "혼문 섬 VIP 스쿠버다이빙/스노클링",
+        "VinWonders 테마파크 + 해상 케이블카",
+        "I-Resort 프라이빗 머드배스",
+        "루프탑 바에서 오션뷰 일몰 감상",
+      ],
     },
     overviewAlerts: {
       title: "⚠️ 핵심 주의사항",
-      items: ["길거리 호객 절대 무시, 택시는 오직 Grab 앱만", "현금 넉넉히 준비, 공항 ATM(VISA) 인출 추천", "자외선 차단 필수, 호텔 객실 내 두리안 절대 금지"]
+      items: [
+        "길거리 호객 절대 무시, 택시는 오직 Grab 앱만",
+        "현금 넉넉히 준비, 공항 ATM(VISA) 인출 추천",
+        "자외선 차단 필수, 호텔 객실 내 두리안 절대 금지",
+      ],
     },
     geoTitle: "위치와 교통",
     geoSub: "냐짱의 구성을 먼저 이해하면 일정이 훨씬 쉬워집니다.",
@@ -110,37 +148,117 @@ function WeatherWidget({ lang }) {
   const [weather, setWeather] = useState(null);
 
   useEffect(() => {
-    // 自动获取芽庄的经纬度天气数据
-    fetch("https://api.open-meteo.com/v1/forecast?latitude=12.2388&longitude=109.1967&current=temperature_2m,relative_humidity_2m,weather_code&timezone=Asia%2FBangkok")
-      .then(res => res.json())
-      .then(data => {
+    fetch(
+      "https://api.open-meteo.com/v1/forecast?latitude=12.2388&longitude=109.1967&current=temperature_2m,relative_humidity_2m,weather_code&timezone=Asia%2FBangkok"
+    )
+      .then((res) => res.json())
+      .then((data) => {
         if (data && data.current) setWeather(data.current);
       })
-      .catch(e => console.error(e));
+      .catch((e) => console.error(e));
   }, []);
 
   if (!weather) return null;
-  const wInfo = weatherMap[weather.weather_code] || { icon: "🌡️", zh: "未知", ko: "알 수 없음" };
+  const wInfo = weatherMap[weather.weather_code] || {
+    icon: "🌡️",
+    zh: "未知",
+    ko: "알 수 없음",
+  };
 
   return (
-    <div style={{ background: "linear-gradient(135deg, #e0f2fe 0%, #bae6fd 100%)", padding: "16px 20px", borderRadius: 16, display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 20, border: "1px solid #7dd3fc" }}>
-       <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-          <span style={{ fontSize: 32, filter: "drop-shadow(0 4px 6px rgba(0,0,0,0.1))" }}>{wInfo.icon}</span>
-          <div>
-            <div style={{ fontWeight: 900, color: "#0284c7", fontSize: 16 }}>{lang === 'zh' ? '芽庄实时天气' : '냐짱 실시간 날씨'}</div>
-            <div style={{ fontSize: 13, color: "#0369a1", fontWeight: 700, marginTop: 2 }}>{lang === 'zh' ? wInfo.zh : wInfo.ko}</div>
+    <div
+      className="card-hover"
+      style={{
+        background: "linear-gradient(135deg, #e0f2fe 0%, #bae6fd 100%)",
+        padding: "18px 24px",
+        borderRadius: 24,
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "center",
+        marginBottom: 20,
+        border: "1px solid rgba(125, 211, 252, 0.5)",
+        flexWrap: "wrap",
+        gap: 14,
+      }}
+    >
+      <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
+        <span
+          style={{
+            fontSize: 36,
+            filter: "drop-shadow(0 4px 6px rgba(0,0,0,0.1))",
+          }}
+        >
+          {wInfo.icon}
+        </span>
+        <div>
+          <div
+            style={{
+              fontWeight: 900,
+              color: "#0284c7",
+              fontSize: 16,
+              letterSpacing: "-0.3px",
+            }}
+          >
+            {lang === "zh" ? "芽庄实时天气" : "냐짱 실시간 날씨"}
           </div>
-       </div>
-       <div style={{ display: "flex", gap: 20 }}>
-          <div style={{ textAlign: "right" }}>
-             <div style={{ fontSize: 12, color: "#0369a1", fontWeight: 700 }}>{lang === 'zh' ? '气温' : '기온'}</div>
-             <div style={{ fontSize: 22, fontWeight: 900, color: "#0c4a6e" }}>{Math.round(weather.temperature_2m)}°C</div>
+          <div
+            style={{
+              fontSize: 13,
+              color: "#0369a1",
+              fontWeight: 700,
+              marginTop: 4,
+            }}
+          >
+            {lang === "zh" ? wInfo.zh : wInfo.ko}
           </div>
-          <div style={{ textAlign: "right" }}>
-             <div style={{ fontSize: 12, color: "#0369a1", fontWeight: 700 }}>{lang === 'zh' ? '湿度' : '습도'}</div>
-             <div style={{ fontSize: 22, fontWeight: 900, color: "#0c4a6e" }}>{weather.relative_humidity_2m}%</div>
+        </div>
+      </div>
+      <div style={{ display: "flex", gap: 24 }}>
+        <div style={{ textAlign: "right" }}>
+          <div
+            style={{
+              fontSize: 12,
+              color: "#0369a1",
+              fontWeight: 700,
+              opacity: 0.8,
+            }}
+          >
+            {lang === "zh" ? "气温" : "기온"}
           </div>
-       </div>
+          <div
+            style={{
+              fontSize: 24,
+              fontWeight: 900,
+              color: "#0c4a6e",
+              letterSpacing: "-0.5px",
+            }}
+          >
+            {Math.round(weather.temperature_2m)}°C
+          </div>
+        </div>
+        <div style={{ textAlign: "right" }}>
+          <div
+            style={{
+              fontSize: 12,
+              color: "#0369a1",
+              fontWeight: 700,
+              opacity: 0.8,
+            }}
+          >
+            {lang === "zh" ? "湿度" : "습도"}
+          </div>
+          <div
+            style={{
+              fontSize: 24,
+              fontWeight: 900,
+              color: "#0c4a6e",
+              letterSpacing: "-0.5px",
+            }}
+          >
+            {weather.relative_humidity_2m}%
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
@@ -148,24 +266,25 @@ function WeatherWidget({ lang }) {
 // --- 实时汇率换算组件 ---
 function CurrencyConverterWidget({ lang }) {
   const [rates, setRates] = useState(null);
-  const [amount, setAmount] = useState(100); // 默认显示 100 RMB
+  const [amount, setAmount] = useState(100);
   const [base, setBase] = useState("cny");
 
   useEffect(() => {
-    // 自动获取最新汇率 (使用稳定的免费开源 CDN)
-    fetch("https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1/currencies/cny.json")
-      .then(res => res.json())
-      .then(data => {
+    fetch(
+      "https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1/currencies/cny.json"
+    )
+      .then((res) => res.json())
+      .then((data) => {
         if (data && data.cny) {
           setRates({ cny: 1, krw: data.cny.krw, vnd: data.cny.vnd });
         }
       })
-      .catch(e => console.error("汇率获取失败", e));
+      .catch((e) => console.error("汇率获取失败", e));
   }, []);
 
   const handleInputChange = (val, currency) => {
-    if (val === '') {
-      setAmount('');
+    if (val === "") {
+      setAmount("");
       setBase(currency);
       return;
     }
@@ -177,10 +296,9 @@ function CurrencyConverterWidget({ lang }) {
   };
 
   const getValue = (currency) => {
-    if (amount === '') return '';
-    if (!rates) return '';
+    if (amount === "") return "";
+    if (!rates) return "";
     if (currency === base) return amount;
-    // 根据当前的基准货币反推计算目标货币
     const inCny = amount / rates[base];
     return Math.round(inCny * rates[currency]);
   };
@@ -188,68 +306,200 @@ function CurrencyConverterWidget({ lang }) {
   if (!rates) return null;
 
   const uiText = {
-    title: lang === 'zh' ? '实时汇率换算' : '실시간 환율 계산기',
-    cny: lang === 'zh' ? '人民币 (CNY)' : '위안화 (CNY)',
-    krw: lang === 'zh' ? '韩元 (KRW)' : '원화 (KRW)',
-    vnd: lang === 'zh' ? '越南盾 (VND)' : '베트남 동 (VND)',
-    tip: lang === 'zh' ? '修改任意框自动换算' : '입력 시 자동 변환'
+    title: lang === "zh" ? "实时汇率换算" : "실시간 환율 계산기",
+    cny: lang === "zh" ? "人民币 (CNY)" : "위안화 (CNY)",
+    krw: lang === "zh" ? "韩元 (KRW)" : "원화 (KRW)",
+    vnd: lang === "zh" ? "越南盾 (VND)" : "베트남 동 (VND)",
+    tip: lang === "zh" ? "点击修改任意框即可换算" : "입력 시 자동 변환",
   };
 
   return (
-    <div style={{ background: "#fff", padding: "18px 20px", borderRadius: 16, marginBottom: 20, border: "2px solid #0e2d4d", boxShadow: "0 8px 24px rgba(20,30,50,0.05)" }}>
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16 }}>
-        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-          <span style={{ fontSize: 22 }}>💱</span>
-          <span style={{ fontWeight: 900, color: "#0e2d4d", fontSize: 16 }}>{uiText.title}</span>
+    <div
+      className="card-hover"
+      style={{
+        background: "#fff",
+        padding: "20px 24px",
+        borderRadius: 24,
+        marginBottom: 20,
+        border: "1px solid #f1f5f9",
+        boxShadow: "0 8px 30px rgba(15,23,42,0.04)",
+      }}
+    >
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          marginBottom: 18,
+          flexWrap: "wrap",
+          gap: 10,
+        }}
+      >
+        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+          <span style={{ fontSize: 24 }}>💱</span>
+          <span
+            style={{
+              fontWeight: 900,
+              color: "#0f172a",
+              fontSize: 17,
+              letterSpacing: "-0.3px",
+            }}
+          >
+            {uiText.title}
+          </span>
         </div>
-        <div style={{ fontSize: 12, color: "#64748b", fontWeight: 700 }}>{uiText.tip}</div>
+        <div
+          style={{
+            fontSize: 12,
+            color: "#64748b",
+            fontWeight: 700,
+            background: "#f1f5f9",
+            padding: "4px 10px",
+            borderRadius: 99,
+          }}
+        >
+          {uiText.tip}
+        </div>
       </div>
 
-      <div style={{ display: "grid", gap: 10 }}>
-         {/* 人民币 */}
-         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", background: "#f8fafc", padding: "12px 16px", borderRadius: 12, border: "1px solid #e2e8f0" }}>
-            <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-              <span style={{ fontSize: 24 }}>🇨🇳</span>
-              <span style={{ fontWeight: 800, color: "#334155", fontSize: 14 }}>{uiText.cny}</span>
-            </div>
-            <input
-              type="number"
-              value={getValue("cny")}
-              onChange={(e) => handleInputChange(e.target.value, "cny")}
-              style={{ textAlign: "right", border: "none", background: "transparent", fontSize: 20, fontWeight: 900, color: "#0e2d4d", width: "120px", outline: "none" }}
-              placeholder="0"
-            />
-         </div>
+      <div style={{ display: "grid", gap: 12 }}>
+        <div
+          className="input-container"
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            background: "#f8fafc",
+            padding: "14px 18px",
+            borderRadius: 16,
+            border: "1px solid #e2e8f0",
+            transition: "all 0.2s",
+          }}
+        >
+          <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+            <span
+              style={{
+                fontSize: 24,
+                filter: "drop-shadow(0 2px 4px rgba(0,0,0,0.1))",
+              }}
+            >
+              🇨🇳
+            </span>
+            <span style={{ fontWeight: 800, color: "#334155", fontSize: 14 }}>
+              {uiText.cny}
+            </span>
+          </div>
+          <input
+            type="number"
+            className="focus-input"
+            value={getValue("cny")}
+            onChange={(e) => handleInputChange(e.target.value, "cny")}
+            style={{
+              textAlign: "right",
+              border: "none",
+              background: "transparent",
+              fontSize: 22,
+              fontWeight: 900,
+              color: "#0f172a",
+              width: "120px",
+              outline: "none",
+              fontFamily: "inherit",
+            }}
+            placeholder="0"
+          />
+        </div>
 
-         {/* 韩元 */}
-         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", background: "#f8fafc", padding: "12px 16px", borderRadius: 12, border: "1px solid #e2e8f0" }}>
-            <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-              <span style={{ fontSize: 24 }}>🇰🇷</span>
-              <span style={{ fontWeight: 800, color: "#334155", fontSize: 14 }}>{uiText.krw}</span>
-            </div>
-            <input
-              type="number"
-              value={getValue("krw")}
-              onChange={(e) => handleInputChange(e.target.value, "krw")}
-              style={{ textAlign: "right", border: "none", background: "transparent", fontSize: 20, fontWeight: 900, color: "#0e2d4d", width: "150px", outline: "none" }}
-              placeholder="0"
-            />
-         </div>
+        <div
+          className="input-container"
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            background: "#f8fafc",
+            padding: "14px 18px",
+            borderRadius: 16,
+            border: "1px solid #e2e8f0",
+            transition: "all 0.2s",
+          }}
+        >
+          <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+            <span
+              style={{
+                fontSize: 24,
+                filter: "drop-shadow(0 2px 4px rgba(0,0,0,0.1))",
+              }}
+            >
+              🇰🇷
+            </span>
+            <span style={{ fontWeight: 800, color: "#334155", fontSize: 14 }}>
+              {uiText.krw}
+            </span>
+          </div>
+          <input
+            type="number"
+            className="focus-input"
+            value={getValue("krw")}
+            onChange={(e) => handleInputChange(e.target.value, "krw")}
+            style={{
+              textAlign: "right",
+              border: "none",
+              background: "transparent",
+              fontSize: 22,
+              fontWeight: 900,
+              color: "#0f172a",
+              width: "150px",
+              outline: "none",
+              fontFamily: "inherit",
+            }}
+            placeholder="0"
+          />
+        </div>
 
-         {/* 越南盾 */}
-         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", background: "#fdf4ff", padding: "12px 16px", borderRadius: 12, border: "1px solid #f5d0fe" }}>
-            <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-              <span style={{ fontSize: 24 }}>🇻🇳</span>
-              <span style={{ fontWeight: 900, color: "#86198f", fontSize: 14 }}>{uiText.vnd}</span>
-            </div>
-            <input
-              type="number"
-              value={getValue("vnd")}
-              onChange={(e) => handleInputChange(e.target.value, "vnd")}
-              style={{ textAlign: "right", border: "none", background: "transparent", fontSize: 20, fontWeight: 900, color: "#c026d3", width: "180px", outline: "none" }}
-              placeholder="0"
-            />
-         </div>
+        <div
+          className="input-container"
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            background: "#fdf4ff",
+            padding: "14px 18px",
+            borderRadius: 16,
+            border: "1px solid #f5d0fe",
+            transition: "all 0.2s",
+          }}
+        >
+          <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+            <span
+              style={{
+                fontSize: 24,
+                filter: "drop-shadow(0 2px 4px rgba(0,0,0,0.1))",
+              }}
+            >
+              🇻🇳
+            </span>
+            <span style={{ fontWeight: 900, color: "#86198f", fontSize: 14 }}>
+              {uiText.vnd}
+            </span>
+          </div>
+          <input
+            type="number"
+            className="focus-input"
+            value={getValue("vnd")}
+            onChange={(e) => handleInputChange(e.target.value, "vnd")}
+            style={{
+              textAlign: "right",
+              border: "none",
+              background: "transparent",
+              fontSize: 22,
+              fontWeight: 900,
+              color: "#c026d3",
+              width: "180px",
+              outline: "none",
+              fontFamily: "inherit",
+            }}
+            placeholder="0"
+          />
+        </div>
       </div>
     </div>
   );
@@ -631,7 +881,7 @@ const foodRecommendations = [
       zh: "约 1,000,000 VND 起 / 人",
       ko: "약 1,000,000 VND 부터 / 1인",
     },
-    img: "/f1.png",
+    img: "https://images.unsplash.com/photo-1559339352-11d035aa65de?auto=format&fit=crop&w=1200&q=80",
     mapLink:
       "https://www.google.com/maps/search/?api=1&query=Ngon+Gallery+Nha+Trang",
     desc: {
@@ -650,13 +900,16 @@ const foodRecommendations = [
   },
   {
     category: { zh: "本地海鲜", ko: "현지 해산물" },
-    name: { zh: "Thanh Suong Seafood", ko: "Thanh Suong Seafood" },
+    name: {
+      zh: "Thanh Suong Seafood (清霜海鲜)",
+      ko: "Thanh Suong Seafood (탄스엉 해산물)",
+    },
     tag: { zh: "本地人常去 · 价格透明", ko: "현지인 인기 · 가격 투명" },
     price: {
       zh: "约 250,000 - 400,000 VND / 人",
       ko: "약 250,000 - 400,000 VND / 1인",
     },
-    img: "/f2.png",
+    img: "https://images.unsplash.com/photo-1510130387422-82bed34b37e9?auto=format&fit=crop&w=1200&q=80",
     mapLink:
       "https://www.google.com/maps/search/?api=1&query=Thanh+Suong+Seafood+Nha+Trang",
     desc: {
@@ -676,7 +929,7 @@ const foodRecommendations = [
       zh: "约 200,000 - 350,000 VND / 人",
       ko: "약 200,000 - 350,000 VND / 1인",
     },
-    img: "/f3.png",
+    img: "https://images.unsplash.com/photo-1558030006-450675393462?auto=format&fit=crop&w=1200&q=80",
     mapLink:
       "https://www.google.com/maps/search/?api=1&query=Lac+Canh+Restaurant+Nha+Trang",
     desc: {
@@ -696,7 +949,7 @@ const foodRecommendations = [
       zh: "约 40,000 - 90,000 VND / 人",
       ko: "약 40,000 - 90,000 VND / 1인",
     },
-    img: "/f4.png",
+    img: "https://images.unsplash.com/photo-1525755662778-989d0524087e?auto=format&fit=crop&w=1200&q=80",
     mapLink:
       "https://www.google.com/maps/search/?api=1&query=Nem+Nuong+Dang+Van+Quyen+Nha+Trang",
     desc: {
@@ -716,7 +969,7 @@ const foodRecommendations = [
       zh: "约 30,000 - 70,000 VND / 人",
       ko: "약 30,000 - 70,000 VND / 1인",
     },
-    img: "/f5.png",
+    img: "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=1200&q=80",
     mapLink:
       "https://www.google.com/maps/search/?api=1&query=Banh+Can+51+To+Hien+Thanh+Nha+Trang",
     desc: {
@@ -736,7 +989,7 @@ const foodRecommendations = [
       zh: "约 25,000 - 40,000 VND / 个",
       ko: "약 25,000 - 40,000 VND / 개",
     },
-    img: "/f6.png",
+    img: "https://images.unsplash.com/photo-1509722747041-616f39b57569?auto=format&fit=crop&w=1200&q=80",
     mapLink:
       "https://www.google.com/maps/search/?api=1&query=Banh+Mi+Phan+Nha+Trang",
     desc: {
@@ -756,7 +1009,7 @@ const foodRecommendations = [
       zh: "约 45,000 - 70,000 VND / 杯",
       ko: "약 45,000 - 70,000 VND / 잔",
     },
-    img: "/f7.png",
+    img: "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=1200&q=80",
     mapLink:
       "https://www.google.com/maps/search/?api=1&query=CCCP+Coffee+Nha+Trang",
     desc: {
@@ -776,7 +1029,7 @@ const foodRecommendations = [
       zh: "约 50,000 - 120,000 VND / 份",
       ko: "약 50,000 - 120,000 VND / 인분",
     },
-    img: "/ss.png",
+    img: "/image_6bd899.jpg",
     mapLink:
       "https://www.google.com/maps/search/?api=1&query=Sweet+Secret+Nha+Trang",
     desc: {
@@ -796,7 +1049,7 @@ const foodRecommendations = [
       zh: "约 30,000 - 60,000 VND / 份",
       ko: "약 30,000 - 60,000 VND / 인분",
     },
-    img: "/f8.png",
+    img: "https://images.unsplash.com/photo-1517686469429-8bdb88b9f907?auto=format&fit=crop&w=1200&q=80",
     mapLink:
       "https://www.google.com/maps/search/?api=1&query=Cui+Banh+Mi+Nha+Trang",
     desc: {
@@ -851,7 +1104,7 @@ const itinerary = [
         },
         tip: {
           zh: "💡 如果在机场忘买零食了，Wyndham 大堂有小型礼品商店（价格偏贵但24h），可以买几瓶水备用。",
-          ko: "💡 공항에서 간식을 못 샀다면, 윈덤 로비 기념품 상점(24시간, 가격 약간 비쌈)에서 물이라도 사 두세요.",
+          ko: "💡 공항에서 간식을 못 샀다면, 윈덤 로비 기념품 상점(24시간, 가격 약간 비쌈)에서 물라도 사 두세요.",
         },
         venues: null,
       },
@@ -1576,7 +1829,7 @@ const itinerary = [
             },
             desc: {
               zh: "用一顿豪气的无限龙虾自助为整趟旅行画上完美句号！Ngon Gallery 是芽庄最著名的高端海鲜自助之一，主打无限龙虾 + 多国菜系（日料刺身 / 西式烤肉 / 越式海鲜），整体出品稳定，性价比在芽庄高端餐厅中属于中等水平。建议提前预订午餐场，通常比晚餐便宜约 20%。",
-              ko: "무제한 랍스터 뷔페로 이번 여행에 완벽한 마침표를! Ngon Gallery는 냐짱 최고 명성의 고급 해산물 뷔페로 무제한 랍스터 + 다국적 메뉴(일식 사시미·서양 BBQ·베트남 해산물)를 제공합니다. 점심이 저녁보다 약 20% 저렴합니다. 사전 예약 권장.",
+              ko: "무제한 랍스터 뷔페로 이번 여행에 완벽한 마침표를! Ngon Gallery는 냐짱 최고 명성의 고급 해산물 뷔페로 무제한 랍스터 + 다국적 메뉴(일식 사시미·서양 BBQ·베트남 해산물)를 제공합니다. 점 점심이 저녁보다 약 20% 저렴합니다. 사전 예약 권장.",
             },
             venues: [
               {
@@ -1713,35 +1966,50 @@ const itinerary = [
   },
 ];
 
+// --- 全局 UI 组件重构 ---
 function Card({ children, accent = false }) {
   return (
     <div
+      className="card-hover"
       style={{
         background: "#fff",
-        border: accent ? "2px solid #0e2d4d" : "1px solid #e8e0d4",
-        borderRadius: 18,
-        padding: 18,
-        boxShadow: "0 8px 24px rgba(20,30,50,0.05)",
+        border: accent
+          ? "2px solid #0e2d4d"
+          : "1px solid rgba(241, 245, 249, 0.8)",
+        borderRadius: 24, // 💡 升级为更大的 24px 现代圆角
+        padding: "24px 26px", // 💡 加大留白，增强呼吸感
+        boxShadow: accent
+          ? "0 12px 32px rgba(14, 45, 77, 0.08)"
+          : "0 8px 24px rgba(15, 23, 42, 0.03)",
+        position: "relative",
+        overflow: "hidden",
       }}
     >
       {children}
     </div>
   );
 }
-
 function Badge({ children }) {
   return (
     <span
       style={{
         display: "inline-block",
-        padding: "6px 10px",
+        padding: "6px 14px",
         borderRadius: 999,
-        background: "#edf4fb",
-        color: "#0e2d4d",
-        fontSize: 12,
-        fontWeight: 700,
+        // 🌟 1. 半透明的白色底色（15% 不透明度）
+        background: "rgba(255, 255, 255, 0.15)",
+        // 🌟 2. 核心毛玻璃发丝特效
+        backdropFilter: "blur(12px)",
+        WebkitBackdropFilter: "blur(12px)", // 兼容苹果 Safari 浏览器
+        // 🌟 3. 加一圈极细的半透明白边，增强玻璃质感
+        border: "1px solid rgba(255, 255, 255, 0.3)",
+        // 🌟 4. 纯白文字
+        color: "#ffffff",
+        fontSize: 13,
+        fontWeight: 800,
         marginRight: 8,
         marginBottom: 8,
+        boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)", // 微微的底层阴影让玻璃浮起来
       }}
     >
       {children}
@@ -1751,35 +2019,49 @@ function Badge({ children }) {
 
 function SectionTitle({ title, sub }) {
   return (
-    <div style={{ margin: "22px 0 12px" }}>
-      <div style={{ fontSize: 24, fontWeight: 800, color: "#0e2d4d" }}>
+    <div style={{ margin: "24px 0 16px" }}>
+      <div
+        style={{
+          fontSize: 26,
+          fontWeight: 900,
+          color: "#0f172a",
+          letterSpacing: "-0.5px",
+        }}
+      >
         {title}
       </div>
-      {sub ? (
-        <div style={{ marginTop: 4, color: "#6b7280", fontSize: 13 }}>
+      {sub && (
+        <div
+          style={{
+            marginTop: 6,
+            color: "#64748b",
+            fontSize: 14,
+            fontWeight: 500,
+          }}
+        >
           {sub}
         </div>
-      ) : null}
+      )}
     </div>
   );
 }
 
 function BulletList({ items }) {
   return (
-    <div style={{ display: "grid", gap: 8 }}>
+    <div style={{ display: "grid", gap: 10 }}>
       {items.map((item, idx) => (
         <div
           key={idx}
           style={{
             display: "flex",
-            gap: 8,
+            gap: 10,
             alignItems: "flex-start",
-            fontSize: 14,
+            fontSize: 15,
             color: "#334155",
-            lineHeight: 1.65,
+            lineHeight: 1.7,
           }}
         >
-          <span style={{ color: "#0e2d4d" }}>•</span>
+          <span style={{ color: "#0284c7", fontSize: 18 }}>•</span>
           <span>{item}</span>
         </div>
       ))}
@@ -1799,30 +2081,37 @@ function HotelItineraryCard({ h, lang }) {
           flexWrap: "wrap",
           paddingBottom: 16,
           marginBottom: 16,
-          borderBottom: "1px dashed #dbe3ea",
+          borderBottom: "1px dashed #cbd5e1",
         }}
       >
         <div>
           <div
             style={{
               display: "inline-block",
-              background: "#e07055",
+              background: "#f97316",
               color: "#fff",
-              padding: "4px 10px",
-              borderRadius: 8,
+              padding: "6px 12px",
+              borderRadius: 10,
               fontSize: 13,
               fontWeight: 900,
-              marginBottom: 8,
+              marginBottom: 10,
             }}
           >
             {lang === "zh" ? h.date.zh : h.date.ko}
           </div>
-          <div style={{ fontSize: 20, fontWeight: 900, color: "#0e2d4d" }}>
+          <div
+            style={{
+              fontSize: 22,
+              fontWeight: 900,
+              color: "#0f172a",
+              letterSpacing: "-0.5px",
+            }}
+          >
             {h.name}
           </div>
           <div
             style={{
-              color: "#6b7280",
+              color: "#64748b",
               fontSize: 14,
               marginTop: 6,
               fontWeight: 700,
@@ -1832,7 +2121,16 @@ function HotelItineraryCard({ h, lang }) {
           </div>
         </div>
         <div style={{ textAlign: "right", flexShrink: 0 }}>
-          <div style={{ fontSize: 18, fontWeight: 900, color: "#111" }}>
+          <div
+            style={{
+              fontSize: 18,
+              fontWeight: 900,
+              color: "#0f172a",
+              background: "#f8fafc",
+              padding: "6px 12px",
+              borderRadius: 12,
+            }}
+          >
             {lang === "zh" ? h.price.zh : h.price.ko}
           </div>
         </div>
@@ -1841,7 +2139,7 @@ function HotelItineraryCard({ h, lang }) {
         style={{
           display: "grid",
           gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))",
-          gap: 16,
+          gap: 18,
         }}
       >
         <InfoItem
@@ -1885,16 +2183,16 @@ function InfoItem({ icon, title, text }) {
       <div
         style={{
           fontWeight: 800,
-          color: "#0e2d4d",
-          marginBottom: 6,
+          color: "#0f172a",
+          marginBottom: 8,
           display: "flex",
           alignItems: "center",
           gap: 6,
         }}
       >
-        <span>{icon}</span> <span>{title}</span>
+        <span style={{ fontSize: 18 }}>{icon}</span> <span>{title}</span>
       </div>
-      <div style={{ color: "#334155" }}>{text}</div>
+      <div style={{ color: "#475569" }}>{text}</div>
     </div>
   );
 }
@@ -1905,7 +2203,7 @@ function FoodCard({ f, lang }) {
       <div
         style={{
           display: "flex",
-          gap: 16,
+          gap: 18,
           flexWrap: "wrap",
           alignItems: "stretch",
         }}
@@ -1913,11 +2211,11 @@ function FoodCard({ f, lang }) {
         <div
           style={{
             flexShrink: 0,
-            width: 150,
-            height: 150,
-            borderRadius: 16,
+            width: 140,
+            height: 140,
+            borderRadius: 18,
             overflow: "hidden",
-            border: "1px solid #e8e0d4",
+            border: "1px solid #f1f5f9",
             background: "linear-gradient(135deg, #f8fafc 0%, #eef2f7 100%)",
             position: "relative",
           }}
@@ -1926,7 +2224,13 @@ function FoodCard({ f, lang }) {
             <img
               src={f.img}
               alt={lang === "zh" ? f.name.zh : f.name.ko}
-              style={{ width: "100%", height: "100%", objectFit: "cover" }}
+              style={{
+                width: "100%",
+                height: "100%",
+                objectFit: "cover",
+                transition: "transform 0.3s ease",
+              }}
+              className="img-hover"
             />
           ) : (
             <div
@@ -1958,20 +2262,33 @@ function FoodCard({ f, lang }) {
             }}
           >
             <div>
-              <div style={{ fontSize: 19, fontWeight: 900, color: "#0e2d4d" }}>
+              <div
+                style={{
+                  fontSize: 20,
+                  fontWeight: 900,
+                  color: "#0f172a",
+                  letterSpacing: "-0.5px",
+                }}
+              >
                 {lang === "zh" ? f.name.zh : f.name.ko}
               </div>
-              <div style={{ marginTop: 6, display: "flex", flexWrap: "wrap" }}>
+              <div
+                style={{
+                  marginTop: 8,
+                  display: "flex",
+                  flexWrap: "wrap",
+                  gap: 8,
+                }}
+              >
                 <span
                   style={{
                     display: "inline-block",
-                    padding: "5px 10px",
+                    padding: "5px 12px",
                     borderRadius: 999,
-                    background: "#edf4fb",
-                    color: "#0e2d4d",
+                    background: "#f1f5f9",
+                    color: "#334155",
                     fontSize: 12,
                     fontWeight: 800,
-                    marginBottom: 6,
                   }}
                 >
                   {lang === "zh" ? f.category.zh : f.category.ko}
@@ -1979,14 +2296,12 @@ function FoodCard({ f, lang }) {
                 <span
                   style={{
                     display: "inline-block",
-                    padding: "5px 10px",
+                    padding: "5px 12px",
                     borderRadius: 999,
-                    background: "#fff4ed",
+                    background: "#fff7ed",
                     color: "#c2410c",
                     fontSize: 12,
                     fontWeight: 800,
-                    marginLeft: 8,
-                    marginBottom: 6,
                   }}
                 >
                   {lang === "zh" ? f.tag.zh : f.tag.ko}
@@ -1997,8 +2312,8 @@ function FoodCard({ f, lang }) {
               style={{
                 background: "#fef2f2",
                 color: "#dc2626",
-                padding: "6px 10px",
-                borderRadius: 10,
+                padding: "6px 12px",
+                borderRadius: 12,
                 fontSize: 13,
                 fontWeight: 800,
                 whiteSpace: "nowrap",
@@ -2009,47 +2324,14 @@ function FoodCard({ f, lang }) {
           </div>
           <div
             style={{
-              marginTop: 12,
+              marginTop: 14,
               fontSize: 14,
-              color: "#334155",
+              color: "#475569",
               lineHeight: 1.75,
             }}
           >
             {lang === "zh" ? f.desc.zh : f.desc.ko}
           </div>
-          {f.menu && (
-            <div style={{ marginTop: 12 }}>
-              <div
-                style={{
-                  fontSize: 13,
-                  fontWeight: 800,
-                  color: "#0e2d4d",
-                  marginBottom: 8,
-                }}
-              >
-                {lang === "zh" ? "推荐菜单" : "추천 메뉴"}
-              </div>
-              <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
-                {(lang === "zh" ? f.menu.zh : f.menu.ko).map((item) => (
-                  <span
-                    key={item}
-                    style={{
-                      display: "inline-block",
-                      padding: "6px 10px",
-                      borderRadius: 999,
-                      background: "#f8fafc",
-                      border: "1px solid #e2e8f0",
-                      color: "#334155",
-                      fontSize: 12,
-                      fontWeight: 700,
-                    }}
-                  >
-                    {item}
-                  </span>
-                ))}
-              </div>
-            </div>
-          )}
           {f.mapLink && (
             <a
               href={f.mapLink}
@@ -2060,14 +2342,16 @@ function FoodCard({ f, lang }) {
                 alignItems: "center",
                 gap: 6,
                 marginTop: 14,
-                padding: "8px 14px",
-                background: "#edf4fb",
-                color: "#0e2d4d",
+                padding: "8px 16px",
+                background: "#f0f9ff",
+                color: "#0284c7",
                 fontSize: 13,
                 fontWeight: 800,
                 textDecoration: "none",
-                borderRadius: 10,
+                borderRadius: 12,
+                transition: "background 0.2s",
               }}
+              className="btn-hover"
             >
               📍 {lang === "zh" ? "Google Maps 导航" : "Google 지도 열기"}
             </a>
@@ -2093,8 +2377,7 @@ function ImageGallery({ images }) {
   };
 
   return (
-    <div style={{ marginTop: 22, width: "100%" }}>
-      <style>{`.hide-scroll::-webkit-scrollbar { display: none; }`}</style>
+    <div style={{ marginTop: 24, width: "100%" }}>
       <div
         className="hide-scroll"
         onScroll={handleScroll}
@@ -2104,8 +2387,9 @@ function ImageGallery({ images }) {
           overflowX: "auto",
           scrollSnapType: "x mandatory",
           WebkitOverflowScrolling: "touch",
-          borderRadius: 12,
-          backgroundColor: "#f4f4f5",
+          borderRadius: 20,
+          backgroundColor: "#f8fafc",
+          border: "1px solid #f1f5f9",
         }}
       >
         {images.map((src, idx) => (
@@ -2137,19 +2421,19 @@ function ImageGallery({ images }) {
         style={{
           display: "flex",
           justifyContent: "center",
-          gap: 6,
-          marginTop: 12,
+          gap: 8,
+          marginTop: 14,
         }}
       >
         {images.map((_, idx) => (
           <div
             key={idx}
             style={{
-              width: activeIndex === idx ? 18 : 6,
-              height: 6,
-              borderRadius: 3,
-              backgroundColor: activeIndex === idx ? "#0e2d4d" : "#cbd5e1",
-              transition: "all 0.3s ease",
+              width: activeIndex === idx ? 20 : 8,
+              height: 8,
+              borderRadius: 4,
+              backgroundColor: activeIndex === idx ? "#0e2d4d" : "#e2e8f0",
+              transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
             }}
           />
         ))}
@@ -2170,29 +2454,20 @@ function ItineraryDayCard({ d, lang }) {
       label: isZh ? "上午" : "오전",
     },
     afternoon: {
-      border: "#60a5fa",
+      border: "#3b82f6",
       bg: "#eff6ff",
       label: isZh ? "下午" : "오후",
     },
     evening: {
-      border: "#c084fc",
+      border: "#a855f7",
       bg: "#fdf4ff",
       label: isZh ? "晚间" : "저녁",
     },
-    night: { border: "#4ade80", bg: "#f0fdf4", label: isZh ? "夜间" : "야간" },
+    night: { border: "#22c55e", bg: "#f0fdf4", label: isZh ? "夜间" : "야간" },
   };
 
   return (
-    <div
-      style={{
-        background: "#fff",
-        border: "2px solid #0e2d4d", // 🌟 统一改成深蓝色加粗边框
-        borderRadius: 18,
-        padding: "20px 22px",
-        boxShadow: "0 8px 24px rgba(20,30,50,0.05)",
-      }}
-    >
-      {/* ── 卡片头部 ── */}
+    <Card accent>
       <div
         style={{
           display: "flex",
@@ -2201,26 +2476,26 @@ function ItineraryDayCard({ d, lang }) {
           gap: 12,
           flexWrap: "wrap",
           paddingBottom: 16,
-          marginBottom: 18,
-          borderBottom: "1px dashed #dbe3ea",
+          marginBottom: 20,
+          borderBottom: "1px dashed #cbd5e1",
         }}
       >
         <div>
           <div
             style={{
               display: "flex",
-              gap: 8,
+              gap: 10,
               alignItems: "center",
               flexWrap: "wrap",
-              marginBottom: 8,
+              marginBottom: 10,
             }}
           >
             <span
               style={{
-                background: "#e07055",
+                background: "#f97316",
                 color: "#fff",
-                padding: "3px 12px",
-                borderRadius: 8,
+                padding: "4px 14px",
+                borderRadius: 10,
                 fontSize: 14,
                 fontWeight: 900,
               }}
@@ -2229,11 +2504,11 @@ function ItineraryDayCard({ d, lang }) {
             </span>
             <span
               style={{
-                background: "#edf4fb",
-                color: "#0e2d4d",
-                padding: "3px 10px",
-                borderRadius: 8,
-                fontSize: 12,
+                background: "#f1f5f9",
+                color: "#475569",
+                padding: "4px 12px",
+                borderRadius: 10,
+                fontSize: 13,
                 fontWeight: 700,
               }}
             >
@@ -2242,10 +2517,11 @@ function ItineraryDayCard({ d, lang }) {
           </div>
           <div
             style={{
-              fontSize: 18,
+              fontSize: 20,
               fontWeight: 900,
-              color: "#0e2d4d",
+              color: "#0f172a",
               lineHeight: 1.4,
+              letterSpacing: "-0.5px",
             }}
           >
             {g(d.title)}
@@ -2254,19 +2530,21 @@ function ItineraryDayCard({ d, lang }) {
         <div
           style={{
             fontSize: 13,
-            color: "#0e2d4d",
+            color: "#0f172a",
             fontWeight: 700,
             textAlign: "right",
             maxWidth: 260,
             lineHeight: 1.5,
+            background: "#f8fafc",
+            padding: "8px 12px",
+            borderRadius: 12,
           }}
         >
           🏨 {typeof d.hotel === "string" ? d.hotel : g(d.hotel)}
         </div>
       </div>
 
-      {/* ── 时间轴 ── */}
-      <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
+      <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
         {d.slots.map((slot, slotIdx) => {
           const pm = periodMeta[slot.period] || periodMeta.morning;
           const hasAlt = Array.isArray(slot.options) && slot.options.length > 0;
@@ -2276,20 +2554,35 @@ function ItineraryDayCard({ d, lang }) {
           return (
             <div
               key={slotIdx}
-              style={{ borderLeft: `3px solid ${pm.border}`, paddingLeft: 14 }}
+              style={{
+                borderLeft: `4px solid ${pm.border}`,
+                paddingLeft: 18,
+                position: "relative",
+              }}
             >
-              {/* 时间 + 时段标签 */}
+              <div
+                style={{
+                  position: "absolute",
+                  left: -6,
+                  top: 2,
+                  width: 8,
+                  height: 8,
+                  borderRadius: "50%",
+                  background: pm.border,
+                }}
+              />
+
               <div
                 style={{
                   display: "flex",
-                  gap: 8,
+                  gap: 10,
                   alignItems: "center",
-                  marginBottom: 8,
+                  marginBottom: 10,
                   flexWrap: "wrap",
                 }}
               >
                 <span
-                  style={{ fontWeight: 800, fontSize: 12, color: "#6b7280" }}
+                  style={{ fontWeight: 800, fontSize: 13, color: "#64748b" }}
                 >
                   {typeof slot.time === "string" ? slot.time : g(slot.time)}
                 </span>
@@ -2297,33 +2590,31 @@ function ItineraryDayCard({ d, lang }) {
                   style={{
                     background: pm.bg,
                     color: pm.border,
-                    padding: "1px 8px",
+                    padding: "2px 10px",
                     borderRadius: 99,
-                    fontSize: 11,
-                    fontWeight: 700,
-                    border: `1px solid ${pm.border}40`,
+                    fontSize: 12,
+                    fontWeight: 800,
                   }}
                 >
                   {pm.label}
                 </span>
               </div>
 
-              {/* 可选项 Tabs */}
               {hasAlt && (
-                <div style={{ marginBottom: 10 }}>
+                <div style={{ marginBottom: 12 }}>
                   {slot.altLabel && (
                     <div
                       style={{
-                        fontSize: 12,
-                        color: "#6b7280",
+                        fontSize: 13,
+                        color: "#64748b",
                         fontWeight: 700,
-                        marginBottom: 6,
+                        marginBottom: 8,
                       }}
                     >
                       {g(slot.altLabel)}
                     </div>
                   )}
-                  <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+                  <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
                     {slot.options.map((opt, i) => (
                       <button
                         key={i}
@@ -2331,18 +2622,18 @@ function ItineraryDayCard({ d, lang }) {
                           setAltChoices((prev) => ({ ...prev, [slotIdx]: i }))
                         }
                         style={{
-                          padding: "5px 12px",
+                          padding: "6px 14px",
                           borderRadius: 999,
                           border:
                             chosen === i
                               ? "2px solid #0e2d4d"
-                              : "1.5px solid #e2e8f0",
+                              : "2px solid #e2e8f0",
                           background: chosen === i ? "#0e2d4d" : "#f8fafc",
                           color: chosen === i ? "#fff" : "#64748b",
-                          fontSize: 12,
+                          fontSize: 13,
                           fontWeight: 800,
                           cursor: "pointer",
-                          transition: "all .2s",
+                          transition: "all .2s cubic-bezier(0.4, 0, 0.2, 1)",
                         }}
                       >
                         {g(opt.tag)}
@@ -2352,43 +2643,40 @@ function ItineraryDayCard({ d, lang }) {
                 </div>
               )}
 
-              {/* 标题行 */}
               <div
                 style={{
                   display: "flex",
-                  gap: 8,
+                  gap: 10,
                   alignItems: "center",
-                  marginBottom: 6,
+                  marginBottom: 8,
                 }}
               >
-                <span style={{ fontSize: 17 }}>{active.icon ?? slot.icon}</span>
+                <span style={{ fontSize: 20 }}>{active.icon ?? slot.icon}</span>
                 <span
-                  style={{ fontWeight: 800, fontSize: 15, color: "#0e2d4d" }}
+                  style={{ fontWeight: 900, fontSize: 16, color: "#0f172a" }}
                 >
                   {g(active.title ?? slot.title)}
                 </span>
               </div>
 
-              {/* 正文描述 */}
               {(active.desc ?? slot.desc) && (
                 <div
-                  style={{ fontSize: 14, lineHeight: 1.8, color: "#334155" }}
+                  style={{ fontSize: 15, lineHeight: 1.75, color: "#475569" }}
                 >
                   {g(active.desc ?? slot.desc)}
                 </div>
               )}
 
-              {/* 场馆信息卡片 */}
               {active.venues && active.venues.length > 0 && (
-                <div style={{ marginTop: 10, display: "grid", gap: 8 }}>
+                <div style={{ marginTop: 12, display: "grid", gap: 10 }}>
                   {active.venues.map((v, vi) => (
                     <div
                       key={vi}
                       style={{
                         background: "#f8fafc",
                         border: "1px solid #e2e8f0",
-                        borderRadius: 12,
-                        padding: "10px 14px",
+                        borderRadius: 16,
+                        padding: "12px 16px",
                       }}
                     >
                       <div
@@ -2397,43 +2685,43 @@ function ItineraryDayCard({ d, lang }) {
                           justifyContent: "space-between",
                           gap: 8,
                           flexWrap: "wrap",
-                          marginBottom: 4,
+                          marginBottom: 6,
                         }}
                       >
                         <span
                           style={{
                             fontWeight: 900,
-                            fontSize: 14,
-                            color: "#0e2d4d",
+                            fontSize: 15,
+                            color: "#0f172a",
                           }}
                         >
                           📍 {typeof v.name === "string" ? v.name : g(v.name)}
                         </span>
                         {v.rating && (
-                          <span style={{ fontSize: 12, whiteSpace: "nowrap" }}>
+                          <span style={{ fontSize: 13, whiteSpace: "nowrap" }}>
                             {v.rating}
                           </span>
                         )}
                       </div>
                       <div
                         style={{
-                          fontSize: 13,
+                          fontSize: 14,
                           color: "#475569",
                           lineHeight: 1.7,
                         }}
                       >
-                        <div>🗺️ {g(v.address)}</div>
+                        <div style={{ marginBottom: 4 }}>🗺️ {g(v.address)}</div>
                         <div>💰 {g(v.price)}</div>
                       </div>
                       {v.tip && (
                         <div
                           style={{
-                            marginTop: 6,
-                            fontSize: 12,
+                            marginTop: 8,
+                            fontSize: 13,
                             color: "#92400e",
-                            background: "#fef3c7",
-                            padding: "4px 8px",
-                            borderRadius: 6,
+                            background: "#fffbeb",
+                            padding: "6px 12px",
+                            borderRadius: 8,
                             lineHeight: 1.6,
                           }}
                         >
@@ -2445,16 +2733,15 @@ function ItineraryDayCard({ d, lang }) {
                 </div>
               )}
 
-              {/* 外层 Tip（无论选哪个方案都显示）*/}
               {slot.tip && (
                 <div
                   style={{
-                    marginTop: 8,
-                    fontSize: 13,
+                    marginTop: 10,
+                    fontSize: 14,
                     color: "#065f46",
-                    background: "#d1fae5",
-                    padding: "7px 11px",
-                    borderRadius: 8,
+                    background: "#ecfdf5",
+                    padding: "8px 14px",
+                    borderRadius: 12,
                     lineHeight: 1.65,
                   }}
                 >
@@ -2465,7 +2752,7 @@ function ItineraryDayCard({ d, lang }) {
           );
         })}
       </div>
-    </div>
+    </Card>
   );
 }
 
@@ -2500,8 +2787,8 @@ export default function App() {
   }, []);
 
   const c = localeCopy[lang];
-
   const tabKeys = ["overview", "spots", "hotels", "food", "itinerary", "tips"];
+
   const scrollToSection = (idx) => {
     setActiveTab(idx);
     const el = document.getElementById(`section-${tabKeys[idx]}`);
@@ -2515,20 +2802,32 @@ export default function App() {
     <div
       style={{
         minHeight: "100vh",
-        background: "linear-gradient(180deg, #f7f4ef 0%, #fdfdfd 100%)",
-        color: "#111827",
+        background: "#f8fafc", // 更干净的基础底色
+        color: "#0f172a",
         fontFamily:
-          "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+          "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
       }}
     >
+      {/* 🌟 注入全局 CSS 特效 */}
+      <style>{`
+        html { scroll-behavior: smooth; }
+        .card-hover { transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.25s cubic-bezier(0.4, 0, 0.2, 1); }
+        .card-hover:hover { transform: translateY(-4px); box-shadow: 0 16px 40px rgba(15, 23, 42, 0.08) !important; }
+        .hide-scroll::-webkit-scrollbar { display: none; }
+        .focus-input:focus { background: #fff !important; border-color: #38bdf8 !important; box-shadow: inset 0 0 0 2px rgba(56, 189, 248, 0.2) !important; }
+        .btn-hover:hover { opacity: 0.85; transform: scale(0.98); }
+        .glass-nav { background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
+        .img-hover:hover { transform: scale(1.05); }
+      `}</style>
+
       <div
         style={{
           backgroundImage:
-            "linear-gradient(rgba(14, 45, 77, 0.3), rgba(14, 45, 77, 0.9)), url('/bg.jpg')",
+            "linear-gradient(rgba(14, 45, 77, 0.4), rgba(14, 45, 77, 0.95)), url('/bg.jpg')",
           backgroundSize: "cover",
-          backgroundPosition: "center 65%",
+          backgroundPosition: "center 60%",
           color: "#fff",
-          padding: "48px 20px 32px",
+          padding: "56px 20px 40px",
         }}
       >
         <div style={{ maxWidth: 1120, margin: "0 auto" }}>
@@ -2536,34 +2835,53 @@ export default function App() {
             style={{
               display: "flex",
               justifyContent: "space-between",
-              gap: 12,
+              gap: 16,
               alignItems: "start",
               flexWrap: "wrap",
             }}
           >
             <div>
-              <div style={{ fontSize: 30, fontWeight: 900 }}>{c.appTitle}</div>
-              <div style={{ marginTop: 8, color: "#d6e6f5", fontSize: 14 }}>
+              <div
+                style={{
+                  fontSize: 32,
+                  fontWeight: 900,
+                  letterSpacing: "-0.5px",
+                }}
+              >
+                {c.appTitle}
+              </div>
+              <div
+                style={{
+                  marginTop: 10,
+                  color: "#e0f2fe",
+                  fontSize: 15,
+                  fontWeight: 500,
+                }}
+              >
                 {c.appSub}
               </div>
             </div>
             <button
+              className="btn-hover"
               onClick={() => setLang((v) => (v === "zh" ? "ko" : "zh"))}
               style={{
-                border: "1px solid rgba(255,255,255,0.35)",
-                background: "rgba(255,255,255,0.12)",
+                border: "1px solid rgba(255,255,255,0.4)",
+                background: "rgba(255,255,255,0.15)",
+                backdropFilter: "blur(8px)",
                 color: "#fff",
                 borderRadius: 999,
-                padding: "10px 16px",
+                padding: "10px 20px",
                 cursor: "pointer",
                 fontWeight: 800,
+                fontSize: 14,
                 whiteSpace: "nowrap",
+                transition: "all 0.2s",
               }}
             >
               {lang === "zh" ? "한국어" : "中文"} · {c.toggle}
             </button>
           </div>
-          <div style={{ marginTop: 10, display: "flex", flexWrap: "wrap" }}>
+          <div style={{ marginTop: 16, display: "flex", flexWrap: "wrap" }}>
             <Badge>7/9 晚到</Badge>
             <Badge>{lang === "zh" ? "市区 + 珍珠岛" : "시내 + 빈펄 섬"}</Badge>
             <Badge>{lang === "zh" ? "万豪优先" : "메리어트 우선"}</Badge>
@@ -2575,24 +2893,25 @@ export default function App() {
         </div>
       </div>
 
+      {/* 🌟 优化：iOS级悬浮药丸式（Pill）导航栏 */}
       <div
+        className="glass-nav"
         style={{
           position: "sticky",
           top: 0,
           zIndex: 100,
-          background: "rgba(255, 255, 255, 0.95)",
-          backdropFilter: "blur(10px)",
-          borderBottom: "1px solid #e8e0d4",
-          boxShadow: "0 4px 12px rgba(0, 0, 0, 0.05)",
+          borderBottom: "1px solid rgba(226, 232, 240, 0.8)",
+          boxShadow: "0 4px 20px rgba(0, 0, 0, 0.04)",
         }}
       >
         <div
+          className="hide-scroll"
           style={{
             maxWidth: 1120,
             margin: "0 auto",
             display: "flex",
-            gap: 24,
-            padding: "0 20px",
+            gap: 12,
+            padding: "14px 20px",
             overflowX: "auto",
             whiteSpace: "nowrap",
           }}
@@ -2602,18 +2921,15 @@ export default function App() {
               key={idx}
               onClick={() => scrollToSection(idx)}
               style={{
-                padding: "16px 0",
-                background: "none",
+                padding: "8px 20px",
+                background: activeTab === idx ? "#0f172a" : "transparent",
+                color: activeTab === idx ? "#fff" : "#475569",
+                fontWeight: activeTab === idx ? 800 : 600,
+                fontSize: 14,
+                borderRadius: 999,
                 border: "none",
-                borderBottom:
-                  activeTab === idx
-                    ? "3px solid #0e2d4d"
-                    : "3px solid transparent",
-                color: activeTab === idx ? "#0e2d4d" : "#6b7280",
-                fontWeight: activeTab === idx ? 900 : 600,
-                fontSize: 15,
                 cursor: "pointer",
-                transition: "all 0.2s",
+                transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
               }}
             >
               {tab}
@@ -2623,77 +2939,151 @@ export default function App() {
       </div>
 
       <div style={{ maxWidth: 1120, margin: "0 auto", padding: 20 }}>
-        <Card>
-          <div style={{ fontWeight: 900, color: "#0e2d4d", marginBottom: 6 }}>
-            {c.quickTitle}
-          </div>
-          <div style={{ fontSize: 14, lineHeight: 1.7, color: "#334155" }}>
-            {c.quickText}
-          </div>
-        </Card>
-
-
-   {/* 锚点 0：总览区 */}
-   <div id="section-overview">
-          <div style={{ display: "grid", gap: 14, marginTop: 14 }}>
-            
-            {/* 你的天气组件 */}
+        {/* 锚点 0：总览区 */}
+        <div id="section-overview">
+          <div style={{ display: "grid", gap: 16, marginTop: 4 }}>
             <WeatherWidget lang={lang} />
-            
-            {/* 🌟 在这里插入新加的汇率组件！ */}
             <CurrencyConverterWidget lang={lang} />
-            
+
             <Card accent>
               <SectionTitle title={c.overviewTitle} sub={c.overviewSub} />
 
-              {/* 🌟 1. 四宫格数据面板 */}
-              <div style={{
-                display: "grid",
-                gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))",
-                gap: 12,
-                marginBottom: 20
-              }}>
+              <div
+                style={{
+                  display: "grid",
+                  gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))",
+                  gap: 12,
+                  marginBottom: 24,
+                }}
+              >
                 {c.overviewCards.map((item, idx) => (
-                  <div key={idx} style={{ background: "#f8fafc", padding: "14px 16px", borderRadius: 14, border: "1px solid #e2e8f0" }}>
-                    <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 8 }}>
-                      <span style={{ fontSize: 16 }}>{item.icon}</span>
-                      <span style={{ fontSize: 13, color: "#64748b", fontWeight: 800 }}>{item.label}</span>
+                  <div
+                    key={idx}
+                    style={{
+                      background: "#f8fafc",
+                      padding: "16px 18px",
+                      borderRadius: 16,
+                      border: "1px solid #e2e8f0",
+                    }}
+                  >
+                    <div
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: 8,
+                        marginBottom: 8,
+                      }}
+                    >
+                      <span style={{ fontSize: 18 }}>{item.icon}</span>
+                      <span
+                        style={{
+                          fontSize: 14,
+                          color: "#64748b",
+                          fontWeight: 800,
+                        }}
+                      >
+                        {item.label}
+                      </span>
                     </div>
-                    <div style={{ fontSize: 14, color: "#0e2d4d", fontWeight: 900, lineHeight: 1.5 }}>
+                    <div
+                      style={{
+                        fontSize: 15,
+                        color: "#0f172a",
+                        fontWeight: 900,
+                        lineHeight: 1.5,
+                      }}
+                    >
                       {item.value}
                     </div>
                   </div>
                 ))}
               </div>
 
-              {/* 🌟 2. 必做与避坑 双栏设计 */}
-              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: 16, marginBottom: 16 }}>
-                {/* 必做列表 */}
-                <div style={{ background: "#fff7ed", padding: 18, borderRadius: 14, border: "1px solid #fdba74" }}>
-                  <div style={{ fontSize: 15, fontWeight: 900, color: "#c2410c", marginBottom: 12 }}>{c.overviewMustDos.title}</div>
-                  <div style={{ display: "grid", gap: 10 }}>
+              <div
+                style={{
+                  display: "grid",
+                  gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))",
+                  gap: 16,
+                  marginBottom: 16,
+                }}
+              >
+                <div
+                  style={{
+                    background: "#fff7ed",
+                    padding: 20,
+                    borderRadius: 20,
+                    border: "1px solid #fdba74",
+                  }}
+                >
+                  <div
+                    style={{
+                      fontSize: 16,
+                      fontWeight: 900,
+                      color: "#c2410c",
+                      marginBottom: 14,
+                    }}
+                  >
+                    {c.overviewMustDos.title}
+                  </div>
+                  <div style={{ display: "grid", gap: 12 }}>
                     {c.overviewMustDos.items.map((item, idx) => (
-                      <div key={idx} style={{ display: "flex", gap: 8, fontSize: 13, color: "#9a3412", lineHeight: 1.5, fontWeight: 700 }}>
-                        <span>✅</span><span>{item}</span>
+                      <div
+                        key={idx}
+                        style={{
+                          display: "flex",
+                          gap: 8,
+                          fontSize: 14,
+                          color: "#9a3412",
+                          lineHeight: 1.6,
+                          fontWeight: 700,
+                        }}
+                      >
+                        <span>✅</span>
+                        <span>{item}</span>
                       </div>
                     ))}
                   </div>
                 </div>
 
-                {/* 避坑列表 */}
-                <div style={{ background: "#fef2f2", padding: 18, borderRadius: 14, border: "1px solid #fca5a5" }}>
-                  <div style={{ fontSize: 15, fontWeight: 900, color: "#b91c1c", marginBottom: 12 }}>{c.overviewAlerts.title}</div>
-                  <div style={{ display: "grid", gap: 10 }}>
+                <div
+                  style={{
+                    background: "#fef2f2",
+                    padding: 20,
+                    borderRadius: 20,
+                    border: "1px solid #fca5a5",
+                  }}
+                >
+                  <div
+                    style={{
+                      fontSize: 16,
+                      fontWeight: 900,
+                      color: "#b91c1c",
+                      marginBottom: 14,
+                    }}
+                  >
+                    {c.overviewAlerts.title}
+                  </div>
+                  <div style={{ display: "grid", gap: 12 }}>
                     {c.overviewAlerts.items.map((item, idx) => (
-                      <div key={idx} style={{ display: "flex", gap: 8, fontSize: 13, color: "#991b1b", lineHeight: 1.5, fontWeight: 700 }}>
-                        <span>🚨</span><span>{item}</span>
+                      <div
+                        key={idx}
+                        style={{
+                          display: "flex",
+                          gap: 8,
+                          fontSize: 14,
+                          color: "#991b1b",
+                          lineHeight: 1.6,
+                          fontWeight: 700,
+                        }}
+                      >
+                        <span>🚨</span>
+                        <span>{item}</span>
                       </div>
                     ))}
                   </div>
                 </div>
               </div>
 
-              {/* 🌟 3. 滑动相册 */}
               <ImageGallery
                 images={[
                   "/view1.jpg",
@@ -2714,18 +3104,23 @@ export default function App() {
             style={{
               display: "grid",
               gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))",
-              gap: 14,
+              gap: 16,
             }}
           >
             {transport.map((t) => (
               <Card key={lang === "zh" ? t.k.zh : t.k.ko}>
                 <div
-                  style={{ fontWeight: 900, color: "#0e2d4d", marginBottom: 8 }}
+                  style={{
+                    fontWeight: 900,
+                    color: "#0f172a",
+                    marginBottom: 10,
+                    fontSize: 16,
+                  }}
                 >
                   {lang === "zh" ? t.k.zh : t.k.ko}
                 </div>
                 <div
-                  style={{ fontSize: 14, lineHeight: 1.7, color: "#334155" }}
+                  style={{ fontSize: 14, lineHeight: 1.75, color: "#475569" }}
                 >
                   {lang === "zh" ? t.v.zh : t.v.ko}
                 </div>
@@ -2733,19 +3128,24 @@ export default function App() {
             ))}
           </div>
 
-          <div style={{ marginTop: 14 }}>
+          <div style={{ marginTop: 16 }}>
             <Card>
               <div
-                style={{ fontWeight: 900, color: "#0e2d4d", marginBottom: 10 }}
+                style={{
+                  fontWeight: 900,
+                  color: "#0f172a",
+                  marginBottom: 10,
+                  fontSize: 16,
+                }}
               >
                 {lang === "zh" ? "芽庄地图" : "냐짱 지도"}
               </div>
               <div
                 style={{
-                  fontSize: 13,
-                  color: "#6b7280",
+                  fontSize: 14,
+                  color: "#64748b",
                   lineHeight: 1.7,
-                  marginBottom: 10,
+                  marginBottom: 14,
                 }}
               >
                 {lang === "zh"
@@ -2757,9 +3157,9 @@ export default function App() {
                   position: "relative",
                   width: "100%",
                   paddingTop: "56.25%",
-                  borderRadius: 14,
+                  borderRadius: 16,
                   overflow: "hidden",
-                  border: "1px solid #e8e0d4",
+                  border: "1px solid #e2e8f0",
                 }}
               >
                 <iframe
@@ -2784,7 +3184,7 @@ export default function App() {
             style={{
               display: "grid",
               gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))",
-              gap: 14,
+              gap: 16,
             }}
           >
             {cityHighlights.map((s) => (
@@ -2793,46 +3193,69 @@ export default function App() {
                   <div
                     style={{
                       width: "100%",
-                      height: 160,
-                      borderRadius: 12,
+                      height: 180,
+                      borderRadius: 16,
                       overflow: "hidden",
-                      marginBottom: 14,
+                      marginBottom: 16,
                     }}
                   >
                     <img
                       src={s.img}
                       alt={s.en}
+                      className="img-hover"
                       style={{
                         width: "100%",
                         height: "100%",
                         objectFit: "cover",
                         display: "block",
+                        transition: "transform 0.4s ease",
                       }}
                     />
                   </div>
                 )}
                 <div
-                  style={{ fontWeight: 900, fontSize: 17, color: "#0e2d4d" }}
+                  style={{ fontWeight: 900, fontSize: 18, color: "#0f172a" }}
                 >
                   {lang === "zh" ? s.name.zh : s.name.ko}
                 </div>
-                <div style={{ color: "#6b7280", fontSize: 13, marginTop: 2 }}>
+                <div
+                  style={{
+                    color: "#64748b",
+                    fontSize: 13,
+                    marginTop: 4,
+                    fontWeight: 500,
+                  }}
+                >
                   {s.en}
                 </div>
-                <div style={{ marginTop: 10, fontSize: 14, lineHeight: 1.7 }}>
-                  <div>
-                    <strong>{lang === "zh" ? "位置：" : "위치: "}</strong>
+                <div style={{ marginTop: 14, fontSize: 14, lineHeight: 1.75 }}>
+                  <div style={{ color: "#334155", marginBottom: 4 }}>
+                    <strong style={{ color: "#0f172a" }}>
+                      {lang === "zh" ? "位置：" : "위치: "}
+                    </strong>
                     {lang === "zh" ? s.where.zh : s.where.ko}
                   </div>
-                  <div>
-                    <strong>{lang === "zh" ? "时长：" : "소요 시간: "}</strong>
+                  <div style={{ color: "#334155", marginBottom: 4 }}>
+                    <strong style={{ color: "#0f172a" }}>
+                      {lang === "zh" ? "时长：" : "소요 시간: "}
+                    </strong>
                     {lang === "zh" ? s.time.zh : s.time.ko}
                   </div>
-                  <div>
-                    <strong>{lang === "zh" ? "价格：" : "가격: "}</strong>
+                  <div style={{ color: "#334155", marginBottom: 8 }}>
+                    <strong style={{ color: "#0f172a" }}>
+                      {lang === "zh" ? "价格：" : "가격: "}
+                    </strong>
                     {lang === "zh" ? s.price.zh : s.price.ko}
                   </div>
-                  <div style={{ marginTop: 6, color: "#334155" }}>
+                  <div
+                    style={{
+                      marginTop: 10,
+                      color: "#475569",
+                      background: "#f8fafc",
+                      padding: "10px 14px",
+                      borderRadius: 12,
+                    }}
+                  >
                     {lang === "zh" ? s.note.zh : s.note.ko}
                   </div>
                 </div>
@@ -2845,7 +3268,7 @@ export default function App() {
             style={{
               display: "grid",
               gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))",
-              gap: 14,
+              gap: 16,
             }}
           >
             {islandHighlights.map((s) => (
@@ -2854,46 +3277,69 @@ export default function App() {
                   <div
                     style={{
                       width: "100%",
-                      height: 160,
-                      borderRadius: 12,
+                      height: 180,
+                      borderRadius: 16,
                       overflow: "hidden",
-                      marginBottom: 14,
+                      marginBottom: 16,
                     }}
                   >
                     <img
                       src={s.img}
                       alt={s.en}
+                      className="img-hover"
                       style={{
                         width: "100%",
                         height: "100%",
                         objectFit: "cover",
                         display: "block",
+                        transition: "transform 0.4s ease",
                       }}
                     />
                   </div>
                 )}
                 <div
-                  style={{ fontWeight: 900, fontSize: 17, color: "#0e2d4d" }}
+                  style={{ fontWeight: 900, fontSize: 18, color: "#0f172a" }}
                 >
                   {lang === "zh" ? s.name.zh : s.name.ko}
                 </div>
-                <div style={{ color: "#6b7280", fontSize: 13, marginTop: 2 }}>
+                <div
+                  style={{
+                    color: "#64748b",
+                    fontSize: 13,
+                    marginTop: 4,
+                    fontWeight: 500,
+                  }}
+                >
                   {s.en}
                 </div>
-                <div style={{ marginTop: 10, fontSize: 14, lineHeight: 1.7 }}>
-                  <div>
-                    <strong>{lang === "zh" ? "位置：" : "위치: "}</strong>
+                <div style={{ marginTop: 14, fontSize: 14, lineHeight: 1.75 }}>
+                  <div style={{ color: "#334155", marginBottom: 4 }}>
+                    <strong style={{ color: "#0f172a" }}>
+                      {lang === "zh" ? "位置：" : "위치: "}
+                    </strong>
                     {lang === "zh" ? s.where.zh : s.where.ko}
                   </div>
-                  <div>
-                    <strong>{lang === "zh" ? "时长：" : "소요 시간: "}</strong>
+                  <div style={{ color: "#334155", marginBottom: 4 }}>
+                    <strong style={{ color: "#0f172a" }}>
+                      {lang === "zh" ? "时长：" : "소요 시간: "}
+                    </strong>
                     {lang === "zh" ? s.time.zh : s.time.ko}
                   </div>
-                  <div>
-                    <strong>{lang === "zh" ? "价格：" : "가격: "}</strong>
+                  <div style={{ color: "#334155", marginBottom: 8 }}>
+                    <strong style={{ color: "#0f172a" }}>
+                      {lang === "zh" ? "价格：" : "가격: "}
+                    </strong>
                     {lang === "zh" ? s.price.zh : s.price.ko}
                   </div>
-                  <div style={{ marginTop: 6, color: "#334155" }}>
+                  <div
+                    style={{
+                      marginTop: 10,
+                      color: "#475569",
+                      background: "#f8fafc",
+                      padding: "10px 14px",
+                      borderRadius: 12,
+                    }}
+                  >
                     {lang === "zh" ? s.note.zh : s.note.ko}
                   </div>
                 </div>
@@ -2905,7 +3351,7 @@ export default function App() {
         {/* 锚点 2：酒店日程区 */}
         <div id="section-hotels">
           <SectionTitle title={c.hotelTitle} sub={c.hotelSub} />
-          <div style={{ display: "grid", gap: 20 }}>
+          <div style={{ display: "grid", gap: 24 }}>
             {hotelItineraryList.map((h, idx) => (
               <HotelItineraryCard key={idx} h={h} lang={lang} />
             ))}
@@ -2915,7 +3361,7 @@ export default function App() {
         {/* 锚点 3：美食推荐区 */}
         <div id="section-food">
           <SectionTitle title={c.foodTitle} sub={c.foodSub} />
-          <div style={{ display: "grid", gap: 14, marginBottom: 28 }}>
+          <div style={{ display: "grid", gap: 16, marginBottom: 32 }}>
             {foodRecommendations.map((f, idx) => (
               <FoodCard key={idx} f={f} lang={lang} />
             ))}
@@ -2925,14 +3371,14 @@ export default function App() {
         {/* 锚点 4：旅行计划区 */}
         <div id="section-itinerary">
           <SectionTitle title={c.itineraryTitle} sub={c.itinerarySub} />
-          <div style={{ display: "grid", gap: 14, marginBottom: 28 }}>
+          <div style={{ display: "grid", gap: 16, marginBottom: 32 }}>
             {itinerary.map((d, idx) => (
               <ItineraryDayCard key={idx} d={d} lang={lang} />
             ))}
           </div>
         </div>
 
-        {/* 锚点 4：实用提示区 */}
+        {/* 锚点 5：实用提示区 */}
         <div id="section-tips">
           <SectionTitle title={c.tipsTitle} sub={c.tipsSub} />
           <div
@@ -2946,9 +3392,9 @@ export default function App() {
               <div
                 style={{
                   fontWeight: 900,
-                  color: "#0e2d4d",
-                  marginBottom: 8,
-                  fontSize: 16,
+                  color: "#0f172a",
+                  marginBottom: 12,
+                  fontSize: 17,
                 }}
               >
                 {lang === "zh" ? "🛂 签证与行程规划" : "🛂 비자 및 여행 준비"}
@@ -2976,9 +3422,9 @@ export default function App() {
               <div
                 style={{
                   fontWeight: 900,
-                  color: "#0e2d4d",
-                  marginBottom: 8,
-                  fontSize: 16,
+                  color: "#0f172a",
+                  marginBottom: 12,
+                  fontSize: 17,
                 }}
               >
                 {lang === "zh"
@@ -3008,9 +3454,9 @@ export default function App() {
               <div
                 style={{
                   fontWeight: 900,
-                  color: "#0e2d4d",
-                  marginBottom: 8,
-                  fontSize: 16,
+                  color: "#0f172a",
+                  marginBottom: 12,
+                  fontSize: 17,
                 }}
               >
                 {lang === "zh"
@@ -3042,9 +3488,9 @@ export default function App() {
               <div
                 style={{
                   fontWeight: 900,
-                  color: "#0e2d4d",
-                  marginBottom: 8,
-                  fontSize: 16,
+                  color: "#0f172a",
+                  marginBottom: 12,
+                  fontSize: 17,
                 }}
               >
                 {lang === "zh"
@@ -3076,9 +3522,9 @@ export default function App() {
               <div
                 style={{
                   fontWeight: 900,
-                  color: "#0e2d4d",
-                  marginBottom: 8,
-                  fontSize: 16,
+                  color: "#0f172a",
+                  marginBottom: 12,
+                  fontSize: 17,
                 }}
               >
                 {lang === "zh"
@@ -3106,17 +3552,20 @@ export default function App() {
 
         <div
           style={{
-            marginTop: 22,
-            color: "#6b7280",
-            fontSize: 12,
+            marginTop: 32,
+            paddingTop: 24,
+            borderTop: "1px solid #e2e8f0",
+            color: "#64748b",
+            fontSize: 13,
             lineHeight: 1.8,
+            textAlign: "center",
           }}
         >
-          <div style={{ marginBottom: 6, fontWeight: 700, color: "#334155" }}>
+          <div style={{ marginBottom: 6, fontWeight: 800, color: "#475569" }}>
             {c.quickTitle}
           </div>
           <div>{c.quickText}</div>
-          <div style={{ marginTop: 6 }}>{c.note}</div>
+          <div style={{ marginTop: 8 }}>{c.note}</div>
         </div>
       </div>
     </div>
