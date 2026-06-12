@@ -109,18 +109,85 @@ const weatherMap = {
 
 function WeatherWidget({ lang }) {
   const [weather, setWeather] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    // 自动获取芽庄的经纬度天气数据
-    fetch("https://api.open-meteo.com/v1/forecast?latitude=12.2388&longitude=109.1967&current=temperature_2m,relative_humidity_2m,weather_code&timezone=Asia%2FBangkok")
-      .then(res => res.json())
-      .then(data => {
-        if (data && data.current) setWeather(data.current);
+    // 使用 Open-Meteo 的 current_weather + hourly.relativehumidity_2m
+    const url =
+      "https://api.open-meteo.com/v1/forecast?latitude=12.2388&longitude=109.1967&current_weather=true&hourly=relativehumidity_2m&timezone=Asia%2FBangkok";
+
+    setLoading(true);
+    setError(null);
+
+    fetch(url)
+      .then((res) => {
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        return res.json();
       })
-      .catch(e => console.error(e));
+      .then((data) => {
+        if (data && data.current_weather) {
+          const current = data.current_weather;
+          // 尝试从 hourly.relativehumidity_2m 中匹配当前时刻的湿度
+          let humidity = null;
+          try {
+            if (
+              data.hourly &&
+              Array.isArray(data.hourly.time) &&
+              Array.isArray(data.hourly.relativehumidity_2m)
+            ) {
+              // Open-Meteo current_weather.time 是 ISO 字符串，例如 "2024-07-09T12:00"
+              const nowIso = current.time;
+              const idx = data.hourly.time.indexOf(nowIso);
+              if (idx >= 0) humidity = data.hourly.relativehumidity_2m[idx];
+              else humidity = data.hourly.relativehumidity_2m[0];
+            }
+          } catch (e) {
+            humidity = null;
+          }
+
+          setWeather({
+            temperature: current.temperature,
+            weather_code: current.weathercode ?? current.weather_code,
+            relative_humidity_2m: humidity,
+          });
+        } else {
+          throw new Error("No current weather data");
+        }
+      })
+      .catch((e) => {
+        console.error("Weather fetch failed", e);
+        setError(e.message || "Fetch error");
+      })
+      .finally(() => setLoading(false));
   }, []);
 
+  const t = lang === "zh";
+
+  if (loading) {
+    return (
+      <div className="card" style={{ marginBottom: "var(--sp-2xl)" }}>
+        <div style={{ fontWeight: 900, color: "var(--primary)", marginBottom: 6 }}>
+          {t ? "芽庄实时天气" : "냐짱 실시간 날씨"}
+        </div>
+        <div style={{ color: "var(--muted)", fontSize: 13 }}>{t ? "正在加载天气信息..." : "날씨 정보를 불러오는 중..."}</div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="card" style={{ marginBottom: "var(--sp-2xl)" }}>
+        <div style={{ fontWeight: 900, color: "#b91c1c", marginBottom: 6 }}>
+          {t ? "天气信息获取失败" : "날씨 정보 불러오기 실패"}
+        </div>
+        <div style={{ color: "var(--muted)", fontSize: 13 }}>{error}</div>
+      </div>
+    );
+  }
+
   if (!weather) return null;
+
   const wInfo = weatherMap[weather.weather_code] || { icon: "🌡️", zh: "未知", ko: "알 수 없음" };
 
   return (
@@ -128,22 +195,23 @@ function WeatherWidget({ lang }) {
        <div style={{ display: "flex", alignItems: "center", gap: "var(--sp-md)" }}>
           <span style={{ fontSize: 32, filter: "drop-shadow(0 4px 6px rgba(0,0,0,0.1))" }}>{wInfo.icon}</span>
           <div>
-            <div style={{ fontWeight: 900, color: "var(--primary)", fontSize: 16 }}>{lang === 'zh' ? '芽庄实时天气' : '냐짱 실시간 날씨'}</div>
-            <div style={{ fontSize: 13, color: "var(--primary-dark)", fontWeight: 700, marginTop: 2 }}>{lang === 'zh' ? wInfo.zh : wInfo.ko}</div>
+            <div style={{ fontWeight: 900, color: "var(--primary)", fontSize: 16 }}>{t ? '芽庄实时天气' : '냐짱 실시간 날씨'}</div>
+            <div style={{ fontSize: 13, color: "var(--primary-dark)", fontWeight: 700, marginTop: 2 }}>{t ? wInfo.zh : wInfo.ko}</div>
           </div>
        </div>
        <div style={{ display: "flex", gap: 20 }}>
           <div style={{ textAlign: "right" }}>
-             <div style={{ fontSize: 12, color: "var(--primary-dark)", fontWeight: 700 }}>{lang === 'zh' ? '气温' : '기온'}</div>
-             <div style={{ fontSize: 22, fontWeight: 900, color: "var(--primary-dark)" }}>{Math.round(weather.temperature_2m)}°C</div>
+             <div style={{ fontSize: 12, color: "var(--primary-dark)", fontWeight: 700 }}>{t ? '气温' : '기온'}</div>
+             <div style={{ fontSize: 22, fontWeight: 900, color: "var(--primary-dark)" }}>{Math.round(weather.temperature)}°C</div>
           </div>
           <div style={{ textAlign: "right" }}>
-             <div style={{ fontSize: 12, color: "var(--primary-dark)", fontWeight: 700 }}>{lang === 'zh' ? '湿度' : '습도'}</div>
-             <div style={{ fontSize: 22, fontWeight: 900, color: "var(--primary-dark)" }}>{weather.relative_humidity_2m}%</div>
+             <div style={{ fontSize: 12, color: "var(--primary-dark)", fontWeight: 700 }}>{t ? '湿度' : '습도'}</div>
+             <div style={{ fontSize: 22, fontWeight: 900, color: "var(--primary-dark)" }}>{weather.relative_humidity_2m ?? '-'}%</div>
           </div>
        </div>
     </div>
   );
+}
 }
 
 // --- 实时汇率换算组件 ---
