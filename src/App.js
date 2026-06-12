@@ -1,4 +1,5 @@
 import { useMemo, useState, useEffect } from "react";
+import "./styles.css";
 
 const localeCopy = {
   zh: {
@@ -123,22 +124,22 @@ function WeatherWidget({ lang }) {
   const wInfo = weatherMap[weather.weather_code] || { icon: "🌡️", zh: "未知", ko: "알 수 없음" };
 
   return (
-    <div style={{ background: "linear-gradient(135deg, #e0f2fe 0%, #bae6fd 100%)", padding: "16px 20px", borderRadius: 16, display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 20, border: "1px solid #7dd3fc" }}>
-       <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+    <div style={{ background: "linear-gradient(135deg, var(--primary-light) 0%, #bae6fd 100%)", padding: "16px 20px", borderRadius: "var(--radius-xl)", display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "var(--sp-2xl)", border: "1px solid var(--border-accent)", boxShadow: "var(--shadow-md)" }}>
+       <div style={{ display: "flex", alignItems: "center", gap: "var(--sp-md)" }}>
           <span style={{ fontSize: 32, filter: "drop-shadow(0 4px 6px rgba(0,0,0,0.1))" }}>{wInfo.icon}</span>
           <div>
-            <div style={{ fontWeight: 900, color: "#0284c7", fontSize: 16 }}>{lang === 'zh' ? '芽庄实时天气' : '냐짱 실시간 날씨'}</div>
-            <div style={{ fontSize: 13, color: "#0369a1", fontWeight: 700, marginTop: 2 }}>{lang === 'zh' ? wInfo.zh : wInfo.ko}</div>
+            <div style={{ fontWeight: 900, color: "var(--primary)", fontSize: 16 }}>{lang === 'zh' ? '芽庄实时天气' : '냐짱 실시간 날씨'}</div>
+            <div style={{ fontSize: 13, color: "var(--primary-dark)", fontWeight: 700, marginTop: 2 }}>{lang === 'zh' ? wInfo.zh : wInfo.ko}</div>
           </div>
        </div>
        <div style={{ display: "flex", gap: 20 }}>
           <div style={{ textAlign: "right" }}>
-             <div style={{ fontSize: 12, color: "#0369a1", fontWeight: 700 }}>{lang === 'zh' ? '气温' : '기온'}</div>
-             <div style={{ fontSize: 22, fontWeight: 900, color: "#0c4a6e" }}>{Math.round(weather.temperature_2m)}°C</div>
+             <div style={{ fontSize: 12, color: "var(--primary-dark)", fontWeight: 700 }}>{lang === 'zh' ? '气温' : '기온'}</div>
+             <div style={{ fontSize: 22, fontWeight: 900, color: "var(--primary-dark)" }}>{Math.round(weather.temperature_2m)}°C</div>
           </div>
           <div style={{ textAlign: "right" }}>
-             <div style={{ fontSize: 12, color: "#0369a1", fontWeight: 700 }}>{lang === 'zh' ? '湿度' : '습도'}</div>
-             <div style={{ fontSize: 22, fontWeight: 900, color: "#0c4a6e" }}>{weather.relative_humidity_2m}%</div>
+             <div style={{ fontSize: 12, color: "var(--primary-dark)", fontWeight: 700 }}>{lang === 'zh' ? '湿度' : '습도'}</div>
+             <div style={{ fontSize: 22, fontWeight: 900, color: "var(--primary-dark)" }}>{weather.relative_humidity_2m}%</div>
           </div>
        </div>
     </div>
@@ -196,49 +197,49 @@ function CurrencyConverterWidget({ lang }) {
   };
 
   return (
-    <div style={{ background: "#fff", padding: "18px 20px", borderRadius: 16, marginBottom: 20, border: "2px solid #0e2d4d", boxShadow: "0 8px 24px rgba(20,30,50,0.05)" }}>
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16 }}>
-        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+    <div className="card" style={{ marginBottom: "var(--sp-2xl)" }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "var(--sp-lg)" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: "var(--sp-md)" }}>
           <span style={{ fontSize: 22 }}>💱</span>
-          <span style={{ fontWeight: 900, color: "#0e2d4d", fontSize: 16 }}>{uiText.title}</span>
+          <span style={{ fontWeight: 900, color: "var(--primary)", fontSize: 16 }}>{uiText.title}</span>
         </div>
-        <div style={{ fontSize: 12, color: "#64748b", fontWeight: 700 }}>{uiText.tip}</div>
+        <div style={{ fontSize: 12, color: "var(--text-light)", fontWeight: 700 }}>{uiText.tip}</div>
       </div>
 
-      <div style={{ display: "grid", gap: 10 }}>
+      <div style={{ display: "grid", gap: "var(--sp-md)" }}>
          {/* 人民币 */}
-         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", background: "#f8fafc", padding: "12px 16px", borderRadius: 12, border: "1px solid #e2e8f0" }}>
-            <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", background: "var(--bg-secondary)", padding: "var(--sp-md) var(--sp-lg)", borderRadius: "var(--radius-lg)", border: "1px solid var(--border-primary)" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: "var(--sp-md)" }}>
               <span style={{ fontSize: 24 }}>🇨🇳</span>
-              <span style={{ fontWeight: 800, color: "#334155", fontSize: 14 }}>{uiText.cny}</span>
+              <span style={{ fontWeight: 800, color: "var(--text-base)", fontSize: 14 }}>{uiText.cny}</span>
             </div>
             <input
               type="number"
               value={getValue("cny")}
               onChange={(e) => handleInputChange(e.target.value, "cny")}
-              style={{ textAlign: "right", border: "none", background: "transparent", fontSize: 20, fontWeight: 900, color: "#0e2d4d", width: "120px", outline: "none" }}
+              style={{ textAlign: "right", border: "none", background: "transparent", fontSize: 20, fontWeight: 900, color: "var(--primary-dark)", width: "120px", outline: "none" }}
               placeholder="0"
             />
          </div>
 
          {/* 韩元 */}
-         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", background: "#f8fafc", padding: "12px 16px", borderRadius: 12, border: "1px solid #e2e8f0" }}>
-            <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", background: "var(--bg-secondary)", padding: "var(--sp-md) var(--sp-lg)", borderRadius: "var(--radius-lg)", border: "1px solid var(--border-primary)" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: "var(--sp-md)" }}>
               <span style={{ fontSize: 24 }}>🇰🇷</span>
-              <span style={{ fontWeight: 800, color: "#334155", fontSize: 14 }}>{uiText.krw}</span>
+              <span style={{ fontWeight: 800, color: "var(--text-base)", fontSize: 14 }}>{uiText.krw}</span>
             </div>
             <input
               type="number"
               value={getValue("krw")}
               onChange={(e) => handleInputChange(e.target.value, "krw")}
-              style={{ textAlign: "right", border: "none", background: "transparent", fontSize: 20, fontWeight: 900, color: "#0e2d4d", width: "150px", outline: "none" }}
+              style={{ textAlign: "right", border: "none", background: "transparent", fontSize: 20, fontWeight: 900, color: "var(--primary-dark)", width: "150px", outline: "none" }}
               placeholder="0"
             />
          </div>
 
          {/* 越南盾 */}
-         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", background: "#fdf4ff", padding: "12px 16px", borderRadius: 12, border: "1px solid #f5d0fe" }}>
-            <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", background: "#fdf4ff", padding: "var(--sp-md) var(--sp-lg)", borderRadius: "var(--radius-lg)", border: "1px solid #f5d0fe" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: "var(--sp-md)" }}>
               <span style={{ fontSize: 24 }}>🇻🇳</span>
               <span style={{ fontWeight: 900, color: "#86198f", fontSize: 14 }}>{uiText.vnd}</span>
             </div>
@@ -1715,15 +1716,7 @@ const itinerary = [
 
 function Card({ children, accent = false }) {
   return (
-    <div
-      style={{
-        background: "#fff",
-        border: accent ? "2px solid #0e2d4d" : "1px solid #e8e0d4",
-        borderRadius: 18,
-        padding: 18,
-        boxShadow: "0 8px 24px rgba(20,30,50,0.05)",
-      }}
-    >
+    <div className="card">
       {children}
     </div>
   );
@@ -1795,44 +1788,45 @@ function HotelItineraryCard({ h, lang }) {
           display: "flex",
           justifyContent: "space-between",
           alignItems: "flex-start",
-          gap: 12,
+          gap: "var(--sp-md)",
           flexWrap: "wrap",
-          paddingBottom: 16,
-          marginBottom: 16,
-          borderBottom: "1px dashed #dbe3ea",
+          paddingBottom: "var(--sp-lg)",
+          marginBottom: "var(--sp-lg)",
+          borderBottom: "1px dashed var(--border-primary)",
         }}
       >
         <div>
           <div
             style={{
               display: "inline-block",
-              background: "#e07055",
+              background: "var(--accent-warm)",
               color: "#fff",
-              padding: "4px 10px",
-              borderRadius: 8,
+              padding: "var(--sp-xs) var(--sp-sm)",
+              borderRadius: "var(--radius-md)",
               fontSize: 13,
               fontWeight: 900,
-              marginBottom: 8,
+              marginBottom: "var(--sp-md)",
             }}
           >
             {lang === "zh" ? h.date.zh : h.date.ko}
           </div>
-          <div style={{ fontSize: 20, fontWeight: 900, color: "#0e2d4d" }}>
+          <div style={{ fontSize: 20, fontWeight: 900, color: "var(--primary-dark)", lineHeight: 1.3 }}>
             {h.name}
           </div>
           <div
             style={{
-              color: "#6b7280",
+              color: "var(--text-light)",
               fontSize: 14,
-              marginTop: 6,
-              fontWeight: 700,
+              marginTop: "var(--sp-sm)",
+              fontWeight: 600,
+              lineHeight: 1.5,
             }}
           >
             {lang === "zh" ? h.brand.zh : h.brand.ko}
           </div>
         </div>
         <div style={{ textAlign: "right", flexShrink: 0 }}>
-          <div style={{ fontSize: 18, fontWeight: 900, color: "#111" }}>
+          <div style={{ fontSize: 18, fontWeight: 900, color: "var(--text-dark)", lineHeight: 1.3 }}>
             {lang === "zh" ? h.price.zh : h.price.ko}
           </div>
         </div>
@@ -1841,7 +1835,7 @@ function HotelItineraryCard({ h, lang }) {
         style={{
           display: "grid",
           gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))",
-          gap: 16,
+          gap: "var(--sp-lg)",
         }}
       >
         <InfoItem
@@ -1885,16 +1879,16 @@ function InfoItem({ icon, title, text }) {
       <div
         style={{
           fontWeight: 800,
-          color: "#0e2d4d",
-          marginBottom: 6,
+          color: "var(--primary-dark)",
+          marginBottom: "var(--sp-sm)",
           display: "flex",
           alignItems: "center",
-          gap: 6,
+          gap: "var(--sp-sm)",
         }}
       >
         <span>{icon}</span> <span>{title}</span>
       </div>
-      <div style={{ color: "#334155" }}>{text}</div>
+      <div style={{ color: "var(--text-light)" }}>{text}</div>
     </div>
   );
 }
@@ -1905,7 +1899,7 @@ function FoodCard({ f, lang }) {
       <div
         style={{
           display: "flex",
-          gap: 16,
+          gap: "var(--sp-lg)",
           flexWrap: "wrap",
           alignItems: "stretch",
         }}
@@ -1915,10 +1909,10 @@ function FoodCard({ f, lang }) {
             flexShrink: 0,
             width: 150,
             height: 150,
-            borderRadius: 16,
+            borderRadius: "var(--radius-xl)",
             overflow: "hidden",
-            border: "1px solid #e8e0d4",
-            background: "linear-gradient(135deg, #f8fafc 0%, #eef2f7 100%)",
+            border: "1px solid var(--border-primary)",
+            background: "var(--bg-secondary)",
             position: "relative",
           }}
         >
@@ -1936,11 +1930,11 @@ function FoodCard({ f, lang }) {
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                color: "#94a3b8",
+                color: "var(--text-lighter)",
                 fontWeight: 800,
                 fontSize: 13,
                 textAlign: "center",
-                padding: 12,
+                padding: "var(--sp-md)",
               }}
             >
               {lang === "zh" ? "暂无图片" : "이미지 없음"}
@@ -1953,25 +1947,25 @@ function FoodCard({ f, lang }) {
               display: "flex",
               justifyContent: "space-between",
               alignItems: "flex-start",
-              gap: 10,
+              gap: "var(--sp-md)",
               flexWrap: "wrap",
             }}
           >
             <div>
-              <div style={{ fontSize: 19, fontWeight: 900, color: "#0e2d4d" }}>
+              <div style={{ fontSize: 19, fontWeight: 900, color: "var(--primary-dark)", lineHeight: 1.4 }}>
                 {lang === "zh" ? f.name.zh : f.name.ko}
               </div>
-              <div style={{ marginTop: 6, display: "flex", flexWrap: "wrap" }}>
+              <div style={{ marginTop: "var(--sp-sm)", display: "flex", flexWrap: "wrap" }}>
                 <span
                   style={{
                     display: "inline-block",
                     padding: "5px 10px",
                     borderRadius: 999,
-                    background: "#edf4fb",
-                    color: "#0e2d4d",
+                    background: "var(--primary-light)",
+                    color: "var(--primary-dark)",
                     fontSize: 12,
                     fontWeight: 800,
-                    marginBottom: 6,
+                    marginBottom: "var(--sp-sm)",
                   }}
                 >
                   {lang === "zh" ? f.category.zh : f.category.ko}
@@ -1985,8 +1979,8 @@ function FoodCard({ f, lang }) {
                     color: "#c2410c",
                     fontSize: 12,
                     fontWeight: 800,
-                    marginLeft: 8,
-                    marginBottom: 6,
+                    marginLeft: "var(--sp-md)",
+                    marginBottom: "var(--sp-sm)",
                   }}
                 >
                   {lang === "zh" ? f.tag.zh : f.tag.ko}
@@ -1997,8 +1991,8 @@ function FoodCard({ f, lang }) {
               style={{
                 background: "#fef2f2",
                 color: "#dc2626",
-                padding: "6px 10px",
-                borderRadius: 10,
+                padding: "var(--sp-sm) var(--sp-md)",
+                borderRadius: "var(--radius-lg)",
                 fontSize: 13,
                 fontWeight: 800,
                 whiteSpace: "nowrap",
@@ -2009,37 +2003,39 @@ function FoodCard({ f, lang }) {
           </div>
           <div
             style={{
-              marginTop: 12,
+              marginTop: "var(--sp-md)",
               fontSize: 14,
-              color: "#334155",
-              lineHeight: 1.75,
+              color: "var(--text-light)",
+              lineHeight: 1.6,
+              fontWeight: 500,
             }}
           >
             {lang === "zh" ? f.desc.zh : f.desc.ko}
           </div>
           {f.menu && (
-            <div style={{ marginTop: 12 }}>
+            <div style={{ marginTop: "var(--sp-md)" }}>
               <div
                 style={{
                   fontSize: 13,
-                  fontWeight: 800,
-                  color: "#0e2d4d",
-                  marginBottom: 8,
+                  fontWeight: 900,
+                  color: "var(--primary-dark)",
+                  marginBottom: "var(--sp-md)",
+                  letterSpacing: "0.3px",
                 }}
               >
                 {lang === "zh" ? "推荐菜单" : "추천 메뉴"}
               </div>
-              <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+              <div style={{ display: "flex", flexWrap: "wrap", gap: "var(--sp-md)" }}>
                 {(lang === "zh" ? f.menu.zh : f.menu.ko).map((item) => (
                   <span
                     key={item}
                     style={{
                       display: "inline-block",
-                      padding: "6px 10px",
+                      padding: "var(--sp-sm) var(--sp-md)",
                       borderRadius: 999,
-                      background: "#f8fafc",
-                      border: "1px solid #e2e8f0",
-                      color: "#334155",
+                      background: "var(--bg-secondary)",
+                      border: "1px solid var(--border-primary)",
+                      color: "var(--text-light)",
                       fontSize: 12,
                       fontWeight: 700,
                     }}
@@ -2058,15 +2054,15 @@ function FoodCard({ f, lang }) {
               style={{
                 display: "inline-flex",
                 alignItems: "center",
-                gap: 6,
-                marginTop: 14,
-                padding: "8px 14px",
-                background: "#edf4fb",
-                color: "#0e2d4d",
+                gap: "var(--sp-sm)",
+                marginTop: "var(--sp-lg)",
+                padding: "var(--sp-md) var(--sp-lg)",
+                background: "var(--primary-light)",
+                color: "var(--primary-dark)",
                 fontSize: 13,
                 fontWeight: 800,
                 textDecoration: "none",
-                borderRadius: 10,
+                borderRadius: "var(--radius-lg)",
               }}
             >
               📍 {lang === "zh" ? "Google Maps 导航" : "Google 지도 열기"}
@@ -2512,42 +2508,51 @@ export default function App() {
   };
 
   return (
-    <div
-      style={{
-        minHeight: "100vh",
-        background: "linear-gradient(180deg, #f7f4ef 0%, #fdfdfd 100%)",
-        color: "#111827",
-        fontFamily:
-          "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
-      }}
-    >
+    <div style={{ minHeight: "100vh", background: "var(--bg-primary)", color: "var(--text-dark)" }}>
+      {/* 顶部导航栏 - 粘性 */}
+      <div className="navbar">
+        <h1 style={{ fontSize: 20, margin: 0 }}>{c.appTitle}</h1>
+        <button 
+          className="navbar-toggle"
+          onClick={() => setLang(lang === "zh" ? "ko" : "zh")}
+        >
+          {c.toggle}
+        </button>
+      </div>
+
+      {/* 英雄区 */}
       <div
         style={{
-          backgroundImage:
-            "linear-gradient(rgba(14, 45, 77, 0.3), rgba(14, 45, 77, 0.9)), url('/bg.jpg')",
-          backgroundSize: "cover",
-          backgroundPosition: "center 65%",
+          background: "linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%)",
           color: "#fff",
-          padding: "48px 20px 32px",
+          padding: "var(--sp-2xl) var(--sp-lg)",
+          marginBottom: "var(--sp-3xl)",
         }}
       >
         <div style={{ maxWidth: 1120, margin: "0 auto" }}>
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              gap: 12,
-              alignItems: "start",
-              flexWrap: "wrap",
-            }}
-          >
-            <div>
-              <div style={{ fontSize: 30, fontWeight: 900 }}>{c.appTitle}</div>
-              <div style={{ marginTop: 8, color: "#d6e6f5", fontSize: 14 }}>
-                {c.appSub}
-              </div>
-            </div>
+          <div style={{ fontSize: 32, fontWeight: 900, marginBottom: "var(--sp-md)" }}>
+            {c.appTitle}
+          </div>
+          <div style={{ fontSize: 14, color: "#bfdbfe", lineHeight: 1.6, maxWidth: "600px" }}>
+            {c.appSub}
+          </div>
+        </div>
+      </div>
+
+      {/* 主内容区 */}
+      <div style={{ maxWidth: 1120, margin: "0 auto", padding: "0 var(--sp-lg)" }}>
+        {/* 标签页导航 */}
+        <div className="tabs-container">
+          {c.tabs.map((tab, idx) => (
             <button
+              key={idx}
+              className={`tab-button ${activeTab === idx ? "active" : ""}`}
+              onClick={() => scrollToSection(idx)}
+            >
+              {tab}
+            </button>
+          ))}
+        </div>
               onClick={() => setLang((v) => (v === "zh" ? "ko" : "zh"))}
               style={{
                 border: "1px solid rgba(255,255,255,0.35)",
