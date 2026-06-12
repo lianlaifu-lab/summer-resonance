@@ -1,5 +1,5 @@
-import { useMemo, useState, useEffect } from "react";
-import "./styles.css";
+"use client";
+import React, { useState, useEffect } from "react";
 
 const localeCopy = {
   zh: {
@@ -147,8 +147,6 @@ const weatherMap = {
 
 function WeatherWidget({ lang }) {
   const [weather, setWeather] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
 
   useEffect(() => {
     fetch(
@@ -160,30 +158,6 @@ function WeatherWidget({ lang }) {
       })
       .catch((e) => console.error(e));
   }, []);
-
-  const t = lang === "zh";
-
-  if (loading) {
-    return (
-      <div className="card" style={{ marginBottom: "var(--sp-2xl)" }}>
-        <div style={{ fontWeight: 900, color: "var(--primary)", marginBottom: 6 }}>
-          {t ? "芽庄实时天气" : "냐짱 실시간 날씨"}
-        </div>
-        <div style={{ color: "var(--muted)", fontSize: 13 }}>{t ? "正在加载天气信息..." : "날씨 정보를 불러오는 중..."}</div>
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="card" style={{ marginBottom: "var(--sp-2xl)" }}>
-        <div style={{ fontWeight: 900, color: "#b91c1c", marginBottom: 6 }}>
-          {t ? "天气信息获取失败" : "날씨 정보 불러오기 실패"}
-        </div>
-        <div style={{ color: "var(--muted)", fontSize: 13 }}>{error}</div>
-      </div>
-    );
-  }
 
   if (!weather) return null;
   const wInfo = weatherMap[weather.weather_code] || {
@@ -221,7 +195,7 @@ function WeatherWidget({ lang }) {
           <div
             style={{
               fontWeight: 900,
-              color: "#0284c7",
+              color: "#0f172a",
               fontSize: 16,
               letterSpacing: "-0.3px",
             }}
@@ -288,7 +262,6 @@ function WeatherWidget({ lang }) {
       </div>
     </div>
   );
-}
 }
 
 // --- 实时汇率换算组件 ---
@@ -1857,7 +1830,7 @@ const itinerary = [
             },
             desc: {
               zh: "用一顿豪气的无限龙虾自助为整趟旅行画上完美句号！Ngon Gallery 是芽庄最著名的高端海鲜自助之一，主打无限龙虾 + 多国菜系（日料刺身 / 西式烤肉 / 越式海鲜），整体出品稳定，性价比在芽庄高端餐厅中属于中等水平。建议提前预订午餐场，通常比晚餐便宜约 20%。",
-              ko: "무제한 랍스터 뷔페로 이번 여행에 완벽한 마침표를! Ngon Gallery는 냐짱 최고 명성의 고급 해산물 뷔페로 무제한 랍스터 + 다국적 메뉴(일식 사시미·서양 BBQ·베트남 해산물)를 제공합니다. 점 점심이 저녁보다 약 20% 저렴합니다. 사전 예약 권장.",
+              ko: "무제한 랍스터 뷔페로 이번 여행에 완벽한 마침표를! Ngon Gallery는 냐짱 최고 명성의 고급 해산물 뷔페로 무제한 랍스터 + 다국적 메뉴(일식 사시미·서양 BBQ·베트남 해산물)를 제공합니다. 점심이 저녁보다 약 20% 저렴합니다. 사전 예약 권장.",
             },
             venues: [
               {
@@ -2017,28 +1990,24 @@ function Card({ children, accent = false }) {
     </div>
   );
 }
+
 function Badge({ children }) {
   return (
     <span
-      className="trip-badge"
       style={{
         display: "inline-block",
         padding: "6px 14px",
         borderRadius: 999,
-        // 🌟 1. 半透明的白色底色（15% 不透明度）
         background: "rgba(255, 255, 255, 0.15)",
-        // 🌟 2. 核心毛玻璃发丝特效
         backdropFilter: "blur(12px)",
-        WebkitBackdropFilter: "blur(12px)", // 兼容苹果 Safari 浏览器
-        // 🌟 3. 加一圈极细的半透明白边，增强玻璃质感
+        WebkitBackdropFilter: "blur(12px)",
         border: "1px solid rgba(255, 255, 255, 0.3)",
-        // 🌟 4. 纯白文字
         color: "#ffffff",
         fontSize: 13,
         fontWeight: 800,
         marginRight: 8,
         marginBottom: 8,
-        boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)", // 微微的底层阴影让玻璃浮起来
+        boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)",
       }}
     >
       {children}
@@ -2106,7 +2075,7 @@ function HotelItineraryCard({ h, lang }) {
           display: "flex",
           justifyContent: "space-between",
           alignItems: "flex-start",
-          gap: "var(--sp-md)",
+          gap: 12,
           flexWrap: "wrap",
           paddingBottom: 16,
           marginBottom: 16,
@@ -2142,9 +2111,8 @@ function HotelItineraryCard({ h, lang }) {
             style={{
               color: "#64748b",
               fontSize: 14,
-              marginTop: "var(--sp-sm)",
-              fontWeight: 600,
-              lineHeight: 1.5,
+              marginTop: 6,
+              fontWeight: 700,
             }}
           >
             {lang === "zh" ? h.brand.zh : h.brand.ko}
@@ -2217,7 +2185,7 @@ function InfoItem({ icon, title, text }) {
           marginBottom: 8,
           display: "flex",
           alignItems: "center",
-          gap: "var(--sp-sm)",
+          gap: 6,
         }}
       >
         <span style={{ fontSize: 18 }}>{icon}</span> <span>{title}</span>
@@ -2270,11 +2238,11 @@ function FoodCard({ f, lang }) {
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                color: "var(--text-lighter)",
+                color: "#94a3b8",
                 fontWeight: 800,
                 fontSize: 13,
                 textAlign: "center",
-                padding: "var(--sp-md)",
+                padding: 12,
               }}
             >
               {lang === "zh" ? "暂无图片" : "이미지 없음"}
@@ -2287,7 +2255,7 @@ function FoodCard({ f, lang }) {
               display: "flex",
               justifyContent: "space-between",
               alignItems: "flex-start",
-              gap: "var(--sp-md)",
+              gap: 10,
               flexWrap: "wrap",
             }}
           >
@@ -2373,13 +2341,14 @@ function FoodCard({ f, lang }) {
                 gap: 6,
                 marginTop: 14,
                 padding: "8px 16px",
-                background: "#f0f9ff",
-                color: "#0284c7",
+                background: "#0f172a",
+                color: "#ffffff",
                 fontSize: 13,
                 fontWeight: 800,
                 textDecoration: "none",
                 borderRadius: 12,
-                transition: "background 0.2s",
+                transition: "all 0.2s cubic-bezier(0.4, 0, 0.2, 1)",
+                boxShadow: "0 4px 12px rgba(15, 23, 42, 0.15)",
               }}
               className="btn-hover"
             >
@@ -2830,7 +2799,6 @@ export default function App() {
 
   return (
     <div
-      className="travel-app"
       style={{
         minHeight: "100vh",
         background: "#f8fafc", // 更干净的基础底色
@@ -2852,7 +2820,6 @@ export default function App() {
       `}</style>
 
       <div
-        className="app-hero"
         style={{
           backgroundImage:
             "linear-gradient(rgba(14, 45, 77, 0.4), rgba(14, 45, 77, 0.95)), url('/bg.jpg')",
@@ -2862,9 +2829,8 @@ export default function App() {
           padding: "56px 20px 40px",
         }}
       >
-        <div className="hero-inner" style={{ maxWidth: 1120, margin: "0 auto" }}>
+        <div style={{ maxWidth: 1120, margin: "0 auto" }}>
           <div
-            className="hero-header"
             style={{
               display: "flex",
               justifyContent: "space-between",
@@ -2952,7 +2918,6 @@ export default function App() {
           {c.tabs.map((tab, idx) => (
             <button
               key={idx}
-              className={activeTab === idx ? "tab-button active" : "tab-button"}
               onClick={() => scrollToSection(idx)}
               style={{
                 padding: "8px 20px",
