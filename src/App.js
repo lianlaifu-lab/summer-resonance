@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 
 const localeCopy = {
   zh: {
@@ -116,6 +116,9 @@ const localeCopy = {
     itinerarySub: "이미 예약한 호텔 흐름에 맞춘 실행 가능한 버전입니다.",
     tipsTitle: "실용 팁",
     tipsSub: "체감 만족도와 일정 실현 가능성에 직접 영향을 줍니다.",
+    foodTitle: "맛집 및 음식 추천",
+    foodSub:
+      "해산물 뷔페, 현지 해산물, 베트남 길거리 음식, 커피 & 디저트 추천.",
     note: "안내: 이 파일은 단일 React 컴포넌트로 구성된 맞춤형 여행 앱 수준의 웹페이지입니다.",
     quickTitle: "원클릭 한국어 번역 안내",
     quickText:
@@ -144,367 +147,6 @@ const weatherMap = {
   96: { icon: "⛈️", zh: "雷暴", ko: "강한 뇌우" },
   99: { icon: "⛈️", zh: "雷暴", ko: "강한 뇌우" },
 };
-
-function WeatherWidget({ lang }) {
-  const [weather, setWeather] = useState(null);
-
-  useEffect(() => {
-    fetch(
-      "https://api.open-meteo.com/v1/forecast?latitude=12.2388&longitude=109.1967&current=temperature_2m,relative_humidity_2m,weather_code&timezone=Asia%2FBangkok"
-    )
-      .then((res) => res.json())
-      .then((data) => {
-        if (data && data.current) setWeather(data.current);
-      })
-      .catch((e) => console.error(e));
-  }, []);
-
-  if (!weather) return null;
-  const wInfo = weatherMap[weather.weather_code] || {
-    icon: "🌡️",
-    zh: "未知",
-    ko: "알 수 없음",
-  };
-
-  return (
-    <div
-      className="card-hover"
-      style={{
-        background: "linear-gradient(135deg, #e0f2fe 0%, #bae6fd 100%)",
-        padding: "18px 24px",
-        borderRadius: 24,
-        display: "flex",
-        justifyContent: "space-between",
-        alignItems: "center",
-        marginBottom: 20,
-        border: "1px solid rgba(125, 211, 252, 0.5)",
-        flexWrap: "wrap",
-        gap: 14,
-      }}
-    >
-      <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
-        <span
-          style={{
-            fontSize: 36,
-            filter: "drop-shadow(0 4px 6px rgba(0,0,0,0.1))",
-          }}
-        >
-          {wInfo.icon}
-        </span>
-        <div>
-          <div
-            style={{
-              fontWeight: 900,
-              color: "#0f172a",
-              fontSize: 16,
-              letterSpacing: "-0.3px",
-            }}
-          >
-            {lang === "zh" ? "芽庄实时天气" : "냐짱 실시간 날씨"}
-          </div>
-          <div
-            style={{
-              fontSize: 13,
-              color: "#0369a1",
-              fontWeight: 700,
-              marginTop: 4,
-            }}
-          >
-            {lang === "zh" ? wInfo.zh : wInfo.ko}
-          </div>
-        </div>
-      </div>
-      <div style={{ display: "flex", gap: 24 }}>
-        <div style={{ textAlign: "right" }}>
-          <div
-            style={{
-              fontSize: 12,
-              color: "#0369a1",
-              fontWeight: 700,
-              opacity: 0.8,
-            }}
-          >
-            {lang === "zh" ? "气温" : "기온"}
-          </div>
-          <div
-            style={{
-              fontSize: 24,
-              fontWeight: 900,
-              color: "#0c4a6e",
-              letterSpacing: "-0.5px",
-            }}
-          >
-            {Math.round(weather.temperature_2m)}°C
-          </div>
-        </div>
-        <div style={{ textAlign: "right" }}>
-          <div
-            style={{
-              fontSize: 12,
-              color: "#0369a1",
-              fontWeight: 700,
-              opacity: 0.8,
-            }}
-          >
-            {lang === "zh" ? "湿度" : "습도"}
-          </div>
-          <div
-            style={{
-              fontSize: 24,
-              fontWeight: 900,
-              color: "#0c4a6e",
-              letterSpacing: "-0.5px",
-            }}
-          >
-            {weather.relative_humidity_2m}%
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-// --- 实时汇率换算组件 ---
-function CurrencyConverterWidget({ lang }) {
-  const [rates, setRates] = useState(null);
-  const [amount, setAmount] = useState(100);
-  const [base, setBase] = useState("cny");
-
-  useEffect(() => {
-    fetch(
-      "https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1/currencies/cny.json"
-    )
-      .then((res) => res.json())
-      .then((data) => {
-        if (data && data.cny) {
-          setRates({ cny: 1, krw: data.cny.krw, vnd: data.cny.vnd });
-        }
-      })
-      .catch((e) => console.error("汇率获取失败", e));
-  }, []);
-
-  const handleInputChange = (val, currency) => {
-    if (val === "") {
-      setAmount("");
-      setBase(currency);
-      return;
-    }
-    const num = parseFloat(val);
-    if (!isNaN(num)) {
-      setAmount(num);
-      setBase(currency);
-    }
-  };
-
-  const getValue = (currency) => {
-    if (amount === "") return "";
-    if (!rates) return "";
-    if (currency === base) return amount;
-    const inCny = amount / rates[base];
-    return Math.round(inCny * rates[currency]);
-  };
-
-  if (!rates) return null;
-
-  const uiText = {
-    title: lang === "zh" ? "实时汇率换算" : "실시간 환율 계산기",
-    cny: lang === "zh" ? "人民币 (CNY)" : "위안화 (CNY)",
-    krw: lang === "zh" ? "韩元 (KRW)" : "원화 (KRW)",
-    vnd: lang === "zh" ? "越南盾 (VND)" : "베트남 동 (VND)",
-    tip: lang === "zh" ? "点击修改任意框即可换算" : "입력 시 자동 변환",
-  };
-
-  return (
-    <div
-      className="card-hover"
-      style={{
-        background: "#fff",
-        padding: "20px 24px",
-        borderRadius: 24,
-        marginBottom: 20,
-        border: "1px solid #f1f5f9",
-        boxShadow: "0 8px 30px rgba(15,23,42,0.04)",
-      }}
-    >
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          marginBottom: 18,
-          flexWrap: "wrap",
-          gap: 10,
-        }}
-      >
-        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-          <span style={{ fontSize: 24 }}>💱</span>
-          <span
-            style={{
-              fontWeight: 900,
-              color: "#0f172a",
-              fontSize: 17,
-              letterSpacing: "-0.3px",
-            }}
-          >
-            {uiText.title}
-          </span>
-        </div>
-        <div
-          style={{
-            fontSize: 12,
-            color: "#64748b",
-            fontWeight: 700,
-            background: "#f1f5f9",
-            padding: "4px 10px",
-            borderRadius: 99,
-          }}
-        >
-          {uiText.tip}
-        </div>
-      </div>
-
-      <div style={{ display: "grid", gap: 12 }}>
-        <div
-          className="input-container"
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            background: "#f8fafc",
-            padding: "14px 18px",
-            borderRadius: 16,
-            border: "1px solid #e2e8f0",
-            transition: "all 0.2s",
-          }}
-        >
-          <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-            <span
-              style={{
-                fontSize: 24,
-                filter: "drop-shadow(0 2px 4px rgba(0,0,0,0.1))",
-              }}
-            >
-              🇨🇳
-            </span>
-            <span style={{ fontWeight: 800, color: "#334155", fontSize: 14 }}>
-              {uiText.cny}
-            </span>
-          </div>
-          <input
-            type="number"
-            className="focus-input"
-            value={getValue("cny")}
-            onChange={(e) => handleInputChange(e.target.value, "cny")}
-            style={{
-              textAlign: "right",
-              border: "none",
-              background: "transparent",
-              fontSize: 22,
-              fontWeight: 900,
-              color: "#0f172a",
-              width: "120px",
-              outline: "none",
-              fontFamily: "inherit",
-            }}
-            placeholder="0"
-          />
-        </div>
-
-        <div
-          className="input-container"
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            background: "#f8fafc",
-            padding: "14px 18px",
-            borderRadius: 16,
-            border: "1px solid #e2e8f0",
-            transition: "all 0.2s",
-          }}
-        >
-          <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-            <span
-              style={{
-                fontSize: 24,
-                filter: "drop-shadow(0 2px 4px rgba(0,0,0,0.1))",
-              }}
-            >
-              🇰🇷
-            </span>
-            <span style={{ fontWeight: 800, color: "#334155", fontSize: 14 }}>
-              {uiText.krw}
-            </span>
-          </div>
-          <input
-            type="number"
-            className="focus-input"
-            value={getValue("krw")}
-            onChange={(e) => handleInputChange(e.target.value, "krw")}
-            style={{
-              textAlign: "right",
-              border: "none",
-              background: "transparent",
-              fontSize: 22,
-              fontWeight: 900,
-              color: "#0f172a",
-              width: "150px",
-              outline: "none",
-              fontFamily: "inherit",
-            }}
-            placeholder="0"
-          />
-        </div>
-
-        <div
-          className="input-container"
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            background: "#fdf4ff",
-            padding: "14px 18px",
-            borderRadius: 16,
-            border: "1px solid #f5d0fe",
-            transition: "all 0.2s",
-          }}
-        >
-          <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-            <span
-              style={{
-                fontSize: 24,
-                filter: "drop-shadow(0 2px 4px rgba(0,0,0,0.1))",
-              }}
-            >
-              🇻🇳
-            </span>
-            <span style={{ fontWeight: 900, color: "#86198f", fontSize: 14 }}>
-              {uiText.vnd}
-            </span>
-          </div>
-          <input
-            type="number"
-            className="focus-input"
-            value={getValue("vnd")}
-            onChange={(e) => handleInputChange(e.target.value, "vnd")}
-            style={{
-              textAlign: "right",
-              border: "none",
-              background: "transparent",
-              fontSize: 22,
-              fontWeight: 900,
-              color: "#c026d3",
-              width: "180px",
-              outline: "none",
-              fontFamily: "inherit",
-            }}
-            placeholder="0"
-          />
-        </div>
-      </div>
-    </div>
-  );
-}
 
 const hotelItineraryList = [
   {
@@ -820,7 +462,7 @@ const islandHighlights = [
   {
     name: { zh: "黑岛 / 木岛 潜水", ko: "혼문 섬 (Hon Mun) 다이빙" },
     en: "Hon Mun Island Diving",
-    img: "https://images.unsplash.com/photo-1544551763-46a013bb70d5?auto=format&fit=crop&w=800&q=80",
+    img: "/p8.png",
     where: {
       zh: "从 Cầu Đá 码头乘快艇出发",
       ko: "Cầu Đá 부두에서 스피드보트로 출발",
@@ -841,7 +483,7 @@ const islandHighlights = [
   {
     name: { zh: "VinWonders 珍珠岛乐园", ko: "VinWonders 냐짱" },
     en: "VinWonders Nha Trang",
-    img: "/p7.png",
+    img: "/p7.png ",
     where: { zh: "竹岛 (Hon Tre)", ko: "혼쩨 섬 (Hon Tre)" },
     time: { zh: "一整天", ko: "하루 종일" },
     price: {
@@ -856,7 +498,7 @@ const islandHighlights = [
   {
     name: { zh: "蚕岛 奢华泥浴与度假", ko: "혼땀 섬 (Hon Tam) 럭셔리 투어" },
     en: "Hon Tam Island Resort",
-    img: "https://images.unsplash.com/photo-1540541338287-41700207dee6?auto=format&fit=crop&w=800&q=80",
+    img: "/p9.png",
     where: {
       zh: "从 Cầu Đá 码头乘船约 20 分钟",
       ko: "Cầu Đá 부두에서 배로 20분 소요",
@@ -882,7 +524,7 @@ const foodRecommendations = [
       zh: "约 1,000,000 VND 起 / 人",
       ko: "약 1,000,000 VND 부터 / 1인",
     },
-    img: "https://images.unsplash.com/photo-1559339352-11d035aa65de?auto=format&fit=crop&w=1200&q=80",
+    img: "/f1.png",
     mapLink:
       "https://www.google.com/maps/search/?api=1&query=Ngon+Gallery+Nha+Trang",
     desc: {
@@ -910,7 +552,7 @@ const foodRecommendations = [
       zh: "约 250,000 - 400,000 VND / 人",
       ko: "약 250,000 - 400,000 VND / 1인",
     },
-    img: "https://images.unsplash.com/photo-1510130387422-82bed34b37e9?auto=format&fit=crop&w=1200&q=80",
+    img: "/f2.png",
     mapLink:
       "https://www.google.com/maps/search/?api=1&query=Thanh+Suong+Seafood+Nha+Trang",
     desc: {
@@ -930,7 +572,7 @@ const foodRecommendations = [
       zh: "约 200,000 - 350,000 VND / 人",
       ko: "약 200,000 - 350,000 VND / 1인",
     },
-    img: "https://images.unsplash.com/photo-1558030006-450675393462?auto=format&fit=crop&w=1200&q=80",
+    img: "/f3.png",
     mapLink:
       "https://www.google.com/maps/search/?api=1&query=Lac+Canh+Restaurant+Nha+Trang",
     desc: {
@@ -950,7 +592,7 @@ const foodRecommendations = [
       zh: "约 40,000 - 90,000 VND / 人",
       ko: "약 40,000 - 90,000 VND / 1인",
     },
-    img: "https://images.unsplash.com/photo-1525755662778-989d0524087e?auto=format&fit=crop&w=1200&q=80",
+    img: "/f4.png",
     mapLink:
       "https://www.google.com/maps/search/?api=1&query=Nem+Nuong+Dang+Van+Quyen+Nha+Trang",
     desc: {
@@ -970,7 +612,7 @@ const foodRecommendations = [
       zh: "约 30,000 - 70,000 VND / 人",
       ko: "약 30,000 - 70,000 VND / 1인",
     },
-    img: "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=1200&q=80",
+    img: "/f5.png",
     mapLink:
       "https://www.google.com/maps/search/?api=1&query=Banh+Can+51+To+Hien+Thanh+Nha+Trang",
     desc: {
@@ -990,7 +632,7 @@ const foodRecommendations = [
       zh: "约 25,000 - 40,000 VND / 个",
       ko: "약 25,000 - 40,000 VND / 개",
     },
-    img: "https://images.unsplash.com/photo-1509722747041-616f39b57569?auto=format&fit=crop&w=1200&q=80",
+    img: "/f6.png",
     mapLink:
       "https://www.google.com/maps/search/?api=1&query=Banh+Mi+Phan+Nha+Trang",
     desc: {
@@ -1010,7 +652,7 @@ const foodRecommendations = [
       zh: "约 45,000 - 70,000 VND / 杯",
       ko: "약 45,000 - 70,000 VND / 잔",
     },
-    img: "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=1200&q=80",
+    img: "/f7.png",
     mapLink:
       "https://www.google.com/maps/search/?api=1&query=CCCP+Coffee+Nha+Trang",
     desc: {
@@ -1030,7 +672,7 @@ const foodRecommendations = [
       zh: "约 50,000 - 120,000 VND / 份",
       ko: "약 50,000 - 120,000 VND / 인분",
     },
-    img: "/image_6bd899.jpg",
+    img: "/f8.png",
     mapLink:
       "https://www.google.com/maps/search/?api=1&query=Sweet+Secret+Nha+Trang",
     desc: {
@@ -1050,7 +692,7 @@ const foodRecommendations = [
       zh: "约 30,000 - 60,000 VND / 份",
       ko: "약 30,000 - 60,000 VND / 인분",
     },
-    img: "https://images.unsplash.com/photo-1517686469429-8bdb88b9f907?auto=format&fit=crop&w=1200&q=80",
+    img: "/f9.png",
     mapLink:
       "https://www.google.com/maps/search/?api=1&query=Cui+Banh+Mi+Nha+Trang",
     desc: {
@@ -1860,7 +1502,7 @@ const itinerary = [
             },
             desc: {
               zh: "如果已经吃了好几顿海鲜想换口味，Lac Canh 是芽庄本地最有名的炭烤牛肉老店（家庭经营，几十年历史），就在喜来登附近，烟火气十足，两人吃饱约 350,000–500,000 VND，非常接地气。",
-              ko: "해산물이 질렸다면 메뉴를 바꿔볼 시간. Lac Cach는 냐짱 현지인에게 수십 년간 사랑받는 가족 운영 숯불 소고기 식당으로 쉐라톤 근처에 있습니다. 활기찬 분위기, 2인 기준 350,000~500,000 VND.",
+              ko: "해산물이 질렸다면 메뉴를 바꿔볼 시간. Lac Cach는 냐짱 현지인에게 수십 초간 사랑받는 가족 운영 숯불 소고기 식당으로 쉐라톤 근처에 있습니다. 활기찬 분위기, 2인 기준 350,000~500,000 VND.",
             },
             venues: [
               {
@@ -1967,25 +1609,522 @@ const itinerary = [
   },
 ];
 
-// --- 全局 UI 组件重构 ---
-function Card({ children, accent = false }) {
+// ═══════════════════════════════════════════════════════════════
+//  GLOBAL STYLES
+// ═══════════════════════════════════════════════════════════════
+const STYLES = `
+  *, *::before, *::after { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html { scroll-behavior: smooth; }
+  body { margin: 0; }
+
+  :root {
+    --deep:   #0C2D4E;
+    --ocean:  #0E7490;
+    --teal:   #0D9488;
+    --teal50: #F0FDFA;
+    --teal100:#CCFBF1;
+    --gold:   #F59E0B;
+    --coral:  #F97316;
+    --red:    #EF4444;
+    --bg:     #F5FBFF;
+    --surf:   #FFFFFF;
+    --ink:    #0F172A;
+    --ink2:   #1E293B;
+    --muted:  #64748B;
+    --subtle: #94A3B8;
+    --bdr:    rgba(15,23,42,.07);
+    --bdr-s:  #F1F5F9;
+    --sh-sm:  0 1px 3px rgba(0,0,0,.04), 0 4px 12px rgba(0,0,0,.05);
+    --sh-md:  0 4px 8px rgba(0,0,0,.06), 0 12px 28px rgba(0,0,0,.07);
+    --sh-lg:  0 8px 16px rgba(0,0,0,.08), 0 20px 48px rgba(0,0,0,.10);
+    --sh-float: 0 24px 64px rgba(0,0,0,.14);
+    --r-sm:   12px;
+    --r-md:   16px;
+    --r-lg:   20px;
+    --r-xl:   24px;
+    --r-pill: 999px;
+    --font:   -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", system-ui, Helvetica, sans-serif;
+    --mono:   "SF Mono", SFMono-Regular, ui-monospace, Menlo, monospace;
+  }
+
+  /* ── Card hover ── */
+  .card-hover {
+    transition: transform .3s cubic-bezier(.34,1.56,.64,1),
+                box-shadow .3s ease;
+    will-change: transform;
+  }
+  .card-hover:hover { transform: translateY(-3px); box-shadow: var(--sh-lg) !important; }
+
+  /* ── Image zoom ── */
+  .img-wrap { overflow: hidden; }
+  .img-wrap img {
+    transition: transform .5s cubic-bezier(.25,.46,.45,.94);
+    width: 100%; height: 100%; object-fit: cover; display: block;
+  }
+  .img-wrap:hover img { transform: scale(1.07); }
+
+  /* ── Button press ── */
+  .btn {
+    transition: transform .15s ease, opacity .15s ease, box-shadow .15s ease;
+    user-select: none; cursor: pointer;
+  }
+  .btn:hover { opacity: .88; }
+  .btn:active { transform: scale(.96); opacity: .8; }
+
+  /* ── Scrollbar hide ── */
+  .no-scroll::-webkit-scrollbar { display: none; }
+  .no-scroll { -ms-overflow-style: none; scrollbar-width: none; }
+
+  /* ── Glass ── */
+  .glass {
+    background: rgba(255,255,255,.82);
+    backdrop-filter: saturate(180%) blur(18px);
+    -webkit-backdrop-filter: saturate(180%) blur(18px);
+  }
+
+  /* ── Animations ── */
+  @keyframes fadeUp {
+    from { opacity:0; transform:translateY(20px); }
+    to   { opacity:1; transform:translateY(0);    }
+  }
+  @keyframes scaleIn {
+    from { opacity:0; transform:scale(.92); }
+    to   { opacity:1; transform:scale(1);   }
+  }
+  @keyframes shimmer {
+    0%   { background-position: -200% center; }
+    100% { background-position:  200% center; }
+  }
+  @keyframes pulse-soft {
+    0%,100% { opacity:.15; transform:scale(1);    }
+    50%     { opacity:.35; transform:scale(1.08); }
+  }
+  .fade-up  { animation: fadeUp  .5s cubic-bezier(.16,1,.3,1) both; }
+  .scale-in { animation: scaleIn .4s cubic-bezier(.16,1,.3,1) both; }
+
+  /* ── Input focus ring ── */
+  .cur-row:focus-within {
+    border-color: var(--ocean) !important;
+    box-shadow: 0 0 0 3px rgba(14,116,144,.14) !important;
+  }
+  input:focus { outline: none; }
+
+  /* ── Period colors ── */
+  .pm-morning  { border-left-color:#F97316; }
+  .pm-afternoon{ border-left-color:#3B82F6; }
+  .pm-evening  { border-left-color:#A855F7; }
+  .pm-night    { border-left-color:#22C55E; }
+
+  .pm-morning-dot  { background:#F97316; }
+  .pm-afternoon-dot{ background:#3B82F6; }
+  .pm-evening-dot  { background:#A855F7; }
+  .pm-night-dot    { background:#22C55E; }
+
+  .pm-morning-badge  { background:#FFF7ED; color:#C2410C; }
+  .pm-afternoon-badge{ background:#EFF6FF; color:#1D4ED8; }
+  .pm-evening-badge  { background:#FDF4FF; color:#7E22CE; }
+  .pm-night-badge    { background:#F0FDF4; color:#15803D; }
+
+  /* ── Hero gradient orbs ── */
+  .orb {
+    position: absolute; border-radius: 50%; filter: blur(60px);
+    animation: pulse-soft 4s ease-in-out infinite;
+    pointer-events: none;
+  }
+
+  /* ── Tab active ── */
+  .tab-active {
+    background: var(--ink) !important;
+    color: #fff !important;
+    box-shadow: 0 2px 8px rgba(0,0,0,.18);
+  }
+
+  /* ── Accordion ── */
+  .accordion-body {
+    overflow: hidden;
+    transition: max-height .4s cubic-bezier(.16,1,.3,1), opacity .3s ease;
+  }
+
+  /* ── Mobile ── */
+  @media (max-width: 640px) {
+    .hero-title  { font-size: 26px !important; letter-spacing: -.4px !important; }
+    .hero-sub    { font-size: 13px !important; }
+    .ov-grid     { grid-template-columns: 1fr 1fr !important; }
+    .food-layout { flex-direction: column !important; }
+    .food-img    { width: 100% !important; height: 190px !important; border-radius: var(--r-lg) var(--r-lg) 0 0 !important; }
+    .food-body   { min-width: 0 !important; }
+    .tip-grid    { grid-template-columns: 1fr !important; }
+    .cur-row input { font-size: 18px !important; }
+    .hotel-grid  { grid-template-columns: 1fr !important; }
+  }
+  @media (max-width: 390px) {
+    .hero-title { font-size: 22px !important; }
+  }
+
+  /* ── Safe area ── */
+  @supports (padding: max(0px)) {
+    .safe-bottom { padding-bottom: max(16px, env(safe-area-inset-bottom)); }
+  }
+`;
+
+// ═══════════════════════════════════════════════════════════════
+//  WEATHER WIDGET
+// ═══════════════════════════════════════════════════════════════
+function WeatherWidget({ lang }) {
+  const [weather, setWeather] = useState(null);
+
+  useEffect(() => {
+    fetch(
+      "https://api.open-meteo.com/v1/forecast?latitude=12.2388&longitude=109.1967&current=temperature_2m,relative_humidity_2m,weather_code&timezone=Asia%2FBangkok"
+    )
+      .then((r) => r.json())
+      .then((d) => {
+        if (d?.current) setWeather(d.current);
+      })
+      .catch((e) => console.error(e));
+  }, []);
+
+  if (!weather) return null;
+
+  const wInfo = weatherMap[weather.weather_code] || {
+    icon: "🌡️",
+    zh: "未知",
+    ko: "알 수 없음",
+  };
+  const temp = Math.round(weather.temperature_2m);
+  const hum = weather.relative_humidity_2m;
+
+  return (
+    <div
+      className="card-hover fade-up"
+      style={{
+        background:
+          "linear-gradient(135deg, #0C4A6E 0%, #0E7490 50%, #0D9488 100%)",
+        borderRadius: "var(--r-xl)",
+        padding: "20px 24px",
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "center",
+        flexWrap: "wrap",
+        gap: 16,
+        position: "relative",
+        overflow: "hidden",
+        boxShadow: "0 8px 32px rgba(12,45,78,.25)",
+      }}
+    >
+      <div
+        style={{
+          position: "absolute",
+          top: -20,
+          right: -20,
+          width: 120,
+          height: 120,
+          background: "rgba(255,255,255,.06)",
+          borderRadius: "50%",
+        }}
+      />
+      <div
+        style={{
+          position: "absolute",
+          bottom: -30,
+          left: 60,
+          width: 80,
+          height: 80,
+          background: "rgba(255,255,255,.04)",
+          borderRadius: "50%",
+        }}
+      />
+      <div
+        style={{ display: "flex", alignItems: "center", gap: 14, zIndex: 1 }}
+      >
+        <div
+          style={{
+            width: 56,
+            height: 56,
+            borderRadius: 16,
+            background: "rgba(255,255,255,.15)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            backdropFilter: "blur(8px)",
+            fontSize: 28,
+            flexShrink: 0,
+          }}
+        >
+          {wInfo.icon}
+        </div>
+        <div>
+          <div
+            style={{
+              color: "rgba(255,255,255,.7)",
+              fontSize: 12,
+              fontWeight: 700,
+              letterSpacing: ".5px",
+              textTransform: "uppercase",
+              marginBottom: 4,
+            }}
+          >
+            {lang === "zh" ? "芽庄 · 实时天气" : "냐짱 · 실시간 날씨"}
+          </div>
+          <div style={{ color: "#fff", fontWeight: 800, fontSize: 17 }}>
+            {lang === "zh" ? wInfo.zh : wInfo.ko}
+          </div>
+        </div>
+      </div>
+      <div style={{ display: "flex", gap: 20, zIndex: 1 }}>
+        {[
+          {
+            label: lang === "zh" ? "气温" : "기온",
+            val: `${temp}°C`,
+            big: true,
+          },
+          {
+            label: lang === "zh" ? "湿度" : "습도",
+            val: `${hum}%`,
+            big: false,
+          },
+        ].map(({ label, val, big }) => (
+          <div key={label} style={{ textAlign: "center" }}>
+            <div
+              style={{
+                color: "rgba(255,255,255,.65)",
+                fontSize: 11,
+                fontWeight: 700,
+                letterSpacing: ".4px",
+                marginBottom: 4,
+              }}
+            >
+              {label}
+            </div>
+            <div
+              style={{
+                color: "#fff",
+                fontWeight: 900,
+                fontSize: big ? 32 : 24,
+                letterSpacing: "-1px",
+                lineHeight: 1,
+              }}
+            >
+              {val}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// ═══════════════════════════════════════════════════════════════
+//  CURRENCY CONVERTER
+// ═══════════════════════════════════════════════════════════════
+function CurrencyConverterWidget({ lang }) {
+  const [rates, setRates] = useState(null);
+  const [amount, setAmount] = useState(100);
+  const [base, setBase] = useState("cny");
+
+  useEffect(() => {
+    fetch(
+      "https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1/currencies/cny.json"
+    )
+      .then((r) => r.json())
+      .then((d) => {
+        if (d?.cny) setRates({ cny: 1, krw: d.cny.krw, vnd: d.cny.vnd });
+      })
+      .catch((e) => console.error("汇率获取失败", e));
+  }, []);
+
+  const handleChange = (val, cur) => {
+    setBase(cur);
+    if (val === "") {
+      setAmount("");
+      return;
+    }
+    const n = parseFloat(val);
+    if (!isNaN(n)) setAmount(n);
+  };
+
+  const getVal = (cur) => {
+    if (amount === "" || !rates) return "";
+    if (cur === base) return amount;
+    return Math.round((amount / rates[base]) * rates[cur]);
+  };
+
+  if (!rates) return null;
+
+  const t = {
+    title: lang === "zh" ? "实时汇率换算" : "실시간 환율 계산기",
+    tip: lang === "zh" ? "点击任意框输入换算" : "입력 시 자동 변환",
+    rows: [
+      {
+        flag: "🇨🇳",
+        name: lang === "zh" ? "人民币 (CNY)" : "위안화 (CNY)",
+        cur: "cny",
+        color: "#0F172A",
+      },
+      {
+        flag: "🇰🇷",
+        name: lang === "zh" ? "韩元 (KRW)" : "원화 (KRW)",
+        cur: "krw",
+        color: "#0F172A",
+      },
+      {
+        flag: "🇻🇳",
+        name: lang === "zh" ? "越南盾 (VND)" : "베트남 동 (VND)",
+        cur: "vnd",
+        color: "#7C3AED",
+      },
+    ],
+  };
+
+  return (
+    <div
+      className="card-hover fade-up"
+      style={{
+        background: "var(--surf)",
+        borderRadius: "var(--r-xl)",
+        padding: "20px 24px",
+        boxShadow: "var(--sh-sm)",
+        border: "1px solid var(--bdr-s)",
+        animationDelay: ".08s",
+      }}
+    >
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          marginBottom: 16,
+          flexWrap: "wrap",
+          gap: 8,
+        }}
+      >
+        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+          <span
+            style={{
+              width: 36,
+              height: 36,
+              borderRadius: 10,
+              background: "linear-gradient(135deg,#0E7490,#0D9488)",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              fontSize: 18,
+              flexShrink: 0,
+            }}
+          >
+            💱
+          </span>
+          <span
+            style={{
+              fontWeight: 900,
+              color: "var(--ink)",
+              fontSize: 17,
+              letterSpacing: "-.4px",
+            }}
+          >
+            {t.title}
+          </span>
+        </div>
+        <span
+          style={{
+            fontSize: 12,
+            color: "var(--muted)",
+            fontWeight: 700,
+            background: "var(--bg)",
+            padding: "4px 12px",
+            borderRadius: "var(--r-pill)",
+            border: "1px solid var(--bdr-s)",
+          }}
+        >
+          {t.tip}
+        </span>
+      </div>
+
+      <div style={{ display: "grid", gap: 10 }}>
+        {t.rows.map(({ flag, name, cur, color }) => (
+          <div
+            key={cur}
+            className="cur-row"
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              background: cur === "vnd" ? "#FAF5FF" : "var(--bg)",
+              padding: "13px 16px",
+              borderRadius: "var(--r-md)",
+              border:
+                cur === "vnd" ? "1px solid #E9D5FF" : "1px solid var(--bdr-s)",
+              transition: "border-color .2s, box-shadow .2s",
+            }}
+          >
+            <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+              <span style={{ fontSize: 22 }}>{flag}</span>
+              <span
+                style={{
+                  fontWeight: 800,
+                  color: cur === "vnd" ? "#7C3AED" : "var(--ink2)",
+                  fontSize: 14,
+                }}
+              >
+                {name}
+              </span>
+            </div>
+            <input
+              type="number"
+              value={getVal(cur)}
+              onChange={(e) => handleChange(e.target.value, cur)}
+              placeholder="0"
+              style={{
+                textAlign: "right",
+                border: "none",
+                background: "transparent",
+                fontSize: 22,
+                fontWeight: 900,
+                color: cur === "vnd" ? "#7C3AED" : color,
+                width: cur === "vnd" ? 180 : cur === "krw" ? 150 : 110,
+                fontFamily: "var(--font)",
+                letterSpacing: "-.5px",
+              }}
+            />
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// ═══════════════════════════════════════════════════════════════
+//  BASE COMPONENTS
+// ═══════════════════════════════════════════════════════════════
+function Card({ children, accent = false, noPad = false }) {
   return (
     <div
       className="card-hover"
       style={{
-        background: "#fff",
+        background: "var(--surf)",
+        borderRadius: "var(--r-xl)",
+        padding: noPad ? 0 : "22px 24px",
+        boxShadow: accent ? "0 4px 16px rgba(12,45,78,.12)" : "var(--sh-sm)",
         border: accent
-          ? "2px solid #0e2d4d"
-          : "1px solid rgba(241, 245, 249, 0.8)",
-        borderRadius: 24, // 💡 升级为更大的 24px 现代圆角
-        padding: "24px 26px", // 💡 加大留白，增强呼吸感
-        boxShadow: accent
-          ? "0 12px 32px rgba(14, 45, 77, 0.08)"
-          : "0 8px 24px rgba(15, 23, 42, 0.03)",
+          ? "1.5px solid rgba(14,116,144,.18)"
+          : "1px solid var(--bdr-s)",
         position: "relative",
         overflow: "hidden",
       }}
     >
+      {accent && (
+        <div
+          style={{
+            position: "absolute",
+            top: 0,
+            left: 0,
+            right: 0,
+            height: 3,
+            background: "linear-gradient(90deg, var(--ocean), var(--teal))",
+            borderRadius: "var(--r-xl) var(--r-xl) 0 0",
+          }}
+        />
+      )}
       {children}
     </div>
   );
@@ -1997,17 +2136,17 @@ function Badge({ children }) {
       style={{
         display: "inline-block",
         padding: "6px 14px",
-        borderRadius: 999,
-        background: "rgba(255, 255, 255, 0.15)",
+        borderRadius: "var(--r-pill)",
+        background: "rgba(255,255,255,.18)",
         backdropFilter: "blur(12px)",
         WebkitBackdropFilter: "blur(12px)",
-        border: "1px solid rgba(255, 255, 255, 0.3)",
-        color: "#ffffff",
+        border: "1px solid rgba(255,255,255,.28)",
+        color: "#fff",
         fontSize: 13,
-        fontWeight: 800,
+        fontWeight: 700,
         marginRight: 8,
         marginBottom: 8,
-        boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)",
+        boxShadow: "0 2px 8px rgba(0,0,0,.12)",
       }}
     >
       {children}
@@ -2017,24 +2156,44 @@ function Badge({ children }) {
 
 function SectionTitle({ title, sub }) {
   return (
-    <div style={{ margin: "24px 0 16px" }}>
+    <div style={{ margin: "32px 0 18px" }}>
       <div
         style={{
-          fontSize: 26,
-          fontWeight: 900,
-          color: "#0f172a",
-          letterSpacing: "-0.5px",
+          display: "flex",
+          alignItems: "center",
+          gap: 10,
+          marginBottom: 6,
         }}
       >
-        {title}
+        <div
+          style={{
+            width: 4,
+            height: 22,
+            borderRadius: 2,
+            background: "linear-gradient(180deg, var(--ocean), var(--teal))",
+            flexShrink: 0,
+          }}
+        />
+        <div
+          style={{
+            fontSize: 24,
+            fontWeight: 900,
+            color: "var(--ink)",
+            letterSpacing: "-.6px",
+            lineHeight: 1.2,
+          }}
+        >
+          {title}
+        </div>
       </div>
       {sub && (
         <div
           style={{
-            marginTop: 6,
-            color: "#64748b",
+            color: "var(--muted)",
             fontSize: 14,
             fontWeight: 500,
+            lineHeight: 1.6,
+            paddingLeft: 14,
           }}
         >
           {sub}
@@ -2047,19 +2206,28 @@ function SectionTitle({ title, sub }) {
 function BulletList({ items }) {
   return (
     <div style={{ display: "grid", gap: 10 }}>
-      {items.map((item, idx) => (
+      {items.map((item, i) => (
         <div
-          key={idx}
+          key={i}
           style={{
             display: "flex",
             gap: 10,
             alignItems: "flex-start",
             fontSize: 15,
-            color: "#334155",
+            color: "var(--ink2)",
             lineHeight: 1.7,
           }}
         >
-          <span style={{ color: "#0284c7", fontSize: 18 }}>•</span>
+          <span
+            style={{
+              width: 6,
+              height: 6,
+              borderRadius: "50%",
+              background: "var(--ocean)",
+              marginTop: 8,
+              flexShrink: 0,
+            }}
+          />
           <span>{item}</span>
         </div>
       ))}
@@ -2067,348 +2235,103 @@ function BulletList({ items }) {
   );
 }
 
-function HotelItineraryCard({ h, lang }) {
-  return (
-    <Card accent>
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "flex-start",
-          gap: 12,
-          flexWrap: "wrap",
-          paddingBottom: 16,
-          marginBottom: 16,
-          borderBottom: "1px dashed #cbd5e1",
-        }}
-      >
-        <div>
-          <div
-            style={{
-              display: "inline-block",
-              background: "#f97316",
-              color: "#fff",
-              padding: "6px 12px",
-              borderRadius: 10,
-              fontSize: 13,
-              fontWeight: 900,
-              marginBottom: 10,
-            }}
-          >
-            {lang === "zh" ? h.date.zh : h.date.ko}
-          </div>
-          <div
-            style={{
-              fontSize: 22,
-              fontWeight: 900,
-              color: "#0f172a",
-              letterSpacing: "-0.5px",
-            }}
-          >
-            {h.name}
-          </div>
-          <div
-            style={{
-              color: "#64748b",
-              fontSize: 14,
-              marginTop: 6,
-              fontWeight: 700,
-            }}
-          >
-            {lang === "zh" ? h.brand.zh : h.brand.ko}
-          </div>
-        </div>
-        <div style={{ textAlign: "right", flexShrink: 0 }}>
-          <div
-            style={{
-              fontSize: 18,
-              fontWeight: 900,
-              color: "#0f172a",
-              background: "#f8fafc",
-              padding: "6px 12px",
-              borderRadius: 12,
-            }}
-          >
-            {lang === "zh" ? h.price.zh : h.price.ko}
-          </div>
-        </div>
-      </div>
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))",
-          gap: 18,
-        }}
-      >
-        <InfoItem
-          icon="🏛️"
-          title={lang === "zh" ? "历史与硬件" : "역사 및 시설"}
-          text={lang === "zh" ? h.hardware.zh : h.hardware.ko}
-        />
-        <InfoItem
-          icon="🛎️"
-          title={lang === "zh" ? "服务水平" : "서비스 수준"}
-          text={lang === "zh" ? h.service.zh : h.service.ko}
-        />
-        <InfoItem
-          icon="🍳"
-          title={lang === "zh" ? "餐饮与早午餐" : "식음료 및 조식"}
-          text={lang === "zh" ? h.meals.zh : h.meals.ko}
-        />
-        <InfoItem
-          icon="🚕"
-          title={lang === "zh" ? "周边交通" : "주변 교통"}
-          text={lang === "zh" ? h.traffic.zh : h.traffic.ko}
-        />
-        <InfoItem
-          icon="🛍️"
-          title={lang === "zh" ? "周边商业" : "주변 상권"}
-          text={lang === "zh" ? h.commerce.zh : h.commerce.ko}
-        />
-        <InfoItem
-          icon="💎"
-          title={lang === "zh" ? "钛金会员权益" : "티타늄 멤버십 혜택"}
-          text={lang === "zh" ? h.benefits.zh : h.benefits.ko}
-        />
-      </div>
-    </Card>
-  );
-}
-
 function InfoItem({ icon, title, text }) {
   return (
-    <div style={{ fontSize: 14, lineHeight: 1.6 }}>
+    <div
+      style={{
+        background: "var(--bg)",
+        borderRadius: "var(--r-md)",
+        padding: "14px 16px",
+        border: "1px solid var(--bdr-s)",
+      }}
+    >
       <div
         style={{
-          fontWeight: 800,
-          color: "#0f172a",
-          marginBottom: 8,
           display: "flex",
           alignItems: "center",
-          gap: 6,
+          gap: 8,
+          marginBottom: 8,
+          fontWeight: 800,
+          color: "var(--ink)",
+          fontSize: 14,
         }}
       >
-        <span style={{ fontSize: 18 }}>{icon}</span> <span>{title}</span>
+        <span
+          style={{
+            width: 28,
+            height: 28,
+            borderRadius: 8,
+            background: "var(--surf)",
+            border: "1px solid var(--bdr-s)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            fontSize: 14,
+            flexShrink: 0,
+            boxShadow: "var(--sh-sm)",
+          }}
+        >
+          {icon}
+        </span>
+        <span>{title}</span>
       </div>
-      <div style={{ color: "#475569" }}>{text}</div>
+      <div style={{ fontSize: 14, color: "var(--muted)", lineHeight: 1.75 }}>
+        {text}
+      </div>
     </div>
   );
 }
 
-function FoodCard({ f, lang }) {
-  return (
-    <Card>
-      <div
-        style={{
-          display: "flex",
-          gap: 18,
-          flexWrap: "wrap",
-          alignItems: "stretch",
-        }}
-      >
-        <div
-          style={{
-            flexShrink: 0,
-            width: 140,
-            height: 140,
-            borderRadius: 18,
-            overflow: "hidden",
-            border: "1px solid #f1f5f9",
-            background: "linear-gradient(135deg, #f8fafc 0%, #eef2f7 100%)",
-            position: "relative",
-          }}
-        >
-          {f.img ? (
-            <img
-              src={f.img}
-              alt={lang === "zh" ? f.name.zh : f.name.ko}
-              style={{
-                width: "100%",
-                height: "100%",
-                objectFit: "cover",
-                transition: "transform 0.3s ease",
-              }}
-              className="img-hover"
-            />
-          ) : (
-            <div
-              style={{
-                width: "100%",
-                height: "100%",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                color: "#94a3b8",
-                fontWeight: 800,
-                fontSize: 13,
-                textAlign: "center",
-                padding: 12,
-              }}
-            >
-              {lang === "zh" ? "暂无图片" : "이미지 없음"}
-            </div>
-          )}
-        </div>
-        <div style={{ flex: 1, minWidth: 240 }}>
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "flex-start",
-              gap: 10,
-              flexWrap: "wrap",
-            }}
-          >
-            <div>
-              <div
-                style={{
-                  fontSize: 20,
-                  fontWeight: 900,
-                  color: "#0f172a",
-                  letterSpacing: "-0.5px",
-                }}
-              >
-                {lang === "zh" ? f.name.zh : f.name.ko}
-              </div>
-              <div
-                style={{
-                  marginTop: 8,
-                  display: "flex",
-                  flexWrap: "wrap",
-                  gap: 8,
-                }}
-              >
-                <span
-                  style={{
-                    display: "inline-block",
-                    padding: "5px 12px",
-                    borderRadius: 999,
-                    background: "#f1f5f9",
-                    color: "#334155",
-                    fontSize: 12,
-                    fontWeight: 800,
-                  }}
-                >
-                  {lang === "zh" ? f.category.zh : f.category.ko}
-                </span>
-                <span
-                  style={{
-                    display: "inline-block",
-                    padding: "5px 12px",
-                    borderRadius: 999,
-                    background: "#fff7ed",
-                    color: "#c2410c",
-                    fontSize: 12,
-                    fontWeight: 800,
-                  }}
-                >
-                  {lang === "zh" ? f.tag.zh : f.tag.ko}
-                </span>
-              </div>
-            </div>
-            <div
-              style={{
-                background: "#fef2f2",
-                color: "#dc2626",
-                padding: "6px 12px",
-                borderRadius: 12,
-                fontSize: 13,
-                fontWeight: 800,
-                whiteSpace: "nowrap",
-              }}
-            >
-              {lang === "zh" ? f.price.zh : f.price.ko}
-            </div>
-          </div>
-          <div
-            style={{
-              marginTop: 14,
-              fontSize: 14,
-              color: "#475569",
-              lineHeight: 1.75,
-            }}
-          >
-            {lang === "zh" ? f.desc.zh : f.desc.ko}
-          </div>
-          {f.mapLink && (
-            <a
-              href={f.mapLink}
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{
-                display: "inline-flex",
-                alignItems: "center",
-                gap: 6,
-                marginTop: 14,
-                padding: "8px 16px",
-                background: "#0f172a",
-                color: "#ffffff",
-                fontSize: 13,
-                fontWeight: 800,
-                textDecoration: "none",
-                borderRadius: 12,
-                transition: "all 0.2s cubic-bezier(0.4, 0, 0.2, 1)",
-                boxShadow: "0 4px 12px rgba(15, 23, 42, 0.15)",
-              }}
-              className="btn-hover"
-            >
-              📍 {lang === "zh" ? "Google Maps 导航" : "Google 지도 열기"}
-            </a>
-          )}
-        </div>
-      </div>
-    </Card>
-  );
-}
-
+// ═══════════════════════════════════════════════════════════════
+//  IMAGE GALLERY
+// ═══════════════════════════════════════════════════════════════
 function ImageGallery({ images }) {
-  const [activeIndex, setActiveIndex] = useState(0);
+  const [idx, setIdx] = useState(0);
 
-  const handleScroll = (e) => {
-    const scrollLeft = e.target.scrollLeft;
-    const width = e.target.clientWidth;
-    if (width > 0) {
-      const newIndex = Math.round(scrollLeft / width);
-      if (newIndex !== activeIndex) {
-        setActiveIndex(newIndex);
-      }
+  const onScroll = (e) => {
+    const w = e.target.clientWidth;
+    if (w > 0) {
+      const ni = Math.round(e.target.scrollLeft / w);
+      if (ni !== idx) setIdx(ni);
     }
   };
 
   return (
-    <div style={{ marginTop: 24, width: "100%" }}>
+    <div
+      style={{
+        marginTop: 20,
+        width: "100%",
+        borderRadius: "var(--r-xl)",
+        overflow: "hidden",
+        position: "relative",
+      }}
+    >
       <div
-        className="hide-scroll"
-        onScroll={handleScroll}
+        className="no-scroll"
+        onScroll={onScroll}
         style={{
           display: "flex",
-          width: "100%",
           overflowX: "auto",
           scrollSnapType: "x mandatory",
           WebkitOverflowScrolling: "touch",
-          borderRadius: 20,
-          backgroundColor: "#f8fafc",
-          border: "1px solid #f1f5f9",
+          background: "var(--bg)",
         }}
       >
-        {images.map((src, idx) => (
+        {images.map((src, i) => (
           <div
-            key={idx}
+            key={i}
             style={{
               flex: "0 0 100%",
               width: "100%",
               scrollSnapAlign: "center",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
             }}
           >
             <img
               src={src}
-              alt={`view-${idx}`}
+              alt={`slide-${i}`}
               style={{
                 width: "100%",
-                maxHeight: 450,
+                maxHeight: 420,
                 objectFit: "contain",
                 display: "block",
               }}
@@ -2416,23 +2339,30 @@ function ImageGallery({ images }) {
           </div>
         ))}
       </div>
+      {/* Dots */}
       <div
         style={{
+          position: "absolute",
+          bottom: 12,
+          left: "50%",
+          transform: "translateX(-50%)",
           display: "flex",
-          justifyContent: "center",
-          gap: 8,
-          marginTop: 14,
+          gap: 6,
+          padding: "6px 12px",
+          background: "rgba(0,0,0,.35)",
+          borderRadius: "var(--r-pill)",
+          backdropFilter: "blur(8px)",
         }}
       >
-        {images.map((_, idx) => (
+        {images.map((_, i) => (
           <div
-            key={idx}
+            key={i}
             style={{
-              width: activeIndex === idx ? 20 : 8,
-              height: 8,
-              borderRadius: 4,
-              backgroundColor: activeIndex === idx ? "#0e2d4d" : "#e2e8f0",
-              transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+              width: i === idx ? 18 : 6,
+              height: 6,
+              borderRadius: 3,
+              background: i === idx ? "#fff" : "rgba(255,255,255,.5)",
+              transition: "all .3s cubic-bezier(.34,1.56,.64,1)",
             }}
           />
         ))}
@@ -2441,32 +2371,561 @@ function ImageGallery({ images }) {
   );
 }
 
+// ═══════════════════════════════════════════════════════════════
+//  ATTRACTION CARD
+// ═══════════════════════════════════════════════════════════════
+function AttractionCard({ s, lang }) {
+  return (
+    <div
+      className="card-hover"
+      style={{
+        background: "var(--surf)",
+        borderRadius: "var(--r-xl)",
+        boxShadow: "var(--sh-sm)",
+        border: "1px solid var(--bdr-s)",
+        overflow: "hidden",
+      }}
+    >
+      {/* Image */}
+      <div className="img-wrap" style={{ width: "100%", height: 200 }}>
+        {s.img ? (
+          <img
+            src={s.img}
+            alt={s.en}
+            style={{ width: "100%", height: "100%", objectFit: "cover" }}
+          />
+        ) : (
+          <div
+            style={{
+              width: "100%",
+              height: "100%",
+              background: "var(--bg)",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              color: "var(--subtle)",
+              fontSize: 13,
+            }}
+          >
+            No Image
+          </div>
+        )}
+      </div>
+
+      <div style={{ padding: "18px 20px" }}>
+        {/* Name row */}
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "flex-start",
+            gap: 8,
+            marginBottom: 8,
+          }}
+        >
+          <div>
+            <div
+              style={{
+                fontWeight: 900,
+                fontSize: 17,
+                color: "var(--ink)",
+                letterSpacing: "-.4px",
+                lineHeight: 1.3,
+              }}
+            >
+              {lang === "zh" ? s.name.zh : s.name.ko}
+            </div>
+            <div
+              style={{
+                color: "var(--subtle)",
+                fontSize: 12,
+                marginTop: 3,
+                fontWeight: 500,
+              }}
+            >
+              {s.en}
+            </div>
+          </div>
+        </div>
+
+        {/* Meta chips */}
+        <div
+          style={{
+            display: "flex",
+            gap: 8,
+            flexWrap: "wrap",
+            marginBottom: 12,
+          }}
+        >
+          {[
+            { icon: "📍", val: lang === "zh" ? s.where.zh : s.where.ko },
+            { icon: "⏱", val: lang === "zh" ? s.time.zh : s.time.ko },
+            { icon: "💰", val: lang === "zh" ? s.price.zh : s.price.ko },
+          ].map(({ icon, val }) => (
+            <span
+              key={icon}
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: 5,
+                background: "var(--bg)",
+                color: "var(--ink2)",
+                fontSize: 12,
+                fontWeight: 600,
+                padding: "5px 10px",
+                borderRadius: "var(--r-pill)",
+                border: "1px solid var(--bdr-s)",
+              }}
+            >
+              {icon} {val}
+            </span>
+          ))}
+        </div>
+
+        {/* Note (直接展示全部文字，不再折叠) */}
+        <div
+          style={{
+            background: "linear-gradient(135deg, #F0FDFA, #EFF6FF)",
+            borderRadius: "var(--r-md)",
+            padding: "12px 14px",
+            border: "1px solid rgba(14,116,144,.12)",
+          }}
+        >
+          <div style={{ fontSize: 13, color: "var(--ink2)", lineHeight: 1.8 }}>
+            {lang === "zh" ? s.note.zh : s.note.ko}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ═══════════════════════════════════════════════════════════════
+//  HOTEL ITINERARY CARD
+// ═══════════════════════════════════════════════════════════════
+function HotelItineraryCard({ h, lang }) {
+  const [open, setOpen] = useState(false);
+  return (
+    <div
+      className="card-hover"
+      style={{
+        background: "var(--surf)",
+        borderRadius: "var(--r-xl)",
+        boxShadow: "var(--sh-sm)",
+        border: "1.5px solid rgba(14,116,144,.15)",
+        overflow: "hidden",
+      }}
+    >
+      {/* Top gradient bar */}
+      <div
+        style={{
+          height: 4,
+          background:
+            "linear-gradient(90deg, var(--ocean), var(--teal), var(--gold))",
+        }}
+      />
+
+      {/* Header (always visible) */}
+      <div
+        onClick={() => setOpen(!open)}
+        style={{
+          padding: "20px 24px",
+          cursor: "pointer",
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "flex-start",
+          gap: 12,
+          flexWrap: "wrap",
+        }}
+      >
+        <div style={{ flex: 1, minWidth: 0 }}>
+          <div
+            style={{
+              display: "inline-block",
+              background: "var(--coral)",
+              color: "#fff",
+              padding: "4px 12px",
+              borderRadius: "var(--r-pill)",
+              fontSize: 12,
+              fontWeight: 800,
+              marginBottom: 10,
+              boxShadow: "0 2px 8px rgba(249,115,22,.3)",
+            }}
+          >
+            {lang === "zh" ? h.date.zh : h.date.ko}
+          </div>
+          <div
+            style={{
+              fontWeight: 900,
+              fontSize: 20,
+              color: "var(--ink)",
+              letterSpacing: "-.5px",
+              lineHeight: 1.3,
+              marginBottom: 6,
+            }}
+          >
+            {h.name}
+          </div>
+          <div style={{ color: "var(--muted)", fontSize: 13, fontWeight: 600 }}>
+            {lang === "zh" ? h.brand.zh : h.brand.ko}
+          </div>
+        </div>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "flex-end",
+            gap: 8,
+            flexShrink: 0,
+          }}
+        >
+          <div
+            style={{
+              background: "var(--teal50)",
+              color: "var(--teal)",
+              padding: "6px 14px",
+              borderRadius: "var(--r-pill)",
+              fontSize: 13,
+              fontWeight: 800,
+              border: "1px solid var(--teal100)",
+              whiteSpace: "nowrap",
+            }}
+          >
+            {lang === "zh" ? h.price.zh : h.price.ko}
+          </div>
+          <div
+            style={{
+              width: 32,
+              height: 32,
+              borderRadius: 10,
+              background: "var(--bg)",
+              border: "1px solid var(--bdr-s)",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              fontSize: 14,
+              transition: "transform .3s",
+              transform: open ? "rotate(180deg)" : "none",
+            }}
+          >
+            ▼
+          </div>
+        </div>
+      </div>
+
+      {/* Body (accordion) */}
+      <div
+        style={{
+          maxHeight: open ? 1200 : 0,
+          overflow: "hidden",
+          transition: "max-height .5s cubic-bezier(.16,1,.3,1)",
+        }}
+      >
+        <div
+          style={{
+            padding: "0 24px 24px",
+            borderTop: "1px solid var(--bdr-s)",
+            paddingTop: 20,
+          }}
+        >
+          <div
+            className="hotel-grid"
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))",
+              gap: 12,
+            }}
+          >
+            {[
+              {
+                icon: "🏛️",
+                zh: "历史与硬件",
+                ko: "역사 및 시설",
+                key: "hardware",
+              },
+              { icon: "🛎️", zh: "服务水平", ko: "서비스 수준", key: "service" },
+              {
+                icon: "🍳",
+                zh: "餐饮与早午餐",
+                ko: "식음료 및 조식",
+                key: "meals",
+              },
+              { icon: "🚕", zh: "周边交通", ko: "주변 교통", key: "traffic" },
+              { icon: "🛍️", zh: "周边商业", ko: "주변 상권", key: "commerce" },
+              {
+                icon: "💎",
+                zh: "钛金会员权益",
+                ko: "티타늄 멤버십 혜택",
+                key: "benefits",
+              },
+            ].map(({ icon, zh, ko, key }) => (
+              <InfoItem
+                key={key}
+                icon={icon}
+                title={lang === "zh" ? zh : ko}
+                text={lang === "zh" ? h[key].zh : h[key].ko}
+              />
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ═══════════════════════════════════════════════════════════════
+//  FOOD CARD
+// ═══════════════════════════════════════════════════════════════
+function FoodCard({ f, lang }) {
+  const name = lang === "zh" ? f.name.zh : f.name.ko;
+  const cat = lang === "zh" ? f.category.zh : f.category.ko;
+  const tag = lang === "zh" ? f.tag.zh : f.tag.ko;
+  const price = lang === "zh" ? f.price.zh : f.price.ko;
+  const desc = lang === "zh" ? f.desc.zh : f.desc.ko;
+  const menu = lang === "zh" ? f.menu.zh : f.menu.ko;
+
+  return (
+    <div
+      className="card-hover"
+      style={{
+        background: "var(--surf)",
+        borderRadius: "var(--r-xl)",
+        boxShadow: "var(--sh-sm)",
+        border: "1px solid var(--bdr-s)",
+        overflow: "hidden",
+      }}
+    >
+      <div
+        className="food-layout"
+        style={{ display: "flex", alignItems: "stretch" }}
+      >
+        {/* Image */}
+        <div
+          className="img-wrap food-img"
+          style={{
+            flexShrink: 0,
+            width: 240, // 👉 这里从 160 改成了 240，让图片变宽
+            height: "auto",
+            minHeight: 180, // 👉 稍微增加了一点最小高度，保持比例协调
+            background: "var(--bg)",
+          }}
+        >
+          {f.img ? (
+            <img
+              src={f.img}
+              alt={name}
+              style={{
+                width: "100%",
+                height: "100%",
+                minHeight: 180, // 👉 这里也同步改成 180
+                objectFit: "cover",
+              }}
+            />
+          ) : (
+            <div
+              style={{
+                width: "100%",
+                height: 180,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                color: "var(--subtle)",
+                fontSize: 13,
+              }}
+            >
+              No Image
+            </div>
+          )}
+        </div>
+
+        {/* Info */}
+        <div
+          className="food-body"
+          style={{ flex: 1, minWidth: 240, padding: "18px 20px" }}
+        >
+          {/* Name + price */}
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              gap: 8,
+              flexWrap: "wrap",
+              marginBottom: 10,
+            }}
+          >
+            <div>
+              <div
+                style={{
+                  fontWeight: 900,
+                  fontSize: 18,
+                  color: "var(--ink)",
+                  letterSpacing: "-.4px",
+                  lineHeight: 1.3,
+                }}
+              >
+                {name}
+              </div>
+              <div
+                style={{
+                  display: "flex",
+                  flexWrap: "wrap",
+                  gap: 6,
+                  marginTop: 8,
+                }}
+              >
+                <span
+                  style={{
+                    background: "var(--teal50)",
+                    color: "var(--teal)",
+                    padding: "3px 10px",
+                    borderRadius: "var(--r-pill)",
+                    fontSize: 12,
+                    fontWeight: 700,
+                    border: "1px solid var(--teal100)",
+                  }}
+                >
+                  {cat}
+                </span>
+                <span
+                  style={{
+                    background: "#FFF7ED",
+                    color: "#C2410C",
+                    padding: "3px 10px",
+                    borderRadius: "var(--r-pill)",
+                    fontSize: 12,
+                    fontWeight: 700,
+                    border: "1px solid #FED7AA",
+                  }}
+                >
+                  {tag}
+                </span>
+              </div>
+            </div>
+            <div
+              style={{
+                background: "#FEF2F2",
+                color: "var(--red)",
+                padding: "6px 12px",
+                borderRadius: "var(--r-md)",
+                fontSize: 13,
+                fontWeight: 800,
+                whiteSpace: "nowrap",
+                alignSelf: "flex-start",
+                border: "1px solid #FECACA",
+              }}
+            >
+              {price}
+            </div>
+          </div>
+
+          <div
+            style={{
+              fontSize: 14,
+              color: "var(--muted)",
+              lineHeight: 1.8,
+              marginBottom: 12,
+            }}
+          >
+            {desc}
+          </div>
+
+          {/* Menu chips */}
+          {menu && menu.length > 0 && (
+            <div
+              style={{
+                display: "flex",
+                gap: 6,
+                flexWrap: "wrap",
+                marginBottom: 14,
+              }}
+            >
+              {menu.map((item) => (
+                <span
+                  key={item}
+                  style={{
+                    background: "var(--bg)",
+                    color: "var(--ink2)",
+                    fontSize: 12,
+                    fontWeight: 600,
+                    padding: "4px 10px",
+                    borderRadius: "var(--r-pill)",
+                    border: "1px solid var(--bdr-s)",
+                  }}
+                >
+                  {item}
+                </span>
+              ))}
+            </div>
+          )}
+
+          {f.mapLink && (
+            <a
+              href={f.mapLink}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn"
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: 6,
+                padding: "9px 16px",
+                background:
+                  "linear-gradient(135deg, var(--deep), var(--ocean))",
+                color: "#fff",
+                fontSize: 13,
+                fontWeight: 700,
+                textDecoration: "none",
+                borderRadius: "var(--r-md)",
+                boxShadow: "0 4px 12px rgba(12,45,78,.2)",
+              }}
+            >
+              📍 {lang === "zh" ? "Google Maps 导航" : "Google 지도 열기"}
+            </a>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ═══════════════════════════════════════════════════════════════
+//  ITINERARY DAY CARD
+// ═══════════════════════════════════════════════════════════════
 function ItineraryDayCard({ d, lang }) {
-  const [altChoices, setAltChoices] = useState({});
+  const [choices, setChoices] = useState({});
   const isZh = lang === "zh";
   const g = (obj) => (obj ? (isZh ? obj.zh : obj.ko) : "");
 
-  const periodMeta = {
+  const PM = {
     morning: {
-      border: "#fb923c",
-      bg: "#fff7ed",
+      cls: "pm-morning",
+      dot: "pm-morning-dot",
+      badge: "pm-morning-badge",
       label: isZh ? "上午" : "오전",
     },
     afternoon: {
-      border: "#3b82f6",
-      bg: "#eff6ff",
+      cls: "pm-afternoon",
+      dot: "pm-afternoon-dot",
+      badge: "pm-afternoon-badge",
       label: isZh ? "下午" : "오후",
     },
     evening: {
-      border: "#a855f7",
-      bg: "#fdf4ff",
+      cls: "pm-evening",
+      dot: "pm-evening-dot",
+      badge: "pm-evening-badge",
       label: isZh ? "晚间" : "저녁",
     },
-    night: { border: "#22c55e", bg: "#f0fdf4", label: isZh ? "夜间" : "야간" },
+    night: {
+      cls: "pm-night",
+      dot: "pm-night-dot",
+      badge: "pm-night-badge",
+      label: isZh ? "夜间" : "야간",
+    },
   };
 
   return (
     <Card accent>
+      {/* Day header */}
       <div
         style={{
           display: "flex",
@@ -2476,14 +2935,14 @@ function ItineraryDayCard({ d, lang }) {
           flexWrap: "wrap",
           paddingBottom: 16,
           marginBottom: 20,
-          borderBottom: "1px dashed #cbd5e1",
+          borderBottom: "1px solid var(--bdr-s)",
         }}
       >
         <div>
           <div
             style={{
               display: "flex",
-              gap: 10,
+              gap: 8,
               alignItems: "center",
               flexWrap: "wrap",
               marginBottom: 10,
@@ -2491,24 +2950,26 @@ function ItineraryDayCard({ d, lang }) {
           >
             <span
               style={{
-                background: "#f97316",
+                background: "linear-gradient(135deg, var(--coral), #EA580C)",
                 color: "#fff",
-                padding: "4px 14px",
-                borderRadius: 10,
+                padding: "5px 14px",
+                borderRadius: "var(--r-pill)",
                 fontSize: 14,
                 fontWeight: 900,
+                boxShadow: "0 2px 8px rgba(249,115,22,.3)",
               }}
             >
               {d.date}
             </span>
             <span
               style={{
-                background: "#f1f5f9",
-                color: "#475569",
-                padding: "4px 12px",
-                borderRadius: 10,
+                background: "var(--bg)",
+                color: "var(--ink2)",
+                padding: "5px 12px",
+                borderRadius: "var(--r-pill)",
                 fontSize: 13,
                 fontWeight: 700,
+                border: "1px solid var(--bdr-s)",
               }}
             >
               {g(d.mood)}
@@ -2516,11 +2977,11 @@ function ItineraryDayCard({ d, lang }) {
           </div>
           <div
             style={{
-              fontSize: 20,
               fontWeight: 900,
-              color: "#0f172a",
+              fontSize: 19,
+              color: "var(--ink)",
+              letterSpacing: "-.5px",
               lineHeight: 1.4,
-              letterSpacing: "-0.5px",
             }}
           >
             {g(d.title)}
@@ -2528,225 +2989,301 @@ function ItineraryDayCard({ d, lang }) {
         </div>
         <div
           style={{
-            fontSize: 13,
-            color: "#0f172a",
-            fontWeight: 700,
-            textAlign: "right",
-            maxWidth: 260,
-            lineHeight: 1.5,
-            background: "#f8fafc",
-            padding: "8px 12px",
-            borderRadius: 12,
+            display: "flex",
+            alignItems: "center",
+            gap: 8,
+            background: "var(--teal50)",
+            padding: "8px 14px",
+            borderRadius: "var(--r-md)",
+            border: "1px solid var(--teal100)",
+            maxWidth: 280,
           }}
         >
-          🏨 {typeof d.hotel === "string" ? d.hotel : g(d.hotel)}
+          <span>🏨</span>
+          <span
+            style={{
+              fontSize: 13,
+              color: "var(--teal)",
+              fontWeight: 700,
+              lineHeight: 1.5,
+            }}
+          >
+            {typeof d.hotel === "string" ? d.hotel : g(d.hotel)}
+          </span>
         </div>
       </div>
 
-      <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
-        {d.slots.map((slot, slotIdx) => {
-          const pm = periodMeta[slot.period] || periodMeta.morning;
+      {/* Slots timeline */}
+      <div style={{ paddingLeft: 4 }}>
+        {d.slots.map((slot, si) => {
+          const pm = PM[slot.period] || PM.morning;
           const hasAlt = Array.isArray(slot.options) && slot.options.length > 0;
-          const chosen = altChoices[slotIdx] ?? 0;
+          const chosen = choices[si] ?? 0;
           const active = hasAlt ? slot.options[chosen] : slot;
 
           return (
             <div
-              key={slotIdx}
+              key={si}
               style={{
-                borderLeft: `4px solid ${pm.border}`,
-                paddingLeft: 18,
-                position: "relative",
+                display: "flex",
+                gap: 16,
+                marginBottom: si < d.slots.length - 1 ? 24 : 0,
               }}
             >
-              <div
-                style={{
-                  position: "absolute",
-                  left: -6,
-                  top: 2,
-                  width: 8,
-                  height: 8,
-                  borderRadius: "50%",
-                  background: pm.border,
-                }}
-              />
-
+              {/* Timeline left */}
               <div
                 style={{
                   display: "flex",
-                  gap: 10,
+                  flexDirection: "column",
                   alignItems: "center",
-                  marginBottom: 10,
-                  flexWrap: "wrap",
+                  width: 16,
+                  flexShrink: 0,
                 }}
               >
-                <span
-                  style={{ fontWeight: 800, fontSize: 13, color: "#64748b" }}
-                >
-                  {typeof slot.time === "string" ? slot.time : g(slot.time)}
-                </span>
-                <span
+                <div
+                  className={pm.dot}
                   style={{
-                    background: pm.bg,
-                    color: pm.border,
-                    padding: "2px 10px",
-                    borderRadius: 99,
-                    fontSize: 12,
-                    fontWeight: 800,
+                    width: 12,
+                    height: 12,
+                    borderRadius: "50%",
+                    flexShrink: 0,
+                    boxShadow:
+                      "0 0 0 3px rgba(255,255,255,.9), 0 0 0 5px currentColor",
+                    marginTop: 2,
                   }}
-                >
-                  {pm.label}
-                </span>
+                />
+                {si < d.slots.length - 1 && (
+                  <div
+                    style={{
+                      flex: 1,
+                      width: 2,
+                      background: "var(--bdr-s)",
+                      marginTop: 8,
+                      minHeight: 20,
+                    }}
+                  />
+                )}
               </div>
 
-              {hasAlt && (
-                <div style={{ marginBottom: 12 }}>
-                  {slot.altLabel && (
-                    <div
+              {/* Content */}
+              <div
+                style={{
+                  flex: 1,
+                  paddingBottom: si < d.slots.length - 1 ? 4 : 0,
+                }}
+              >
+                {/* Time + period */}
+                <div
+                  style={{
+                    display: "flex",
+                    gap: 8,
+                    alignItems: "center",
+                    flexWrap: "wrap",
+                    marginBottom: 10,
+                  }}
+                >
+                  <span
+                    style={{
+                      fontWeight: 800,
+                      fontSize: 13,
+                      color: "var(--muted)",
+                      letterSpacing: "-.2px",
+                    }}
+                  >
+                    {typeof slot.time === "string" ? slot.time : g(slot.time)}
+                  </span>
+                  <span
+                    className={pm.badge}
+                    style={{
+                      padding: "2px 10px",
+                      borderRadius: "var(--r-pill)",
+                      fontSize: 12,
+                      fontWeight: 800,
+                    }}
+                  >
+                    {pm.label}
+                  </span>
+                </div>
+
+                {/* Alt options */}
+                {hasAlt && (
+                  <div style={{ marginBottom: 12 }}>
+                    {slot.altLabel && (
+                      <div
+                        style={{
+                          fontSize: 13,
+                          color: "var(--muted)",
+                          fontWeight: 700,
+                          marginBottom: 8,
+                        }}
+                      >
+                        {g(slot.altLabel)}
+                      </div>
+                    )}
+                    <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+                      {slot.options.map((opt, i) => (
+                        <button
+                          key={i}
+                          onClick={() => setChoices((p) => ({ ...p, [si]: i }))}
+                          className="btn"
+                          style={{
+                            padding: "6px 16px",
+                            borderRadius: "var(--r-pill)",
+                            cursor: "pointer",
+                            border:
+                              chosen === i
+                                ? "2px solid var(--deep)"
+                                : "2px solid var(--bdr-s)",
+                            background:
+                              chosen === i ? "var(--deep)" : "var(--surf)",
+                            color: chosen === i ? "#fff" : "var(--muted)",
+                            fontSize: 13,
+                            fontWeight: 700,
+                            fontFamily: "var(--font)",
+                          }}
+                        >
+                          {g(opt.tag)}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Slot box */}
+                <div
+                  style={{
+                    background: "var(--bg)",
+                    borderRadius: "var(--r-lg)",
+                    border: "1px solid var(--bdr-s)",
+                    padding: "14px 16px",
+                  }}
+                >
+                  {/* Title */}
+                  <div
+                    style={{
+                      display: "flex",
+                      gap: 10,
+                      alignItems: "flex-start",
+                      marginBottom: 10,
+                    }}
+                  >
+                    <span style={{ fontSize: 20, flexShrink: 0, marginTop: 1 }}>
+                      {active.icon ?? slot.icon}
+                    </span>
+                    <span
                       style={{
-                        fontSize: 13,
-                        color: "#64748b",
-                        fontWeight: 700,
-                        marginBottom: 8,
+                        fontWeight: 900,
+                        fontSize: 16,
+                        color: "var(--ink)",
+                        lineHeight: 1.4,
+                        letterSpacing: "-.3px",
                       }}
                     >
-                      {g(slot.altLabel)}
+                      {g(active.title ?? slot.title)}
+                    </span>
+                  </div>
+
+                  {(active.desc ?? slot.desc) && (
+                    <div
+                      style={{
+                        fontSize: 14,
+                        color: "var(--muted)",
+                        lineHeight: 1.8,
+                        marginBottom: 10,
+                      }}
+                    >
+                      {g(active.desc ?? slot.desc)}
                     </div>
                   )}
-                  <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
-                    {slot.options.map((opt, i) => (
-                      <button
-                        key={i}
-                        onClick={() =>
-                          setAltChoices((prev) => ({ ...prev, [slotIdx]: i }))
-                        }
-                        style={{
-                          padding: "6px 14px",
-                          borderRadius: 999,
-                          border:
-                            chosen === i
-                              ? "2px solid #0e2d4d"
-                              : "2px solid #e2e8f0",
-                          background: chosen === i ? "#0e2d4d" : "#f8fafc",
-                          color: chosen === i ? "#fff" : "#64748b",
-                          fontSize: 13,
-                          fontWeight: 800,
-                          cursor: "pointer",
-                          transition: "all .2s cubic-bezier(0.4, 0, 0.2, 1)",
-                        }}
-                      >
-                        {g(opt.tag)}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              )}
 
-              <div
-                style={{
-                  display: "flex",
-                  gap: 10,
-                  alignItems: "center",
-                  marginBottom: 8,
-                }}
-              >
-                <span style={{ fontSize: 20 }}>{active.icon ?? slot.icon}</span>
-                <span
-                  style={{ fontWeight: 900, fontSize: 16, color: "#0f172a" }}
-                >
-                  {g(active.title ?? slot.title)}
-                </span>
-              </div>
+                  {/* Venues */}
+                  {active.venues?.length > 0 && (
+                    <div style={{ display: "grid", gap: 8, marginTop: 10 }}>
+                      {active.venues.map((v, vi) => (
+                        <div
+                          key={vi}
+                          style={{
+                            background: "var(--surf)",
+                            border: "1px solid var(--bdr-s)",
+                            borderRadius: "var(--r-md)",
+                            padding: "12px 14px",
+                          }}
+                        >
+                          <div
+                            style={{
+                              display: "flex",
+                              justifyContent: "space-between",
+                              gap: 8,
+                              flexWrap: "wrap",
+                              marginBottom: 6,
+                            }}
+                          >
+                            <span
+                              style={{
+                                fontWeight: 900,
+                                fontSize: 14,
+                                color: "var(--ink)",
+                              }}
+                            >
+                              📍{" "}
+                              {typeof v.name === "string" ? v.name : g(v.name)}
+                            </span>
+                            {v.rating && (
+                              <span style={{ fontSize: 13 }}>{v.rating}</span>
+                            )}
+                          </div>
+                          <div
+                            style={{
+                              fontSize: 13,
+                              color: "var(--muted)",
+                              lineHeight: 1.7,
+                            }}
+                          >
+                            <div style={{ marginBottom: 3 }}>
+                              🗺️ {g(v.address)}
+                            </div>
+                            <div>💰 {g(v.price)}</div>
+                          </div>
+                          {v.tip && (
+                            <div
+                              style={{
+                                marginTop: 8,
+                                fontSize: 12,
+                                color: "#92400E",
+                                background: "#FFFBEB",
+                                padding: "6px 10px",
+                                borderRadius: "var(--r-sm)",
+                                lineHeight: 1.6,
+                                border: "1px solid #FDE68A",
+                              }}
+                            >
+                              💡 {g(v.tip)}
+                            </div>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  )}
 
-              {(active.desc ?? slot.desc) && (
-                <div
-                  style={{ fontSize: 15, lineHeight: 1.75, color: "#475569" }}
-                >
-                  {g(active.desc ?? slot.desc)}
-                </div>
-              )}
-
-              {active.venues && active.venues.length > 0 && (
-                <div style={{ marginTop: 12, display: "grid", gap: 10 }}>
-                  {active.venues.map((v, vi) => (
+                  {/* Tip */}
+                  {slot.tip && (
                     <div
-                      key={vi}
                       style={{
-                        background: "#f8fafc",
-                        border: "1px solid #e2e8f0",
-                        borderRadius: 16,
-                        padding: "12px 16px",
+                        marginTop: 10,
+                        fontSize: 13,
+                        color: "#065F46",
+                        background: "linear-gradient(135deg,#ECFDF5,#D1FAE5)",
+                        padding: "10px 14px",
+                        borderRadius: "var(--r-md)",
+                        lineHeight: 1.7,
+                        border: "1px solid #A7F3D0",
                       }}
                     >
-                      <div
-                        style={{
-                          display: "flex",
-                          justifyContent: "space-between",
-                          gap: 8,
-                          flexWrap: "wrap",
-                          marginBottom: 6,
-                        }}
-                      >
-                        <span
-                          style={{
-                            fontWeight: 900,
-                            fontSize: 15,
-                            color: "#0f172a",
-                          }}
-                        >
-                          📍 {typeof v.name === "string" ? v.name : g(v.name)}
-                        </span>
-                        {v.rating && (
-                          <span style={{ fontSize: 13, whiteSpace: "nowrap" }}>
-                            {v.rating}
-                          </span>
-                        )}
-                      </div>
-                      <div
-                        style={{
-                          fontSize: 14,
-                          color: "#475569",
-                          lineHeight: 1.7,
-                        }}
-                      >
-                        <div style={{ marginBottom: 4 }}>🗺️ {g(v.address)}</div>
-                        <div>💰 {g(v.price)}</div>
-                      </div>
-                      {v.tip && (
-                        <div
-                          style={{
-                            marginTop: 8,
-                            fontSize: 13,
-                            color: "#92400e",
-                            background: "#fffbeb",
-                            padding: "6px 12px",
-                            borderRadius: 8,
-                            lineHeight: 1.6,
-                          }}
-                        >
-                          💡 {g(v.tip)}
-                        </div>
-                      )}
+                      {g(slot.tip)}
                     </div>
-                  ))}
+                  )}
                 </div>
-              )}
-
-              {slot.tip && (
-                <div
-                  style={{
-                    marginTop: 10,
-                    fontSize: 14,
-                    color: "#065f46",
-                    background: "#ecfdf5",
-                    padding: "8px 14px",
-                    borderRadius: 12,
-                    lineHeight: 1.65,
-                  }}
-                >
-                  {g(slot.tip)}
-                </div>
-              )}
+              </div>
             </div>
           );
         })}
@@ -2755,180 +3292,387 @@ function ItineraryDayCard({ d, lang }) {
   );
 }
 
+// ═══════════════════════════════════════════════════════════════
+//  TIPS CARD
+// ═══════════════════════════════════════════════════════════════
+function TipsCard({ icon, title, items }) {
+  return (
+    <Card>
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          gap: 12,
+          marginBottom: 16,
+        }}
+      >
+        <div
+          style={{
+            width: 40,
+            height: 40,
+            borderRadius: 12,
+            flexShrink: 0,
+            background:
+              "linear-gradient(135deg, var(--teal50), var(--teal100))",
+            border: "1px solid var(--teal100)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            fontSize: 20,
+          }}
+        >
+          {icon}
+        </div>
+        <div
+          style={{
+            fontWeight: 900,
+            color: "var(--ink)",
+            fontSize: 16,
+            letterSpacing: "-.3px",
+          }}
+        >
+          {title}
+        </div>
+      </div>
+      <BulletList items={items} />
+    </Card>
+  );
+}
+
+// ═══════════════════════════════════════════════════════════════
+//  MAIN APP
+// ═══════════════════════════════════════════════════════════════
 export default function App() {
   const [lang, setLang] = useState("zh");
   const [activeTab, setActiveTab] = useState(0);
+  const tabRef = useRef(null);
 
+  const TAB_KEYS = ["overview", "spots", "hotels", "food", "itinerary", "tips"];
+
+  // Scroll spy
   useEffect(() => {
-    const handleScrollSpy = () => {
-      const tabKeys = [
-        "overview",
-        "spots",
-        "hotels",
-        "food",
-        "itinerary",
-        "tips",
-      ];
-      let currentActive = 0;
-      for (let i = 0; i < tabKeys.length; i++) {
-        const el = document.getElementById(`section-${tabKeys[i]}`);
-        if (el) {
-          const rect = el.getBoundingClientRect();
-          if (rect.top <= 85) {
-            currentActive = i;
-          }
-        }
-      }
-      setActiveTab(currentActive);
+    const spy = () => {
+      let current = 0;
+      TAB_KEYS.forEach((k, i) => {
+        const el = document.getElementById(`section-${k}`);
+        if (el && el.getBoundingClientRect().top <= 90) current = i;
+      });
+      setActiveTab(current);
     };
-    window.addEventListener("scroll", handleScrollSpy);
-    return () => window.removeEventListener("scroll", handleScrollSpy);
+    window.addEventListener("scroll", spy, { passive: true });
+    return () => window.removeEventListener("scroll", spy);
   }, []);
 
-  const c = localeCopy[lang];
-  const tabKeys = ["overview", "spots", "hotels", "food", "itinerary", "tips"];
+  // Auto-scroll active tab into view on mobile
+  useEffect(() => {
+    const btn = tabRef.current?.querySelector(`[data-tab="${activeTab}"]`);
+    if (btn)
+      btn.scrollIntoView({
+        behavior: "smooth",
+        block: "nearest",
+        inline: "center",
+      });
+  }, [activeTab]);
 
-  const scrollToSection = (idx) => {
-    setActiveTab(idx);
-    const el = document.getElementById(`section-${tabKeys[idx]}`);
+  const c = localeCopy[lang];
+
+  const scrollTo = (i) => {
+    setActiveTab(i);
+    const el = document.getElementById(`section-${TAB_KEYS[i]}`);
     if (el) {
-      const y = el.getBoundingClientRect().top + window.scrollY - 70;
-      window.scrollTo({ top: y, behavior: "smooth" });
+      window.scrollTo({
+        top: el.getBoundingClientRect().top + window.scrollY - 72,
+        behavior: "smooth",
+      });
     }
   };
+
+  const tipsData = [
+    {
+      icon: "🛂",
+      zh: "签证与行程规划",
+      ko: "비자 및 여행 준비",
+      itemsZh: [
+        "护照有效期至少 6 个月。签证政策请以出发前官方最新信息为准。",
+        "务必提前订好酒店，经济实惠且干净的酒店长期处于满房状态。",
+        "按照景点的时间预约进入，提前或延迟都可能被拒之门外，千万别错过。",
+        "把酒店订单、返程票、保险等证件，放在手机和纸质备份里。",
+      ],
+      itemsKo: [
+        "여권 유효기간은 최소 6개월 이상이어야 하며, 비자 정책은 최신 공식 정보를 확인하세요.",
+        "호텔은 무조건 미리 예약하세요. 가성비 좋고 깔끔한 곳은 항상 만실입니다.",
+        "관광지 예약 시간은 엄수해야 합니다. 너무 일찍 가거나 지각하면 입장이 불가할 수 있습니다.",
+        "호텔 예약, 귀국 항공권, 보험 서류는 휴대폰과 종이 모두 보관하세요.",
+      ],
+    },
+    {
+      icon: "💰",
+      zh: "现金、交通与套路",
+      ko: "현금, 교통 및 바가지 피하기",
+      itemsZh: [
+        "一定要带现金！很多小店不可刷卡且不收美金。机场 ATM 刷 VISA 取款最方便汇率也公道，绝不要找私人换钱防被骗。",
+        "市区赶时间优选 Grab 摩托车。高峰期极其堵车，打车或公交会浪费大量时间。",
+        "在越南骑乘摩托车【必须】戴好安全帽，否则警察会直接罚款。",
+        "街边的各种热情搭讪轻易不要理会，绝大多数都是付费服务或套路陷阱。",
+      ],
+      itemsKo: [
+        "현금 지참 필수! 작은 가게는 카드나 달러를 받지 않습니다. 공항 ATM(VISA) 출금이 가장 안전하며, 사설 환전소는 피하세요.",
+        "시내에서 급할 땐 Grab 오토바이가 최고입니다. 출퇴근 시간에는 차가 매우 막혀 택시/버스는 비효율적입니다.",
+        "오토바이를 탈 때는 반드시 헬멧을 착용하세요. 미착용 시 경찰에게 벌금을 냅니다.",
+        "길거리의 과도한 호객 행위는 무시하세요. 대부분 유료 서비스나 바가지입니다.",
+      ],
+    },
+    {
+      icon: "🍍",
+      zh: "饮食与点单防坑",
+      ko: "식음료 및 레스토랑 주의사항",
+      itemsZh: [
+        "酒店绝对不允许带榴莲进入！违规会被高额罚款，买完必须在外面吃掉。",
+        "不要在 Grab 上买鲜切水果，又贵又不好吃；没见过颜色的艳丽水果也不要轻易尝试。",
+        "一定要随身携带纸巾，绝大多数餐厅是不提供免费纸巾的。",
+        "网红餐厅都需要排队，请合理安排时间。越南辣椒辣度极高，千万不要大口吃辣椒！",
+        "看不懂菜单不要随便乱点，最稳妥的做法是看别人吃什么，指着要一份一样的。",
+      ],
+      itemsKo: [
+        "호텔 내 두리안 반입 절대 금지! 적발 시 큰 벌금이 부과되므로 밖에서 다 드세요.",
+        "Grab에서 컷팅 과일을 배달시키지 마세요 (비싸고 덜 익음). 화려한 색의 낯선 과일도 주의하세요.",
+        "무료 휴지가 없는 식당이 많으니 개인 티슈를 꼭 챙기세요.",
+        "유명 맛집은 항상 대기가 있습니다. 또한, 베트남 고추는 상상 이상으로 매우니 조금만 드세요!",
+        "메뉴를 모를 땐 다른 테이블의 음식을 가리켜 같은 걸로 주문하는 것이 가장 안전합니다.",
+      ],
+    },
+    {
+      icon: "🏖️",
+      zh: "游玩项目与购物",
+      ko: "관광 액티비티 및 쇼핑",
+      itemsZh: [
+        "如果想好好体验潜水，千万别去走马观花的四岛跳岛游。推荐【黑岛一日】，水质更清、珊瑚和鱼很多。",
+        "海钓如果没有经验和实力就别想了，不仅暴晒而且根本钓不到鱼。",
+        "进按摩店一定要提前问好价格。越南没有给小费习惯，精油按摩非常解乏但需要提前预约。",
+        "别在越南买翡翠等玉石特产，越南根本不产这些！也不要买药店的保健品或纪念品店的高价纪念品。",
+        "不要特意去订做一套奥黛，很挑人穿尤其是男生，直接租一套体验即可。",
+      ],
+      itemsKo: [
+        "제대로 된 스쿠버다이빙을 원한다면 4섬 투어 대신 '혼문(Mun) 섬' 일일 투어를 추천합니다. 물이 맑고 산호가 많습니다.",
+        "낚시 초보라면 바다 낚시는 포기하세요. 햇볕만 뜨겁고 고기는 안 잡혀 만족도가 낮습니다.",
+        "마사지 샵 입장 전 가격을 꼭 확인하세요. 팁은 의무가 아니며, 아로마 마사지는 사전 예약이 필수입니다.",
+        "베트남은 옥/비취 산지가 아니니 보석류는 절대 사지 마세요. 약국 건강식품이나 고가 기념품도 피하세요.",
+        "비싼 돈 주고 아오자이를 맞춤 제작할 필요 없이, 대여해서 사진만 찍는 것이 훨씬 합리적입니다.",
+      ],
+    },
+    {
+      icon: "⛅",
+      zh: "天气、装备与收尾",
+      ko: "날씨, 준비물 및 귀국 일정",
+      itemsZh: [
+        "7 月属于旺季且天气极热，防晒霜、帽子、太阳镜一定要带足。",
+        "四岛游和海边活动建议多准备一套干衣服。逛大教堂、寺庙等需要一双好走的鞋，且穿着不能过于暴露。",
+        "【返程最后一晚】如果 7/16 是早航班，最后一晚务必住金兰机场方向；如果是晚班机，可继续住市区补逛，不要折腾太远的点以免误机。",
+      ],
+      itemsKo: [
+        "7월은 성수기이며 매우 덥습니다. 선크림, 모자, 선글라스를 충분히 챙기세요.",
+        "해양 액티비티 시 마른 여벌 옷이 필요합니다. 성당, 사원 방문을 위해 편한 신발을 신고, 노출이 심한 옷은 피하세요.",
+        "【귀국 마지막 밤】 7/16 이른 비행기라면 공항 근처(깜라인)에 숙박하고, 늦은 비행기라면 시내에 머물며 쇼핑을 마무리하세요. 무리한 이동은 피하세요.",
+      ],
+    },
+  ];
 
   return (
     <div
       style={{
         minHeight: "100vh",
-        background: "#f8fafc", // 更干净的基础底色
-        color: "#0f172a",
-        fontFamily:
-          "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
+        background: "var(--bg)",
+        color: "var(--ink)",
+        fontFamily: "var(--font)",
       }}
     >
-      {/* 🌟 注入全局 CSS 特效 */}
-      <style>{`
-        html { scroll-behavior: smooth; }
-        .card-hover { transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.25s cubic-bezier(0.4, 0, 0.2, 1); }
-        .card-hover:hover { transform: translateY(-4px); box-shadow: 0 16px 40px rgba(15, 23, 42, 0.08) !important; }
-        .hide-scroll::-webkit-scrollbar { display: none; }
-        .focus-input:focus { background: #fff !important; border-color: #38bdf8 !important; box-shadow: inset 0 0 0 2px rgba(56, 189, 248, 0.2) !important; }
-        .btn-hover:hover { opacity: 0.85; transform: scale(0.98); }
-        .glass-nav { background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
-        .img-hover:hover { transform: scale(1.05); }
-      `}</style>
+      <style>{STYLES}</style>
 
+      {/* ══════════════════ HERO ══════════════════ */}
       <div
         style={{
-          backgroundImage:
-            "linear-gradient(rgba(14, 45, 77, 0.4), rgba(14, 45, 77, 0.95)), url('/bg.jpg')",
-          backgroundSize: "cover",
-          backgroundPosition: "center 60%",
+          background:
+            "linear-gradient(rgba(10, 30, 50, 0.4), rgba(9, 61, 58, 0.7)), url('/bg.jpg') center 60%/cover no-repeat",
           color: "#fff",
-          padding: "56px 20px 40px",
+          padding: "60px 20px 48px",
+          position: "relative",
+          overflow: "hidden",
         }}
       >
-        <div style={{ maxWidth: 1120, margin: "0 auto" }}>
+        {/* Ambient orbs */}
+        <div
+          className="orb"
+          style={{
+            width: 300,
+            height: 300,
+            background: "rgba(14,116,144,.25)",
+            top: -80,
+            right: -60,
+            animationDelay: "0s",
+          }}
+        />
+        <div
+          className="orb"
+          style={{
+            width: 200,
+            height: 200,
+            background: "rgba(245,158,11,.12)",
+            bottom: -60,
+            left: 40,
+            animationDelay: "2s",
+          }}
+        />
+        <div
+          className="orb"
+          style={{
+            width: 150,
+            height: 150,
+            background: "rgba(13,148,136,.2)",
+            top: 40,
+            left: "40%",
+            animationDelay: "1s",
+          }}
+        />
+
+        <div
+          style={{
+            maxWidth: 1120,
+            margin: "0 auto",
+            position: "relative",
+            zIndex: 1,
+          }}
+        >
+          {/* Top row: title + lang toggle */}
           <div
             style={{
               display: "flex",
               justifyContent: "space-between",
               gap: 16,
-              alignItems: "start",
+              alignItems: "flex-start",
               flexWrap: "wrap",
+              marginBottom: 20,
             }}
           >
-            <div>
+            <div style={{ flex: 1, minWidth: 220 }}>
               <div
                 style={{
-                  fontSize: 32,
+                  fontSize: 12,
+                  fontWeight: 700,
+                  letterSpacing: "2px",
+                  textTransform: "uppercase",
+                  color: "rgba(255,255,255,.5)",
+                  marginBottom: 10,
+                }}
+              >
+                {lang === "zh"
+                  ? "🇻🇳 2025 定制旅行指南"
+                  : "🇻🇳 2025 맞춤 여행 가이드"}
+              </div>
+              <h1
+                className="hero-title"
+                style={{
+                  margin: 0,
+                  fontSize: 36,
                   fontWeight: 900,
-                  letterSpacing: "-0.5px",
+                  letterSpacing: "-.8px",
+                  lineHeight: 1.2,
+                  color: "#fff",
                 }}
               >
                 {c.appTitle}
-              </div>
-              <div
+              </h1>
+              <p
+                className="hero-sub"
                 style={{
-                  marginTop: 10,
-                  color: "#e0f2fe",
+                  margin: "12px 0 0",
                   fontSize: 15,
+                  color: "rgba(255,255,255,.65)",
                   fontWeight: 500,
                 }}
               >
                 {c.appSub}
-              </div>
+              </p>
             </div>
+
+            {/* Language toggle */}
             <button
-              className="btn-hover"
-              onClick={() => setLang((v) => (v === "zh" ? "ko" : "zh"))}
+              className="btn"
+              onClick={() => setLang((l) => (l === "zh" ? "ko" : "zh"))}
               style={{
-                border: "1px solid rgba(255,255,255,0.4)",
-                background: "rgba(255,255,255,0.15)",
-                backdropFilter: "blur(8px)",
+                border: "1px solid rgba(255,255,255,.28)",
+                borderRadius: "var(--r-pill)",
+                background: "rgba(255,255,255,.12)",
+                backdropFilter: "blur(12px)",
+                WebkitBackdropFilter: "blur(12px)",
                 color: "#fff",
-                borderRadius: 999,
-                padding: "10px 20px",
-                cursor: "pointer",
+                padding: "11px 22px",
                 fontWeight: 800,
                 fontSize: 14,
                 whiteSpace: "nowrap",
-                transition: "all 0.2s",
+                fontFamily: "var(--font)",
+                boxShadow: "0 4px 16px rgba(0,0,0,.2)",
               }}
             >
-              {lang === "zh" ? "한국어" : "中文"} · {c.toggle}
+              {lang === "zh" ? "🇰🇷 한국어" : "🇨🇳 中文"} · {c.toggle}
             </button>
           </div>
-          <div style={{ marginTop: 16, display: "flex", flexWrap: "wrap" }}>
-            <Badge>7/9 晚到</Badge>
-            <Badge>{lang === "zh" ? "市区 + 珍珠岛" : "시내 + 빈펄 섬"}</Badge>
-            <Badge>{lang === "zh" ? "万豪优先" : "메리어트 우선"}</Badge>
+
+          {/* Badges */}
+          <div style={{ display: "flex", flexWrap: "wrap" }}>
+            <Badge>📅 7/9 – 7/16</Badge>
             <Badge>
-              {lang === "zh" ? "四岛游 / 泥浴" : "사섬투어 / 머드배스"}
+              {lang === "zh" ? "🏙️ 市区 + 珍珠岛" : "🏙️ 시내 + 빈펄 섬"}
             </Badge>
-            <Badge>VinWonders</Badge>
+            <Badge>{lang === "zh" ? "⭐ 万豪优先" : "⭐ 메리어트 우선"}</Badge>
+            <Badge>
+              {lang === "zh" ? "🤿 四岛游 / 泥浴" : "🤿 사섬투어 / 머드배스"}
+            </Badge>
+            <Badge>🎢 VinWonders</Badge>
           </div>
         </div>
       </div>
 
-      {/* 🌟 优化：iOS级悬浮药丸式（Pill）导航栏 */}
+      {/* ══════════════════ STICKY NAV ══════════════════ */}
       <div
-        className="glass-nav"
+        className="glass"
         style={{
           position: "sticky",
           top: 0,
-          zIndex: 100,
-          borderBottom: "1px solid rgba(226, 232, 240, 0.8)",
-          boxShadow: "0 4px 20px rgba(0, 0, 0, 0.04)",
+          zIndex: 200,
+          borderBottom: "1px solid rgba(226,232,240,.6)",
+          boxShadow: "0 4px 24px rgba(0,0,0,.04)",
         }}
       >
         <div
-          className="hide-scroll"
+          ref={tabRef}
+          className="no-scroll"
           style={{
             maxWidth: 1120,
             margin: "0 auto",
             display: "flex",
-            gap: 12,
-            padding: "14px 20px",
+            gap: 6,
+            padding: "12px 16px",
             overflowX: "auto",
-            whiteSpace: "nowrap",
           }}
         >
-          {c.tabs.map((tab, idx) => (
+          {c.tabs.map((tab, i) => (
             <button
-              key={idx}
-              onClick={() => scrollToSection(idx)}
+              key={i}
+              data-tab={i}
+              onClick={() => scrollTo(i)}
+              className={`btn tab-btn ${activeTab === i ? "tab-active" : ""}`}
               style={{
-                padding: "8px 20px",
-                background: activeTab === idx ? "#0f172a" : "transparent",
-                color: activeTab === idx ? "#fff" : "#475569",
-                fontWeight: activeTab === idx ? 800 : 600,
-                fontSize: 14,
-                borderRadius: 999,
+                padding: "9px 18px",
+                borderRadius: "var(--r-pill)",
                 border: "none",
-                cursor: "pointer",
-                transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+                background: activeTab === i ? "var(--ink)" : "transparent",
+                color: activeTab === i ? "#fff" : "var(--muted)",
+                fontWeight: activeTab === i ? 800 : 600,
+                fontSize: 14,
+                whiteSpace: "nowrap",
+                fontFamily: "var(--font)",
+                flexShrink: 0,
+                minHeight: 38,
               }}
             >
               {tab}
@@ -2937,189 +3681,252 @@ export default function App() {
         </div>
       </div>
 
-      <div style={{ maxWidth: 1120, margin: "0 auto", padding: 20 }}>
-        {/* 锚点 0：总览区 */}
+      {/* ══════════════════ CONTENT ══════════════════ */}
+      <div
+        style={{ maxWidth: 1120, margin: "0 auto", padding: "16px 16px 48px" }}
+      >
+        {/* ─── OVERVIEW ─── */}
         <div id="section-overview">
-          <div style={{ display: "grid", gap: 16, marginTop: 4 }}>
-            <WeatherWidget lang={lang} />
+          <WeatherWidget lang={lang} />
+          <div style={{ marginTop: 16 }}>
             <CurrencyConverterWidget lang={lang} />
+          </div>
 
-            <Card accent>
-              <SectionTitle title={c.overviewTitle} sub={c.overviewSub} />
+          <SectionTitle title={c.overviewTitle} sub={c.overviewSub} />
 
+          {/* Overview cards */}
+          <div
+            className="ov-grid"
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
+              gap: 12,
+              marginBottom: 16,
+            }}
+          >
+            {c.overviewCards.map((item, i) => (
               <div
+                key={i}
+                className="card-hover fade-up"
                 style={{
-                  display: "grid",
-                  gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))",
-                  gap: 12,
-                  marginBottom: 24,
+                  background: "var(--surf)",
+                  borderRadius: "var(--r-lg)",
+                  padding: "16px 18px",
+                  boxShadow: "var(--sh-sm)",
+                  border: "1px solid var(--bdr-s)",
+                  animationDelay: `${i * 0.06}s`,
                 }}
               >
-                {c.overviewCards.map((item, idx) => (
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 8,
+                    marginBottom: 10,
+                  }}
+                >
                   <div
-                    key={idx}
                     style={{
-                      background: "#f8fafc",
-                      padding: "16px 18px",
-                      borderRadius: 16,
-                      border: "1px solid #e2e8f0",
+                      width: 32,
+                      height: 32,
+                      borderRadius: 9,
+                      flexShrink: 0,
+                      background:
+                        "linear-gradient(135deg,var(--teal50),var(--teal100))",
+                      border: "1px solid var(--teal100)",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      fontSize: 16,
                     }}
                   >
-                    <div
+                    {item.icon}
+                  </div>
+                  <span
+                    style={{
+                      fontSize: 13,
+                      color: "var(--muted)",
+                      fontWeight: 800,
+                    }}
+                  >
+                    {item.label}
+                  </span>
+                </div>
+                <div
+                  style={{
+                    fontSize: 15,
+                    color: "var(--ink)",
+                    fontWeight: 800,
+                    lineHeight: 1.5,
+                  }}
+                >
+                  {item.value}
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Must-do + Alerts */}
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))",
+              gap: 14,
+              marginBottom: 20,
+            }}
+          >
+            <div
+              style={{
+                background: "linear-gradient(135deg,#FFF7ED,#FFFBF5)",
+                padding: 20,
+                borderRadius: "var(--r-xl)",
+                border: "1px solid #FED7AA",
+                boxShadow: "0 4px 16px rgba(249,115,22,.08)",
+              }}
+            >
+              <div
+                style={{
+                  fontSize: 16,
+                  fontWeight: 900,
+                  color: "#C2410C",
+                  marginBottom: 14,
+                }}
+              >
+                {c.overviewMustDos.title}
+              </div>
+              <div style={{ display: "grid", gap: 10 }}>
+                {c.overviewMustDos.items.map((item, i) => (
+                  <div
+                    key={i}
+                    style={{
+                      display: "flex",
+                      gap: 10,
+                      fontSize: 14,
+                      color: "#9A3412",
+                      lineHeight: 1.6,
+                      fontWeight: 700,
+                      alignItems: "flex-start",
+                    }}
+                  >
+                    <span
                       style={{
+                        width: 20,
+                        height: 20,
+                        borderRadius: 6,
+                        background: "#F97316",
+                        color: "#fff",
                         display: "flex",
                         alignItems: "center",
-                        gap: 8,
-                        marginBottom: 8,
-                      }}
-                    >
-                      <span style={{ fontSize: 18 }}>{item.icon}</span>
-                      <span
-                        style={{
-                          fontSize: 14,
-                          color: "#64748b",
-                          fontWeight: 800,
-                        }}
-                      >
-                        {item.label}
-                      </span>
-                    </div>
-                    <div
-                      style={{
-                        fontSize: 15,
-                        color: "#0f172a",
+                        justifyContent: "center",
+                        fontSize: 10,
                         fontWeight: 900,
-                        lineHeight: 1.5,
+                        flexShrink: 0,
+                        marginTop: 1,
                       }}
                     >
-                      {item.value}
-                    </div>
+                      ✓
+                    </span>
+                    <span>{item}</span>
                   </div>
                 ))}
               </div>
+            </div>
 
+            <div
+              style={{
+                background: "linear-gradient(135deg,#FEF2F2,#FFF5F5)",
+                padding: 20,
+                borderRadius: "var(--r-xl)",
+                border: "1px solid #FECACA",
+                boxShadow: "0 4px 16px rgba(239,68,68,.08)",
+              }}
+            >
               <div
                 style={{
-                  display: "grid",
-                  gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))",
-                  gap: 16,
-                  marginBottom: 16,
+                  fontSize: 16,
+                  fontWeight: 900,
+                  color: "#B91C1C",
+                  marginBottom: 14,
                 }}
               >
-                <div
-                  style={{
-                    background: "#fff7ed",
-                    padding: 20,
-                    borderRadius: 20,
-                    border: "1px solid #fdba74",
-                  }}
-                >
-                  <div
-                    style={{
-                      fontSize: 16,
-                      fontWeight: 900,
-                      color: "#c2410c",
-                      marginBottom: 14,
-                    }}
-                  >
-                    {c.overviewMustDos.title}
-                  </div>
-                  <div style={{ display: "grid", gap: 12 }}>
-                    {c.overviewMustDos.items.map((item, idx) => (
-                      <div
-                        key={idx}
-                        style={{
-                          display: "flex",
-                          gap: 8,
-                          fontSize: 14,
-                          color: "#9a3412",
-                          lineHeight: 1.6,
-                          fontWeight: 700,
-                        }}
-                      >
-                        <span>✅</span>
-                        <span>{item}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                <div
-                  style={{
-                    background: "#fef2f2",
-                    padding: 20,
-                    borderRadius: 20,
-                    border: "1px solid #fca5a5",
-                  }}
-                >
-                  <div
-                    style={{
-                      fontSize: 16,
-                      fontWeight: 900,
-                      color: "#b91c1c",
-                      marginBottom: 14,
-                    }}
-                  >
-                    {c.overviewAlerts.title}
-                  </div>
-                  <div style={{ display: "grid", gap: 12 }}>
-                    {c.overviewAlerts.items.map((item, idx) => (
-                      <div
-                        key={idx}
-                        style={{
-                          display: "flex",
-                          gap: 8,
-                          fontSize: 14,
-                          color: "#991b1b",
-                          lineHeight: 1.6,
-                          fontWeight: 700,
-                        }}
-                      >
-                        <span>🚨</span>
-                        <span>{item}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
+                {c.overviewAlerts.title}
               </div>
-
-              <ImageGallery
-                images={[
-                  "/view1.jpg",
-                  "/view2.jpg",
-                  "/view3.jpg",
-                  "/view4.jpg",
-                  "/view5.jpg",
-                ]}
-              />
-            </Card>
+              <div style={{ display: "grid", gap: 10 }}>
+                {c.overviewAlerts.items.map((item, i) => (
+                  <div
+                    key={i}
+                    style={{
+                      display: "flex",
+                      gap: 10,
+                      fontSize: 14,
+                      color: "#991B1B",
+                      lineHeight: 1.6,
+                      fontWeight: 700,
+                      alignItems: "flex-start",
+                    }}
+                  >
+                    <span style={{ flexShrink: 0, fontSize: 16 }}>🚨</span>
+                    <span>{item}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
+
+          <Card accent>
+            <ImageGallery
+              images={[
+                "/view1.jpg",
+                "/view2.jpg",
+                "/view3.jpg",
+                "/view4.jpg",
+                "/view5.jpg",
+              ]}
+            />
+          </Card>
         </div>
 
-        {/* 锚点 1：景点攻略区 */}
+        {/* ─── SPOTS ─── */}
         <div id="section-spots">
           <SectionTitle title={c.geoTitle} sub={c.geoSub} />
           <div
             style={{
               display: "grid",
               gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))",
-              gap: 16,
+              gap: 12,
             }}
           >
             {transport.map((t) => (
               <Card key={lang === "zh" ? t.k.zh : t.k.ko}>
                 <div
                   style={{
-                    fontWeight: 900,
-                    color: "#0f172a",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 10,
                     marginBottom: 10,
+                    fontWeight: 900,
+                    color: "var(--ink)",
                     fontSize: 16,
                   }}
                 >
+                  <div
+                    style={{
+                      width: 8,
+                      height: 8,
+                      borderRadius: "50%",
+                      background:
+                        "linear-gradient(135deg, var(--ocean), var(--teal))",
+                      flexShrink: 0,
+                    }}
+                  />
                   {lang === "zh" ? t.k.zh : t.k.ko}
                 </div>
                 <div
-                  style={{ fontSize: 14, lineHeight: 1.75, color: "#475569" }}
+                  style={{
+                    fontSize: 14,
+                    lineHeight: 1.8,
+                    color: "var(--muted)",
+                  }}
                 >
                   {lang === "zh" ? t.v.zh : t.v.ko}
                 </div>
@@ -3127,38 +3934,42 @@ export default function App() {
             ))}
           </div>
 
-          <div style={{ marginTop: 16 }}>
+          {/* Map */}
+          <div style={{ marginTop: 14 }}>
             <Card>
               <div
                 style={{
                   fontWeight: 900,
-                  color: "#0f172a",
-                  marginBottom: 10,
+                  color: "var(--ink)",
+                  marginBottom: 8,
                   fontSize: 16,
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 8,
                 }}
               >
-                {lang === "zh" ? "芽庄地图" : "냐짱 지도"}
+                <span>🗺️</span> {lang === "zh" ? "芽庄地图" : "냐짱 지도"}
               </div>
               <div
                 style={{
                   fontSize: 14,
-                  color: "#64748b",
+                  color: "var(--muted)",
                   lineHeight: 1.7,
                   marginBottom: 14,
                 }}
               >
                 {lang === "zh"
-                  ? "这张地图可以帮助你快速理解：金兰机场在南边，市区景点沿海滨大道和中心区分布，珍珠岛在海上。"
-                  : "이 지도는 깜라인 공항이 남쪽에 있고, 시내 명소는 해변 도로와 중심 구역에 모여 있으며, 빈펄 섬은 바다 위에 있다는 점을 빠르게 이해하는 데 도움이 됩니다."}
+                  ? "金兰机场在南边，市区景点沿海滨大道分布，珍珠岛在海上。"
+                  : "깜라인 공항은 남쪽, 시내 명소는 해변 도로에, 빈펄 섬은 바다 위에 있습니다."}
               </div>
               <div
                 style={{
                   position: "relative",
                   width: "100%",
-                  paddingTop: "56.25%",
-                  borderRadius: 16,
+                  paddingTop: "52%",
+                  borderRadius: "var(--r-lg)",
                   overflow: "hidden",
-                  border: "1px solid #e2e8f0",
+                  border: "1px solid var(--bdr-s)",
                 }}
               >
                 <iframe
@@ -3182,83 +3993,12 @@ export default function App() {
           <div
             style={{
               display: "grid",
-              gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))",
+              gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
               gap: 16,
             }}
           >
             {cityHighlights.map((s) => (
-              <Card key={s.en}>
-                {s.img && (
-                  <div
-                    style={{
-                      width: "100%",
-                      height: 180,
-                      borderRadius: 16,
-                      overflow: "hidden",
-                      marginBottom: 16,
-                    }}
-                  >
-                    <img
-                      src={s.img}
-                      alt={s.en}
-                      className="img-hover"
-                      style={{
-                        width: "100%",
-                        height: "100%",
-                        objectFit: "cover",
-                        display: "block",
-                        transition: "transform 0.4s ease",
-                      }}
-                    />
-                  </div>
-                )}
-                <div
-                  style={{ fontWeight: 900, fontSize: 18, color: "#0f172a" }}
-                >
-                  {lang === "zh" ? s.name.zh : s.name.ko}
-                </div>
-                <div
-                  style={{
-                    color: "#64748b",
-                    fontSize: 13,
-                    marginTop: 4,
-                    fontWeight: 500,
-                  }}
-                >
-                  {s.en}
-                </div>
-                <div style={{ marginTop: 14, fontSize: 14, lineHeight: 1.75 }}>
-                  <div style={{ color: "#334155", marginBottom: 4 }}>
-                    <strong style={{ color: "#0f172a" }}>
-                      {lang === "zh" ? "位置：" : "위치: "}
-                    </strong>
-                    {lang === "zh" ? s.where.zh : s.where.ko}
-                  </div>
-                  <div style={{ color: "#334155", marginBottom: 4 }}>
-                    <strong style={{ color: "#0f172a" }}>
-                      {lang === "zh" ? "时长：" : "소요 시간: "}
-                    </strong>
-                    {lang === "zh" ? s.time.zh : s.time.ko}
-                  </div>
-                  <div style={{ color: "#334155", marginBottom: 8 }}>
-                    <strong style={{ color: "#0f172a" }}>
-                      {lang === "zh" ? "价格：" : "가격: "}
-                    </strong>
-                    {lang === "zh" ? s.price.zh : s.price.ko}
-                  </div>
-                  <div
-                    style={{
-                      marginTop: 10,
-                      color: "#475569",
-                      background: "#f8fafc",
-                      padding: "10px 14px",
-                      borderRadius: 12,
-                    }}
-                  >
-                    {lang === "zh" ? s.note.zh : s.note.ko}
-                  </div>
-                </div>
-              </Card>
+              <AttractionCard key={s.en} s={s} lang={lang} />
             ))}
           </div>
 
@@ -3266,305 +4006,87 @@ export default function App() {
           <div
             style={{
               display: "grid",
-              gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))",
+              gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
               gap: 16,
             }}
           >
             {islandHighlights.map((s) => (
-              <Card key={s.en}>
-                {s.img && (
-                  <div
-                    style={{
-                      width: "100%",
-                      height: 180,
-                      borderRadius: 16,
-                      overflow: "hidden",
-                      marginBottom: 16,
-                    }}
-                  >
-                    <img
-                      src={s.img}
-                      alt={s.en}
-                      className="img-hover"
-                      style={{
-                        width: "100%",
-                        height: "100%",
-                        objectFit: "cover",
-                        display: "block",
-                        transition: "transform 0.4s ease",
-                      }}
-                    />
-                  </div>
-                )}
-                <div
-                  style={{ fontWeight: 900, fontSize: 18, color: "#0f172a" }}
-                >
-                  {lang === "zh" ? s.name.zh : s.name.ko}
-                </div>
-                <div
-                  style={{
-                    color: "#64748b",
-                    fontSize: 13,
-                    marginTop: 4,
-                    fontWeight: 500,
-                  }}
-                >
-                  {s.en}
-                </div>
-                <div style={{ marginTop: 14, fontSize: 14, lineHeight: 1.75 }}>
-                  <div style={{ color: "#334155", marginBottom: 4 }}>
-                    <strong style={{ color: "#0f172a" }}>
-                      {lang === "zh" ? "位置：" : "위치: "}
-                    </strong>
-                    {lang === "zh" ? s.where.zh : s.where.ko}
-                  </div>
-                  <div style={{ color: "#334155", marginBottom: 4 }}>
-                    <strong style={{ color: "#0f172a" }}>
-                      {lang === "zh" ? "时长：" : "소요 시간: "}
-                    </strong>
-                    {lang === "zh" ? s.time.zh : s.time.ko}
-                  </div>
-                  <div style={{ color: "#334155", marginBottom: 8 }}>
-                    <strong style={{ color: "#0f172a" }}>
-                      {lang === "zh" ? "价格：" : "가격: "}
-                    </strong>
-                    {lang === "zh" ? s.price.zh : s.price.ko}
-                  </div>
-                  <div
-                    style={{
-                      marginTop: 10,
-                      color: "#475569",
-                      background: "#f8fafc",
-                      padding: "10px 14px",
-                      borderRadius: 12,
-                    }}
-                  >
-                    {lang === "zh" ? s.note.zh : s.note.ko}
-                  </div>
-                </div>
-              </Card>
+              <AttractionCard key={s.en} s={s} lang={lang} />
             ))}
           </div>
         </div>
 
-        {/* 锚点 2：酒店日程区 */}
+        {/* ─── HOTELS ─── */}
         <div id="section-hotels">
           <SectionTitle title={c.hotelTitle} sub={c.hotelSub} />
-          <div style={{ display: "grid", gap: 24 }}>
-            {hotelItineraryList.map((h, idx) => (
-              <HotelItineraryCard key={idx} h={h} lang={lang} />
+          <div style={{ display: "grid", gap: 20 }}>
+            {hotelItineraryList.map((h, i) => (
+              <HotelItineraryCard key={i} h={h} lang={lang} />
             ))}
           </div>
         </div>
 
-        {/* 锚点 3：美食推荐区 */}
+        {/* ─── FOOD ─── */}
         <div id="section-food">
           <SectionTitle title={c.foodTitle} sub={c.foodSub} />
-          <div style={{ display: "grid", gap: 16, marginBottom: 32 }}>
-            {foodRecommendations.map((f, idx) => (
-              <FoodCard key={idx} f={f} lang={lang} />
+          <div style={{ display: "grid", gap: 14 }}>
+            {foodRecommendations.map((f, i) => (
+              <FoodCard key={i} f={f} lang={lang} />
             ))}
           </div>
         </div>
 
-        {/* 锚点 4：旅行计划区 */}
+        {/* ─── ITINERARY ─── */}
         <div id="section-itinerary">
           <SectionTitle title={c.itineraryTitle} sub={c.itinerarySub} />
-          <div style={{ display: "grid", gap: 16, marginBottom: 32 }}>
-            {itinerary.map((d, idx) => (
-              <ItineraryDayCard key={idx} d={d} lang={lang} />
+          <div style={{ display: "grid", gap: 16 }}>
+            {itinerary.map((d, i) => (
+              <ItineraryDayCard key={i} d={d} lang={lang} />
             ))}
           </div>
         </div>
 
-        {/* 锚点 5：实用提示区 */}
+        {/* ─── TIPS ─── */}
         <div id="section-tips">
           <SectionTitle title={c.tipsTitle} sub={c.tipsSub} />
           <div
+            className="tip-grid"
             style={{
               display: "grid",
               gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))",
-              gap: 16,
+              gap: 14,
             }}
           >
-            <Card>
-              <div
-                style={{
-                  fontWeight: 900,
-                  color: "#0f172a",
-                  marginBottom: 12,
-                  fontSize: 17,
-                }}
-              >
-                {lang === "zh" ? "🛂 签证与行程规划" : "🛂 비자 및 여행 준비"}
-              </div>
-              <BulletList
-                items={
-                  lang === "zh"
-                    ? [
-                        "护照有效期至少 6 个月。签证政策请以出发前官方最新信息为准。",
-                        "务必提前订好酒店，经济实惠且干净的酒店长期处于满房状态。",
-                        "按照景点的时间预约进入，提前或延迟都可能被拒之门外，千万别错过。",
-                        "把酒店订单、返程票、保险等证件，放在手机和纸质备份里。",
-                      ]
-                    : [
-                        "여권 유효기간은 최소 6개월 이상이어야 하며, 비자 정책은 최신 공식 정보를 확인하세요.",
-                        "호텔은 무조건 미리 예약하세요. 가성비 좋고 깔끔한 곳은 항상 만실입니다.",
-                        "관광지 예약 시간은 엄수해야 합니다. 너무 일찍 가거나 지각하면 입장이 불가할 수 있습니다.",
-                        "호텔 예약, 귀국 항공권, 보험 서류는 휴대폰과 종이 모두 보관하세요.",
-                      ]
-                }
+            {tipsData.map((t) => (
+              <TipsCard
+                key={t.zh}
+                icon={t.icon}
+                title={lang === "zh" ? t.zh : t.ko}
+                items={lang === "zh" ? t.itemsZh : t.itemsKo}
               />
-            </Card>
-
-            <Card>
-              <div
-                style={{
-                  fontWeight: 900,
-                  color: "#0f172a",
-                  marginBottom: 12,
-                  fontSize: 17,
-                }}
-              >
-                {lang === "zh"
-                  ? "💰 现金、交通与套路"
-                  : "💰 현금, 교통 및 바가지 피하기"}
-              </div>
-              <BulletList
-                items={
-                  lang === "zh"
-                    ? [
-                        "一定要带现金！很多小店不可刷卡且不收美金。机场 ATM 刷 VISA 取款最方便汇率也公道，绝不要找私人换钱防被骗。",
-                        "市区赶时间优选 Grab 摩托车。高峰期极其堵车，打车或公交会浪费大量时间。",
-                        "在越南骑乘摩托车【必须】戴好安全帽，否则警察会直接罚款。",
-                        "街边的各种热情搭讪轻易不要理会，绝大多数都是付费服务或套路陷阱。",
-                      ]
-                    : [
-                        "현금 지참 필수! 작은 가게는 카드나 달러를 받지 않습니다. 공항 ATM(VISA) 출금이 가장 안전하며, 사설 환전소는 피하세요.",
-                        "시내에서 급할 땐 Grab 오토바이가 최고입니다. 출퇴근 시간에는 차가 매우 막혀 택시/버스는 비효율적입니다.",
-                        "오토바이를 탈 때는 반드시 헬멧을 착용하세요. 미착용 시 경찰에게 벌금을 냅니다.",
-                        "길거리의 과도한 호객 행위는 무시하세요. 대부분 유료 서비스나 바가지입니다.",
-                      ]
-                }
-              />
-            </Card>
-
-            <Card>
-              <div
-                style={{
-                  fontWeight: 900,
-                  color: "#0f172a",
-                  marginBottom: 12,
-                  fontSize: 17,
-                }}
-              >
-                {lang === "zh"
-                  ? "🍍 饮食与点单防坑"
-                  : "🍍 식음료 및 레스토랑 주의사항"}
-              </div>
-              <BulletList
-                items={
-                  lang === "zh"
-                    ? [
-                        "酒店绝对不允许带榴莲进入！违规会被高额罚款，买完必须在外面吃掉。",
-                        "不要在 Grab 上买鲜切水果，又贵又不好吃，通常是不熟的；没见过颜色的艳丽水果也不要轻易尝试。",
-                        "一定要随身携带纸巾，绝大多数餐厅是不提供免费纸巾的。",
-                        "网红餐厅都需要排队，请合理安排时间。越南辣椒辣度极高，千万不要大口吃辣椒！",
-                        "看不懂菜单不要随便乱点，最稳妥的做法是看别人吃什么，指着要一份一样的。",
-                      ]
-                    : [
-                        "호텔 내 두리안 반입 절대 금지! 적발 시 큰 벌금이 부과되므로 밖에서 다 드세요.",
-                        "Grab에서 컷팅 과일을 배달시키지 마세요 (비싸고 덜 익음). 화려한 색의 낯선 과일도 주의하세요.",
-                        "무료 휴지가 없는 식당이 많으니 개인 티슈를 꼭 챙기세요.",
-                        "유명 맛집은 항상 대기가 있습니다. 또한, 베트남 고추는 상상 이상으로 매우니 조금만 드세요!",
-                        "메뉴를 모를 땐 다른 테이블의 음식을 가리켜 같은 걸로 주문하는 것이 가장 안전합니다.",
-                      ]
-                }
-              />
-            </Card>
-
-            <Card>
-              <div
-                style={{
-                  fontWeight: 900,
-                  color: "#0f172a",
-                  marginBottom: 12,
-                  fontSize: 17,
-                }}
-              >
-                {lang === "zh"
-                  ? "🏖️ 游玩项目与购物"
-                  : "🏖️ 관광 액티비티 및 쇼핑"}
-              </div>
-              <BulletList
-                items={
-                  lang === "zh"
-                    ? [
-                        "如果想好好体验潜水，千万别去走马观花的四岛跳岛游。推荐【黑岛一日】，水质更清、珊瑚和鱼很多。",
-                        "海钓如果没有经验和实力就别想了，不仅暴晒而且根本钓不到鱼。",
-                        "进按摩店一定要提前问好价格。越南没有给小费习惯，精油按摩非常解乏但需要提前预约。",
-                        "别在越南买翡翠等玉石特产，越南根本不产这些！也不要买药店的保健品或纪念品店的高价纪念品。",
-                        "不要特意去订做一套奥黛，很挑人穿尤其是男生，直接租一套体验即可。",
-                      ]
-                    : [
-                        "제대로 된 스쿠버다이빙을 원한다면 4섬 투어 대신 '혼문(Mun) 섬' 일일 투어를 추천합니다. 물이 맑고 산호가 많습니다.",
-                        "낚시 초보라면 바다 낚시는 포기하세요. 햇볕만 뜨겁고 고기는 안 잡혀 만족도가 낮습니다.",
-                        "마사지 샵 입장 전 가격을 꼭 확인하세요. 팁은 의무가 아니며, 아로마 마사지는 사전 예약이 필수입니다.",
-                        "베트남은 옥/비취 산지가 아니니 보석류는 절대 사지 마세요. 약국 건강식품이나 고가 기념품도 피하세요.",
-                        "비싼 돈 주고 아오자이를 맞춤 제작할 필요 없이, 대여해서 사진만 찍는 것이 훨씬 합리적입니다.",
-                      ]
-                }
-              />
-            </Card>
-
-            <Card>
-              <div
-                style={{
-                  fontWeight: 900,
-                  color: "#0f172a",
-                  marginBottom: 12,
-                  fontSize: 17,
-                }}
-              >
-                {lang === "zh"
-                  ? "⛅ 天气、装备与收尾"
-                  : "⛅ 날씨, 준비물 및 귀국 일정"}
-              </div>
-              <BulletList
-                items={
-                  lang === "zh"
-                    ? [
-                        "7 月属于旺季且天气极热，防晒霜、帽子、太阳镜一定要带足。",
-                        "四岛游和海边活动建议多准备一套干衣服。逛大教堂、寺庙等需要一双好走的鞋，且穿着不能过于暴露。",
-                        "【返程最后一晚】如果 7/16 是早航班，最后一晚务必住金兰机场方向；如果是晚班机，可继续住市区补逛，不要折腾太远的点以免误机。",
-                      ]
-                    : [
-                        "7월은 성수기이며 매우 덥습니다. 선크림, 모자, 선글라스를 충분히 챙기세요.",
-                        "해양 액티비티 시 마른 여벌 옷이 필요합니다. 성당, 사원 방문을 위해 편한 신발을 신고, 노출이 심한 옷은 피하세요.",
-                        "【귀국 마지막 밤】 7/16 이른 비행기라면 공항 근처(깜라인)에 숙박하고, 늦은 비행기라면 시내에 머물며 쇼핑을 마무리하세요. 무리한 이동은 피하세요.",
-                      ]
-                }
-              />
-            </Card>
+            ))}
           </div>
         </div>
 
+        {/* Footer */}
         <div
           style={{
-            marginTop: 32,
+            marginTop: 40,
             paddingTop: 24,
-            borderTop: "1px solid #e2e8f0",
-            color: "#64748b",
+            borderTop: "1px solid var(--bdr-s)",
+            textAlign: "center",
+            color: "var(--subtle)",
             fontSize: 13,
             lineHeight: 1.8,
-            textAlign: "center",
           }}
         >
-          <div style={{ marginBottom: 6, fontWeight: 800, color: "#475569" }}>
+          <div
+            style={{ fontWeight: 800, color: "var(--muted)", marginBottom: 6 }}
+          >
             {c.quickTitle}
           </div>
           <div>{c.quickText}</div>
-          <div style={{ marginTop: 8 }}>{c.note}</div>
+          <div style={{ marginTop: 6, fontSize: 12 }}>{c.note}</div>
         </div>
       </div>
     </div>
