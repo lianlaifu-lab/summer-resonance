@@ -4,7 +4,7 @@ import React, { useState, useEffect, useRef } from "react";
 const localeCopy = {
   zh: {
     appTitle: "芽庄（Nha Trang）旅游全攻略",
-    appSub: "一键中/韩翻译 · 情侣出行 · 7月9日–16日 · 市区 + 珍珠岛",
+    appSub: "一键中/韩翻译 · 7月9日–16日 · 市区 + 珍珠岛",
     toggle: "切换为韩语",
     tabs: ["总览", "景点攻略", "酒店日程", "美食推荐", "旅行计划", "实用提示"],
     overviewTitle: "行程总控面板",
@@ -62,8 +62,7 @@ const localeCopy = {
   },
   ko: {
     appTitle: "냐짱(Nha Trang) 여행 완전 가이드",
-    appSub:
-      "원클릭 중/한 번역 · 커플 여행 · 7월 9일–16일 · 시내 + 빈펄 아일랜드",
+    appSub: "원클릭 중/한 번역 · 7월 9일–16일 · 시내 + 빈펄 아일랜드",
     toggle: "중국어로 전환",
     tabs: ["전체", "명소 가이드", "호텔 일정", "맛집 추천", "일정", "실용 팁"],
     overviewTitle: "여행 마스터 컨트롤 패널",
@@ -3552,8 +3551,8 @@ export default function App() {
                 }}
               >
                 {lang === "zh"
-                  ? "🇻🇳 2025 定制旅行指南"
-                  : "🇻🇳 2025 맞춤 여행 가이드"}
+                  ? "🇻🇳 2026 定制旅行指南"
+                  : "🇻🇳 2026 맞춤 여행 가이드"}
               </div>
               <h1
                 className="hero-title"
