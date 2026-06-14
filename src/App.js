@@ -2570,6 +2570,8 @@ function HotelItineraryCard({ h, lang }) {
             {lang === "zh" ? h.brand.zh : h.brand.ko}
           </div>
         </div>
+
+        {/* 右侧区域：已移除价格标签，仅保留切换箭头 */}
         <div
           style={{
             display: "flex",
@@ -2579,20 +2581,6 @@ function HotelItineraryCard({ h, lang }) {
             flexShrink: 0,
           }}
         >
-          <div
-            style={{
-              background: "var(--teal50)",
-              color: "var(--teal)",
-              padding: "6px 14px",
-              borderRadius: "var(--r-pill)",
-              fontSize: 13,
-              fontWeight: 800,
-              border: "1px solid var(--teal100)",
-              whiteSpace: "nowrap",
-            }}
-          >
-            {lang === "zh" ? h.price.zh : h.price.ko}
-          </div>
           <div
             style={{
               width: 32,
@@ -2672,7 +2660,6 @@ function HotelItineraryCard({ h, lang }) {
     </div>
   );
 }
-
 // ═══════════════════════════════════════════════════════════════
 //  FOOD CARD
 // ═══════════════════════════════════════════════════════════════
