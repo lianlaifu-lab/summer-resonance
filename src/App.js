@@ -3552,8 +3552,8 @@ export default function App() {
                 }}
               >
                 {lang === "zh"
-                  ? "🇻🇳 2025 定制旅行指南"
-                  : "🇻🇳 2025 맞춤 여행 가이드"}
+                  ? "🇻🇳 2026 定制旅行指南"
+                  : "🇻🇳 2026 맞춤 여행 가이드"}
               </div>
               <h1
                 className="hero-title"
